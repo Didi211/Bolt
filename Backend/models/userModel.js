@@ -1,7 +1,7 @@
-const  instance  = require('../config/dbconfig');
+const  neo4j  = require('../config/neo4j_config');
 
 
-instance.model('User', {
+neo4j.model('User', {
     person_id: {
         primary: true,
         type: 'uuid',

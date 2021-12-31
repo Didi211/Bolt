@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 //jwt
-const db = require('./config/dbconfig')
+const neo4j = require('./config/neo4j_config')
 const user = require('./routes/user')
 
 
