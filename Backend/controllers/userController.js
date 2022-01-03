@@ -1,8 +1,7 @@
 
-const  neo4j  = require('../config/neo4j_config');
+const neo4j = require('../config/neo4j_config')
 const user = require('../models/userModel')
 
-console.log(neo4j);
 const CreateUser = (req,res) => {    
     neo4j.model("User").create({
         name: 'James',  

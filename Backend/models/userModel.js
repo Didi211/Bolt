@@ -1,25 +1,16 @@
 const  neo4j  = require('../config/neo4j_config');
 
+/*User je klasa koja je zajednicka za musteriju restoran i dostavljaca*/
 
 neo4j.model('User', {
-    person_id: {
-        primary: true,
-        type: 'uuid',
-        required: true, // Creates an Exists Constraint in Enterprise mode
-    },
-    name: {
-        type: 'string',
-        unique: 'true', // Creates a Unique Constraint
-    },
-    surname: {
-        type: 'string',
-        index: true, // Creates an Index
-    },
     username: {        
         type: 'string',
         required: true, // Creates an Exists Constraint in Enterprise mode
+        unique: true
     },
-    password: 'string', // Simple schema definition of property : type
-    location: 'string'
+    password: {
+        type: 'string', // Simple schema definition of property : type
+        required: true
+    } 
 
 });
