@@ -3,6 +3,7 @@ const cors = require('cors');
 //jwt
 const neo4j = require('./config/neo4j_config');
 
+
 const user = require('./routes/user');
 const customer = require('./routes/customer');
 const deliverer = require('./routes/deliverer');
@@ -10,7 +11,6 @@ const meal = require('./routes/meal');
 const order = require('./routes/order');
 const store = require('./routes/store');
 
-console.log(__dirname)
 
 neo4j.withDirectory(__dirname + '/models')
 
@@ -27,10 +27,12 @@ app.use('/api/order',order);
 app.use('/api/store',store);
 app.use('/api/user',user);
 
-// console.log(neo4j.schema)
+
+/*koristiti neku od ovih funkcija samo kad je potrebno izmeniti schemu, u ostalim situacijama nema potrebe*/
+/*sluzi za instaliranje scheme definisane modelima na bazu u cloud-u*/
 // neo4j.schema.install().then(() => console.log('Schema installed!'))
-// neo4j.schema.drop()
-//     .then(() => console.log('Schema dropped!'))
+/*sluzi da ocisti celu bazu zajedno sa cvorovima, ne radi bas uvek*/
+// neo4j.schema.drop().then(() => console.log('Schema dropped!'))
 
 
 app.listen(5000,() => {
