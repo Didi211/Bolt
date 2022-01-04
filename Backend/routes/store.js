@@ -1,8 +1,8 @@
-const express = require("express")
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-const CreateRestoran = require('../controllers/storeController')
+const CreateRestoran = require('../controllers/storeController');
 
-router.post('/', CreateRestoran)
+router.post('/', CreateRestoran);
 
-module.exports = router
+module.exports = router;

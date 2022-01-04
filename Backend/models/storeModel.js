@@ -1,4 +1,4 @@
-const neo4j = require('../config/neo4j_config')
+const neo4j = require('../config/neo4j_config');
 
 neo4j.extend('User','Store',{
     name: {
@@ -11,4 +11,4 @@ neo4j.extend('User','Store',{
         unique: true
     }
 
-})
+});
