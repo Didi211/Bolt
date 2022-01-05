@@ -9,6 +9,19 @@ neo4j.extend('User','Store',{
         type: 'string',
         required: true,
         unique: true
+    },
+    cooks: {
+        type: 'relationship',
+        target: 'Meal',
+        relationship: 'COOKS',
+        direction: 'out',
+        properties: {
+            time: {
+                type: 'number',
+                required: true
+            }
+            //odeljak??? 
+        }
     }
     //veza sa meal 'COOKS', cooks veza ima property odeljak naziv 
 });

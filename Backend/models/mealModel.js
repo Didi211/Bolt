@@ -10,9 +10,6 @@ neo4j.model('Meal',{
         type: 'string',
         required: true,
     },
-    // ingredients: {
-    //     type: 'string'
-    // },
     price: {
         type: 'number',
         required: true
@@ -23,6 +20,13 @@ neo4j.model('Meal',{
     },
     servingSize: {
         type: 'number' //u gramima ili mozda bude string 
+    },
+    contains_ingredient: {
+        type: 'relationship',
+        target: 'Ingredient',
+        relationship: 'CONTAINS_INGREDIENT',
+        direction: 'out',
+        eager: true
     }
     //treba veza sa ingredient 'CONTAINS_INGREDIENT'
 }); 

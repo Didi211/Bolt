@@ -11,6 +11,14 @@ neo4j.extend('User','Customer',{
     location: {
         type: 'string',
         unique: true
+    },
+    ordered: { 
+        type: 'relationship',
+        target: 'Order',
+        relationship: 'ORDERED',
+        direction: 'out',
+        eager: 'true' //kada se otvori porudzbina da se prikazu njeni podaci
+       
     }
     //treba veza sa order 'Porucio' ili 'ORDERED'
 });
