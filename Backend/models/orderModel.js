@@ -22,4 +22,5 @@ neo4j.model('Order',{
     note: {
         type: 'string'
     }
+    //veza sa jelima CONTAINS_MEAL
 });

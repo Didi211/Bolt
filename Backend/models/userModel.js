@@ -12,5 +12,5 @@ neo4j.model('User', {
         type: 'string', // Simple schema definition of property : type
         required: true
     } 
-
+    
 });

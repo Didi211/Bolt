@@ -12,5 +12,5 @@ neo4j.extend('User','Customer',{
         type: 'string',
         unique: true
     }
-
+    //treba veza sa order 'Porucio' ili 'ORDERED'
 });

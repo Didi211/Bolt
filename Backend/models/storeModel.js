@@ -10,5 +10,5 @@ neo4j.extend('User','Store',{
         required: true,
         unique: true
     }
-
+    //veza sa meal 'COOKS', cooks veza ima property odeljak naziv 
 });

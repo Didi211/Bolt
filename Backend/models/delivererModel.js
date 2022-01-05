@@ -10,5 +10,6 @@ neo4j.extend('User','Deliverer',{
     vehicle: {
         type: 'string'
     }
+    //treba veza sa order 'POKUPI' ili 'PICK_UP' ili 'DELIVER'
 });
 
