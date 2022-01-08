@@ -10,15 +10,6 @@ neo4j.extend('User','Deliverer',{
     vehicle: {
         type: 'string'
     },
-    picks_up: { 
-        type: 'relationship',
-        target: 'Order',
-        relationship: 'PICKS_UP',
-        direction: "out",
-        properties: {
-            timePicked: "localtime"
-        }
-
-    }
+   
 });
 

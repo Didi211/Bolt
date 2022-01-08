@@ -16,4 +16,25 @@ const CreateCustomer = (req,res) => {
     }).catch(err => res.send(err).status(400));
 }
 
+// const CreateFoodOrder = (req,res) => {
+//     Promise.all([
+//         neo4j.model('Customer').create({
+//             name: 'Dimitrije',
+//             surname: 'Mitic',
+//             location: 'Dragise Cvetkovica 22/12',
+//             username: 'miticd99',
+//             password: 'didididi'
+
+//         }),
+//         neo4j.model('Order').create({
+            
+
+//         })
+//     ]).then(([customer,order]) => { 
+//         customer.relateTo(order,'creates_order',{date: new Date().now(), time: new Date().now() })
+//             .then(res => {
+//                 console.log('Order created.');
+//             })
+//     }) 
+// }
 module.exports = {CreateCustomer};

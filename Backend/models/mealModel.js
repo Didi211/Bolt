@@ -19,14 +19,10 @@ neo4j.model('Meal',{
         required: true
     },
     servingSize: {
+        //ako ovo bude u gramima, moze u vezi sa sastojcima da se naznaci 
+        //koji se sastojak koliko nalazi u obroku i da ovo bude suma toga
         type: 'number' //u gramima ili mozda bude string 
     },
-    contains_ingredient: {
-        type: 'relationship',
-        target: 'Ingredient',
-        relationship: 'CONTAINS_INGREDIENT',
-        direction: 'out',
-        eager: true
-    }
+    
     //treba veza sa ingredient 'CONTAINS_INGREDIENT'
 }); 
