@@ -10,15 +10,19 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state:{
-
+        storeCards:[]
     },
     getters:{
-
+        getStoreCard(state){
+            return state.storeCards
+        }
     },
     actions:{
-
+        
     },
     mutations:{
-
+        setStoreCards(state, cards){
+            state.storeCards = cards
+        }
     }
 })

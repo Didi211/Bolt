@@ -7,8 +7,8 @@
             <header class="bg-dark py-5">
                 <div class="container px-4 px-lg-5 my-5">
                     <div class="text-center text-white">
-                        <h1 class="display-4 fw-bolder">Shop in style</h1>
-                        <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+                        <h1 class="display-4 fw-bolder">BOLT</h1>
+                        <p class="lead fw-normal text-white-50 mb-0"><b>Niš</b>Ta ne spremaj naručujemo klopu</p>
                     </div>
                 </div>
             </header>
@@ -16,9 +16,11 @@
             <section class="py-5">
                 <div class="container px-4 px-lg-5 mt-5">
                     <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                        <div class="col mb-5">
-                            <StoreInfo />
-                        </div>
+                        
+                        <!-- <StoreCard v-for="info in information" 
+                                    :key="info.id" 
+                                    :info="info"/> -->
+                        
                         <div class="col mb-5 ">
                             <div class="card h-100">
                                 <!-- Sale badge-->
@@ -211,15 +213,27 @@
 import { defineComponent } from '@vue/composition-api'
 import  Header  from '@/components/Header.vue'
 import  Footer  from '@/components/Footer.vue'
-import StoreInfo from '@/components/StoreInfoComponent.vue'
+//import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
     name: "Homepage",
     components: {
         Header,
         Footer,
-        StoreInfo
-    }
+        //StoreInfo
+    },
+    data(){
+  
+    },
+    // computed:{
+    //     information(){
+    //         return this.$store.getters['getStoreCard']
+    //     }
+    // },
+    // async created(){
+    //     await this.$store.dispatch('getStoreCard').then(()=>{
+    //     })
+    // }
 })
 </script>
 
