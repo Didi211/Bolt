@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Homepage from '@/pages/Homepage'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
+import PageNotFound from '@/pages/PageNotFound'
 
 Vue.use(Router)
 
@@ -74,11 +75,11 @@ const router = new Router({
         //     name: 'PageNotAuthenticated',
         //     component: PageNotAuthenticated
         // },
-        // {
-        //     path: '*',
-        //     name: 'PageNotFound',
-        //     component: PageNotFound
-        // }
+        {
+            path: '*',
+            name: 'PageNotFound',
+            component: PageNotFound
+        }
     ],
     mode: 'history'
 })
