@@ -24,5 +24,4 @@ neo4j.model('Meal',{
         type: 'number' //u gramima ili mozda bude string 
     },
     
-    //treba veza sa ingredient 'CONTAINS_INGREDIENT'
 }); 

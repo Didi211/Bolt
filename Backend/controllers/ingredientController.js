@@ -2,9 +2,11 @@
 const neo4j = require('../config/neo4j_config');
 const ingredient = require('../models/ingredientModel');
 
-const CreateIngredient = (req,res) => {    
+const AddIngredient = (req,res) => { 
+    ingr = req.body   
     neo4j.model("Ingredient").create({
-        name: 'Chicken breasts',  
+        name: ingr.name
+
     
     }).then(ingredient => {
        res.send(ingredient).status(200);
@@ -12,4 +14,4 @@ const CreateIngredient = (req,res) => {
     }).catch(err => res.send(err).status(400));
 }
 
-module.exports = {CreateIngredient};
+module.exports = {AddIngredient};

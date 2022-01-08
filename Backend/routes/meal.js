@@ -4,6 +4,6 @@ const router = express.Router()
 const {CreateMeal} = require('../controllers/mealController');
 
 
-router.post('/',CreateMeal); 
+router.post('/create',CreateMeal); 
 
 module.exports = router;

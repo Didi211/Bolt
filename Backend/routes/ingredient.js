@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router()
 
-const {CreateIngredient} = require('../controllers/ingredientController');
+const {AddIngredient} = require('../controllers/ingredientController');
 
 
-router.post('/',CreateIngredient); 
+router.post('/add',AddIngredient); 
 
 module.exports = router;
