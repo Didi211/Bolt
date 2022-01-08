@@ -12,5 +12,6 @@ neo4j.extend('User','Customer',{
         type: 'string',
         unique: true
     },
+   
     
 });
