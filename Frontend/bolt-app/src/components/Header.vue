@@ -19,15 +19,7 @@
                             </ul>
                         </li> -->
                     </ul>
-                    <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <router-link :to="{name: 'Basket'}">
-                            <i class="bi-cart-fill me-1"></i>
-                            Korpa
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </router-link>
-                        </button>
-                    </form>
+                   
                 </div>
             </div>
         </nav>

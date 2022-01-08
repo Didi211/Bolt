@@ -71,11 +71,11 @@ export default defineComponent({
                         position: "top-center", 
                         duration : 2000
                    })
-        //   this.isDataLoaded = false
-        //   await this.$store.dispatch('loginKorisnik', this.loginInfo).then(()=>
-        //   {
-        //     this.isDataLoaded=true
-        //   })
+          this.isDataLoaded = false
+          await this.$store.dispatch('loginKorisnik', this.loginInfo).then(()=>
+          {
+            this.isDataLoaded=true
+          })
         }
         }
     }

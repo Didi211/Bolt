@@ -185,10 +185,10 @@ export default defineComponent({
                             position: "top-center", 
                             duration : 2000
                     })
-            //   this.isDataLoaded = false
-            //   await this.$store.dispatch('registerKorisnik', this.form).then(()=>{
-            //     this.isDataLoaded = true
-            //   })
+              this.isDataLoaded = false
+              await this.$store.dispatch('registerCustomer', this.formC).then(()=>{
+                this.isDataLoaded = true
+              })
             }
         },
            async registerRestaurant(){
@@ -240,10 +240,10 @@ export default defineComponent({
                             position: "top-center", 
                             duration : 2000
                     })
-            //   this.isDataLoaded = false
-            //   await this.$store.dispatch('registerKorisnik', this.form).then(()=>{
-            //     this.isDataLoaded = true
-            //   })
+              this.isDataLoaded = false
+              await this.$store.dispatch('registerStore', this.formR).then(()=>{
+                this.isDataLoaded = true
+              })
             }
         },
            async registerDeliverer(){
@@ -295,10 +295,10 @@ export default defineComponent({
                             position: "top-center", 
                             duration : 2000
                     })
-            //   this.isDataLoaded = false
-            //   await this.$store.dispatch('registerKorisnik', this.form).then(()=>{
-            //     this.isDataLoaded = true
-            //   })
+              this.isDataLoaded = false
+              await this.$store.dispatch('registerDeliverer', this.formD).then(()=>{
+                this.isDataLoaded = true
+              })
             }
         }
     }
