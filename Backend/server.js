@@ -15,6 +15,7 @@ const ingredient = require('./routes/ingredient')
 
 neo4j.withDirectory(__dirname + '/models')
 
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended : false}));
@@ -36,7 +37,7 @@ app.use('/api/ingredient',ingredient);
 // neo4j.schema.install().then(() => console.log('Schema installed!'))
 
 /*sluzi da ocisti celu bazu zajedno sa cvorovima, ne radi bas uvek*/
-// neo4j.schema.drop().then(() => console.log('Schema dropped!'))
+//  neo4j.schema.drop().then(() => console.log('Schema dropped!'))
 
 
 app.listen(5000,() => {
