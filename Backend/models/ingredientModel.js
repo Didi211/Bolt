@@ -5,5 +5,5 @@ neo4j.model('Ingredient', {
         type: 'string',
         required: true
     }
-
+    
 });

@@ -1,7 +1,7 @@
 const neo4j = require('../config/neo4j_config');
 
 neo4j.model('Meal',{ 
-    mealD: {
+    mealID: {
         primary: true,
         unique: true,
         type: 'uuid'
@@ -23,5 +23,7 @@ neo4j.model('Meal',{
         //koji se sastojak koliko nalazi u obroku i da ovo bude suma toga
         type: 'number' //u gramima ili mozda bude string 
     },
+  
+     
     
 }); 
