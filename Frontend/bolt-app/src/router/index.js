@@ -4,6 +4,8 @@ import Router from 'vue-router'
 import Homepage from '@/pages/Homepage'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
+import PageNotFound from '@/pages/PageNotFound'
+import Basket from '@/pages/Basket'
 
 Vue.use(Router)
 
@@ -69,16 +71,21 @@ const router = new Router({
             //     }
             // }
         },
+        {
+            path:'/Basket',
+            name: 'Basket',
+            component: Basket
+        },
         // {
         //     path: '/401',
         //     name: 'PageNotAuthenticated',
         //     component: PageNotAuthenticated
         // },
-        // {
-        //     path: '*',
-        //     name: 'PageNotFound',
-        //     component: PageNotFound
-        // }
+        {
+            path: '*',
+            name: 'PageNotFound',
+            component: PageNotFound
+        }
     ],
     mode: 'history'
 })
