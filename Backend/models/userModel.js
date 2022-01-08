@@ -11,6 +11,14 @@ neo4j.model('User', {
     password: {
         type: 'string', // Simple schema definition of property : type
         required: true
-    } 
+    } , 
+    role:{
+        type: 'string'
+    },    
+    uuid: {
+        primary: true,
+        unique: true,
+        type: 'uuid'
+    },
     
 });

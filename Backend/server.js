@@ -11,6 +11,9 @@ const meal = require('./routes/meal');
 const order = require('./routes/order');
 const store = require('./routes/store');
 const ingredient = require('./routes/ingredient')
+const login = require('./routes/login')
+const register = require('./routes/register')
+
 
 
 neo4j.withDirectory(__dirname + '/models')
@@ -27,6 +30,8 @@ app.use('/api/deliverer',deliverer);
 app.use('/api/meal',meal);
 app.use('/api/order',order);
 app.use('/api/store',store);
+app.use('/api/login',login); 
+app.use('/api/register',register)
 // app.use('/api/user',user); da ne bi smo mogli da kreiramo praznog usera jer je on kao abstraktna klasa 
 app.use('/api/ingredient',ingredient);
 
@@ -37,7 +42,7 @@ app.use('/api/ingredient',ingredient);
 // neo4j.schema.install().then(() => console.log('Schema installed!'))
 
 /*sluzi da ocisti celu bazu zajedno sa cvorovima, ne radi bas uvek*/
-//  neo4j.schema.drop().then(() => console.log('Schema dropped!'))
+// neo4j.schema.drop().then(() => console.log('Schema dropped!'))
 
 
 app.listen(5000,() => {
