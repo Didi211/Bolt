@@ -7,7 +7,8 @@ const nodemon = require('nodemon');
 const saltRounds = 10;
 
 
-const CreateCustomer = (req,res) => {   
+const CreateCustomer = (req,res) => {  
+    console.log(req) 
     bcrypt.hash(req.body.password, saltRounds).then(hash => {
 
         neo4j.model("Customer").create({

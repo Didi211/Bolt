@@ -50,7 +50,7 @@ export default defineComponent({
         Footer
     },
     methods:{
-        login(){
+        async login(){
             if(this.loginInfo.username==""){
            this.$toasted.show("Polje za username mora biti popunjeno!", { 
                         theme: "bubble", 

@@ -36,7 +36,8 @@ export default new Vuex.Store({
             })
         },
         async registerCustomer({commit}, registerInfo){
-            return await Api().post('/', registerInfo).then((res)=>{
+            console.log(registerInfo)
+            return await Api().post('/api/register/customer', registerInfo).then((res)=>{
                 const trenutniKorisnik = res.data
                 commit('setKorisnik', trenutniKorisnik)
                 Vue.$cookies.set("id",this.state.trenutniKorisnik.uuid,"1h");

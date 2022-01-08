@@ -1,7 +1,7 @@
 import '@/assets/style.css'
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from './router/index.js'
 import Toasted from 'vue-toasted'
 import store from './api-services/data'
 import Axios from 'axios'
