@@ -223,9 +223,7 @@ export default defineComponent({
         Footer,
         //StoreInfo
     },
-    data(){
-  
-    },
+    
     // computed:{
     //     information(){
     //         return this.$store.getters['getStoreCard']
