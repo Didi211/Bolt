@@ -6,6 +6,10 @@ import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import PageNotFound from '@/pages/PageNotFound'
 import Basket from '@/pages/Basket'
+import Search from '@/pages/Search'
+import Store from '@/pages/Store'
+import Customer from '@/pages/Customer'
+import Deliverer from '@/pages/Deliverer'
 
 Vue.use(Router)
 
@@ -75,6 +79,26 @@ const router = new Router({
             path:'/Basket',
             name: 'Basket',
             component: Basket
+        },
+        {
+            path:'/Search',
+            name: 'Search',
+            component: Search
+        },
+        {
+            path:'/Store',
+            name: 'Store',
+            component: Store
+        },
+        {
+            path:'/Customer',
+            name: 'Customer',
+            component: Customer
+        },
+        {
+            path:'/Deliverer',
+            name: 'Deliverer',
+            component: Deliverer
         },
         // {
         //     path: '/401',

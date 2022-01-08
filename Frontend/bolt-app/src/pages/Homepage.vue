@@ -213,6 +213,7 @@
 import { defineComponent } from '@vue/composition-api'
 import  Header  from '@/components/Header.vue'
 import  Footer  from '@/components/Footer.vue'
+//import Vue from 'vue'
 //import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
