@@ -7,7 +7,7 @@ const nodemon = require('nodemon');
 const saltRounds = 10;
 
 
-const CreateCustomer = (req,res) => {  
+const CreateCustomer = async (req,res) => {  
     console.log(req) 
     bcrypt.hash(req.body.password, saltRounds).then(hash => {
 
@@ -34,7 +34,7 @@ const CreateCustomer = (req,res) => {
     }).catch(err => res.send(err).status(500))
 }
 
-const GetCustomerByUsername = (req,customer) => {
+const GetCustomerByUsername = (req) => {
     neo4j.find('Customer', {username : req.body.username}).then(customer => {
         return customer
     }).catch(err => {console.log(err); return "ERROR!"})
@@ -46,25 +46,5 @@ const GetCustomer = (req,res) => {
         res.send(user).status(200)
     }).catch(err => res.send(err).status(400))
 }
-// const CreateFoodOrder = (req,res) => {
-//     Promise.all([
-//         neo4j.model('Customer').create({
-//             name: 'Dimitrije',
-//             surname: 'Mitic',
-//             location: 'Dragise Cvetkovica 22/12',
-//             username: 'miticd99',
-//             password: 'didididi'
 
-//         }),
-//         neo4j.model('Order').create({
-            
-
-//         })
-//     ]).then(([customer,order]) => { 
-//         customer.relateTo(order,'creates_order',{date: new Date().now(), time: new Date().now() })
-//             .then(res => {
-//                 console.log('Order created.');
-//             })
-//     }) 
-// }
 module.exports = {CreateCustomer,GetCustomer,GetCustomerByUsername};

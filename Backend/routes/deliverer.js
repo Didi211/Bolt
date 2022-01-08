@@ -3,6 +3,6 @@ const router = express.Router();
 
 const CreateDeliverer = require('../controllers/delivererController');
 
-router.post('/', CreateDeliverer);
+// router.post('/', CreateDeliverer);
 
 module.exports = router;
