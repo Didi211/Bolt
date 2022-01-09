@@ -12,6 +12,7 @@ import Deliverer from '@/pages/Deliverer'
 import StoreMenu from '@/pages/StoreMenu'
 import PageNotAuthenticated from '@/pages/PageNotAuthenticated'
 import OrderHistory from '@/pages/OrderHistory'
+import StoreChangeMenus from '@/pages/StoreChangeMenus'
 
 Vue.use(Router)
 
@@ -101,6 +102,20 @@ const router = new Router({
             path:'/Store',
             name: 'Store',
             component: Store,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip == 'Store'){
+                    next();
+                }
+                else{
+                    next({name: 'PageNotAuthenticated'})
+                }
+            }
+        },
+        {
+            path:'/StoreChangeMenus',
+            name: 'StoreChangeMenus',
+            component: StoreChangeMenus,
             beforeEnter(to, from, next){
                 let tip = Vue.$cookies.get("tip")
                 if(tip == 'Store'){
