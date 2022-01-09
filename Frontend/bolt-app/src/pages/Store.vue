@@ -12,7 +12,7 @@
                                 <h5 class="form-signin text-center">Promeni prosecno vreme obrade porudzbine:</h5>
                             </div>
                             <div class="col-xl-3">
-                                <input type="number" class="form-control" v-model="novoVreme" name="novoVreme" step="5" placeholder="Novo vreme porudzbine..." autofocus="">           
+                                <input type="text" class="form-control" v-model="novoVreme.preptime" name="novoVreme" placeholder="Novo vreme porudzbine..." autofocus="">           
                             </div>
                         </div>
                         <button class="btn btn-lg btn-primary dugme" @click="promeniVreme">Promeni</button>
@@ -51,7 +51,9 @@ export default defineComponent({
     },
     data(){
         return{
-            novoVreme:0
+            novoVreme:{
+                preptime:null
+            }
         }
     },
     methods:{

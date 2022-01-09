@@ -19,6 +19,7 @@ export default new Vuex.Store({
         store: null,
         kategorije:[],
         customer:null,
+        unselectedOrdersDeliverer:[]
     },
     getters:{
         getOrderHistory(state){
@@ -47,6 +48,9 @@ export default new Vuex.Store({
         },
         getTrenutniKorisnik(state){
             return state.trenKorisnik
+        },
+        getUnselectedOrders(state){
+            return state.unselectedOrdersDeliverer
         }
     },
     actions:{
@@ -123,7 +127,7 @@ export default new Vuex.Store({
                 commit('setOsobaID', Vue.$cookies.get("id"))
                 router.push("/Store")
             }).catch(()=>{
-                Vue.toasted.show("Već postoji korisnik sa tim username-om!", { 
+                Vue.toasted.show("Greska!", { 
                     theme: "bubble", 
                     position: "top-center", 
                     duration : 2000
@@ -247,8 +251,20 @@ export default new Vuex.Store({
         },
         // async changeTime({commit}, novoVreme){
         //     return await Api().put('/'+ this.state.osobaID, novoVreme).then(res=>{
+        async changeTime( novoVreme){
+            return await Api().put('/api/store/preptime/change/'+ this.state.osobaID, novoVreme).then(()=>{
+
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        // async getUnselectedOrders({commit}){
+        //     return await Api().get('/api/category/all').then(res=>{
+        //         const kat = res.data
+        //         commit('setCategories', kat)
         //     })  
-        // },
+        // }, 
+        
         postaviToken({commit}, tok){
             commit('setToken', tok)
         },

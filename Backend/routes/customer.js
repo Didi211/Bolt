@@ -5,5 +5,5 @@ const {CreateCustomer, GetPreviousOrders} = require('../controllers/customerCont
 
 
 router.post('/',CreateCustomer); 
-router.get('/prevousOrders',GetPreviousOrders)
+router.get('/previousOrders/:id',GetPreviousOrders)
 module.exports = router;

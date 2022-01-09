@@ -2,6 +2,7 @@ const  neo4j  = require('../config/neo4j_config');
 const restoran = require('../models/storeModel');
 const token = require('../config/token')
 const bcrypt = require('bcrypt');
+const e = require('express');
 
 const saltRounds = 10;
 
@@ -18,6 +19,37 @@ function convertToDTO(store) {
   
    
 }
+const GetTop5 = async (req,res) => { 
+    async function makeArray(arr) {
+        let allStores = await neo4j.model('Store').all()
+        
+        await allStores.forEach(async (store) => { 
+            
+            let stored_uuid = await store._properties.get('uuid')
+            let result = await neo4j.cypher(
+                `MATCH (s:Store {uuid: '${stored_uuid}'})-[rel:PREPARES]->(o:Order) return count(rel)`
+            );
+        
+            result.records.forEach(async (element) => {
+                let relCount = await element._fields[0].low;
+
+                await arr.push({
+                    key: stored_uuid,
+                    value: relCount
+                });
+                console.log(arr);
+            })
+        });
+        return arr
+    }
+    temp = []
+    temp = await makeArray(temp)
+    temp.sort()
+    
+    console.log("nasdasm l");
+    console.log(temp)
+    res.status(200).send("")
+}
 const CreateStore = async (req,res) => { 
     
     
@@ -28,7 +60,7 @@ const CreateStore = async (req,res) => {
             password: hash,
             name: req.body.name,
             location: req.body.location,
-            preptime: req.body.preptime,
+            preptime: null,
             role: "Store"// Simple schema definition of property : type
         
         }).then(store => {
@@ -90,4 +122,10 @@ const GetAllStores = async (req,res) => {
     }
 }
 
-module.exports = {CreateStore, GetStore, GetAllStores, changePrepTime}
+module.exports = {
+    CreateStore,
+    GetStore,
+    GetAllStores,
+    changePrepTime,
+    GetTop5
+}

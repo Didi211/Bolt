@@ -3,7 +3,14 @@
         <div class="row">
             <HeaderDeliverer />
         </div>
-
+        <div class="row">
+            <h4>Izaberite porudzbinu koju zelite da dostavite:</h4>
+        </div>
+        <div class="row">
+            <OrderCard v-for="order in unselectedOrders" 
+                                    :key="order.id" 
+                                    :order="order"/>
+        </div>
         <div class="row">
             <Footer />
         </div>
@@ -15,6 +22,7 @@
 import { defineComponent } from '@vue/composition-api'
 import  HeaderDeliverer  from '@/components/HeaderSAndD.vue'
 import  Footer  from '@/components/Footer.vue'
+import OrderCard from '@/components/OrderCardDeliverer.vue'
 //import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
@@ -22,17 +30,18 @@ export default defineComponent({
     components: {
         HeaderDeliverer,
         Footer,
+        OrderCard
         //StoreInfo
     },
-    // computed:{
-    //     information(){
-    //         return this.$store.getters['getStoreCard']
-    //     }
-    // },
-    // async created(){
-    //     await this.$store.dispatch('getStoreCard').then(()=>{
-    //     })
-    // }
+    computed:{
+        unselectedOrders(){
+            return this.$store.getters['getUnselectedOrders']
+        }
+    },
+    async created(){
+        await this.$store.dispatch('getUnselectedOrders').then(()=>{
+        })
+    }
 })
 </script>
 

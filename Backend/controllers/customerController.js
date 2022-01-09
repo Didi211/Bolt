@@ -8,9 +8,8 @@ const saltRounds = 10;
 
 const RecordsToJSON = (records) =>{
     let item= []    
-    records.forEach(element => {
-        if(element._fields[0].properties.status == 'Finished')
-            item.push(element._fields[0].properties)
+    records.forEach(element => {       
+        item.push(element._fields[0].properties)
     })
     return item
 } 
@@ -55,8 +54,8 @@ const GetCustomer = (req,res) => {
     }).catch(err => res.send(err).status(400))
 }
 const GetPreviousOrders = (req,res) => {
-    neo4j.cypher(`match (c:Customer {uuid : "${req.params.id}"})-[rel:ORDERED]->(o:Order) return o`).then(result => {
-        
+    neo4j.cypher(`match (c:Customer {uuid : "${req.params.id}"})-[rel:ORDERED]->(o:Order {status: "Finished"}) return o`).then(result => {
+        console.log(result);
         orders = RecordsToJSON(result.records)
         
         res.send(orders).status(200)
