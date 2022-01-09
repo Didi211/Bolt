@@ -154,9 +154,10 @@ const router = new Router({
             }
         },
         {
-            path:'/StoreMenu',
+            path:'/StoreMenu/:id',
             name: 'StoreMenu',
             component: StoreMenu,
+            props: true,
             beforeEnter(to, from, next){
                 let tip = Vue.$cookies.get("tip")
                 if(tip == 'Customer'){

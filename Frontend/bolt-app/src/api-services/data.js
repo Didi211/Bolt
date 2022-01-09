@@ -211,10 +211,10 @@ export default new Vuex.Store({
                 commit('setAllMealsFromStore', meals)
             })  
         },
-        async getStoreById({commit}){
+        async getStoreById({commit}, storeID){
             //koristi id od pickedStore
             console.log(this.state.pickedStore)
-            return await Api().get('/api/store/get/'+ this.state.pickedStore).then(res=>{
+            return await Api().get('/api/store/get/'+ storeID).then(res=>{
                 const store = res.data
                 console.log(store)
                 commit('setStore', store)
