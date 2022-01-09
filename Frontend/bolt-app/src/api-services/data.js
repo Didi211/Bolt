@@ -19,8 +19,8 @@ export default new Vuex.Store({
     actions:{
         async registerDeliverer({commit}, registerInfo){
             return await Api().post('/', registerInfo).then((res)=>{
-                const trenutniKorisnik = res.data
-                commit('setKorisnik', trenutniKorisnik)
+                const trenKorisnik = res.data
+                commit('setKorisnik', trenKorisnik)
                 Vue.$cookies.set("id",this.state.trenutniKorisnik.uuid,"1h");
                 Vue.$cookies.set("token",this.state.trenutniKorisnik.token,"1h");
                 Vue.$cookies.set("tip",this.state.trenutniKorisnik.role,"1h");
@@ -39,13 +39,15 @@ export default new Vuex.Store({
             console.log(registerInfo)
             return await Api().post('/api/register/customer', registerInfo).then((res)=>{
                 const trenutniKorisnik = res.data
+                console.log(res.data)
                 commit('setKorisnik', trenutniKorisnik)
-                Vue.$cookies.set("id",this.state.trenutniKorisnik.uuid,"1h");
-                Vue.$cookies.set("token",this.state.trenutniKorisnik.token,"1h");
-                Vue.$cookies.set("tip",this.state.trenutniKorisnik.role,"1h");
+                Vue.$cookies.set("id",this.state.trenutniKorisnik.user.uuid,"1h");
+                Vue.$cookies.set("token",this.state.trenutniKorisnik.webtoken,"1h");
+                Vue.$cookies.set("tip",this.state.trenutniKorisnik.user.role,"1h");
                 commit('setToken', Vue.$cookies.get("token"))
                 commit('setTip', Vue.$cookies.get("tip"))
-                router.push("/HomepageCustomer")
+                commit('setOsobaID', Vue.$cookies.get("id"))
+                router.push("/Customer")
             }).catch(()=>{
                 Vue.toasted.show("Već postoji korisnik sa tim username-om!", { 
                     theme: "bubble", 
@@ -73,26 +75,27 @@ export default new Vuex.Store({
             })
         },
         async loginKorisnik({commit},loginInfo){
-            await Api().post('/', loginInfo).then(res=>{
+            await Api().post('/api/login', loginInfo).then(res=>{
                 const trenutniKorisnik = res.data
                 commit('setKorisnik', trenutniKorisnik)
-                Vue.$cookies.set("id",this.state.trenutniKorisnik.uuid,"1h");
+                Vue.$cookies.set("id",this.state.trenutniKorisnik.user.uuid,"1h");
                 Vue.$cookies.set("token",this.state.trenutniKorisnik.token,"1h");
-                Vue.$cookies.set("tip",this.state.trenutniKorisnik.role,"1h");
+                Vue.$cookies.set("tip",this.state.trenutniKorisnik.user.role,"1h");
                 commit('setToken', Vue.$cookies.get("token"))
                 commit('setTip', Vue.$cookies.get("tip"))
+                commit('setOsobaID', Vue.$cookies.get("id"))
                 // commit('setOsobaID',this.state.trenutniKorisnik.userID)
-                if(this.state.trenutniKorisnik.tip == "C")
+                if(this.state.trenutniKorisnik.tip == "Customer")
                 {
-                    router.push("/HomepageCustomer")
+                    router.push("/Customer")
                 }
-                else if(this.state.trenutniKorisnik.tip == "S")
+                else if(this.state.trenutniKorisnik.tip == "Store")
                 {
-                    router.push("/HomepageStore")
+                    router.push("/Store")
                 }
-                else if(this.state.trenutniKorisnik.tip == "D")
+                else if(this.state.trenutniKorisnik.tip == "Deliverer")
                 {
-                    router.push("/HomepageDeliverer")
+                    router.push("/Deliverer")
                 }
             }).catch((err)=>{
                 if(err.response.status==403){
@@ -114,8 +117,9 @@ export default new Vuex.Store({
         },
         logoutKorisnik({commit}){
                 commit('setKorisnik', null)
-                commit('setToken', null);
+                commit('setToken', null)
                 commit('setTip', null)
+                commit('setOsobaID', null)
                 Vue.$cookies.remove("id");
                 Vue.$cookies.remove("token");
                 Vue.$cookies.remove("tip");
@@ -141,5 +145,8 @@ export default new Vuex.Store({
         setTip(state, tip){
             state.tip = tip;
         },
+        setOsobaID(state, osobaID){
+            state.osobaID = osobaID;
+        }
     }
 })
