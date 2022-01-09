@@ -29,10 +29,12 @@ export default {
     
     if(this.korisnik != null && this.korisnik.id != null)
     {
+      console.log(this.korisnik)
       await this.$store.dispatch("postaviTip", this.korisnik.tip)
       await this.$store.dispatch("postaviToken", this.korisnik.token)
+      console.log(this.korisnik.id)
+      await this.$store.dispatch("postaviOsobaID", this.korisnik.id)
       // await this.$store.dispatch("getKorisnikById", this.korisnik.id)
-      // await this.$store.dispatch("postaviOsobaID", this.korisnik.id)
     }
 
   }

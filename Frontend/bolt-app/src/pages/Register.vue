@@ -35,11 +35,10 @@
                     <div v-if="restaurantSel">
                         <form class="form-signin" @submit.prevent>
                             <h2 class="form-signin-heading text-center ml-2 mr-2">Registracija restorana</h2>
-                                <input v-model="formR.naziv" type="text" class="form-control" name="name" placeholder="Naziv" required="" autofocus="">
+                                <input v-model="formR.name" type="text" class="form-control" name="name" placeholder="Naziv" required="" autofocus="">
                                 <input v-model="formR.username" type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="">
-                                <input v-model="formR.adresa" type="text" class="form-control" name="address" placeholder="Adresa" required="" autofocus="">
-                                <input v-model="formR.sifra" type="password" class="form-control" name="password" placeholder="Šifra" required="" /> 
-                                <input v-model="formR.potvrdiSifru" type="password" class="form-control" name="confirm" placeholder="Potvrdi šifru" required="" /> 
+                                <input v-model="formR.location" type="text" class="form-control" name="address" placeholder="Adresa" required="" autofocus="">
+                                <input v-model="formR.password" type="password" class="form-control" name="password" placeholder="Šifra" required="" /> 
                                 <button @click.prevent="registerRestaurant" class="btn btn-lg btn-primary dugme ">Registruj se</button>
                         </form>
                     </div>
@@ -94,10 +93,10 @@ export default defineComponent({
           username: ""
         },
         formR: {
-          naziv: "",
+          name: "",
           username: "",
-          adresa: "",
-          sifra: ""
+          location: "",
+          password: ""
         },
         formD: {
           ime: "",
@@ -174,7 +173,7 @@ export default defineComponent({
             }
         },
            async registerRestaurant(){
-            if(this.formR.naziv==""){
+            if(this.formR.name==""){
             this.$toasted.show("Polje za ime mora biti popunjeno!", { 
                             theme: "bubble", 
                             position: "top-center", 
@@ -188,29 +187,15 @@ export default defineComponent({
                             duration : 2000
                     })
             }
-            else if(this.formR.adresa==""){
+            else if(this.formR.location==""){
             this.$toasted.show("Polje za adresu mora biti popunjeno!", { 
                             theme: "bubble", 
                             position: "top-center", 
                             duration : 2000
                     })
             }
-            else if(this.formR.sifra==""){
+            else if(this.formR.password==""){
             this.$toasted.show("Polje za šifru mora biti popunjeno!", { 
-                            theme: "bubble", 
-                            position: "top-center", 
-                            duration : 2000
-                    })
-            }
-            else if(this.formR.potvrdiSifru==""){
-            this.$toasted.show("Morate potvrditi šifru!", { 
-                            theme: "bubble", 
-                            position: "top-center", 
-                            duration : 2000
-                    })
-            }
-            else if(this.formR.potvrdiSifru!=this.formR.sifra){
-            this.$toasted.show("Šifre se ne poklapaju, probajte ponovo!", { 
                             theme: "bubble", 
                             position: "top-center", 
                             duration : 2000
