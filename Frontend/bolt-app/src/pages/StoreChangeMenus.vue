@@ -3,7 +3,15 @@
         <div class="row">
             <HeaderStore />
         </div>
-        <div class="row">
+        <div v-if="isDataLoaded" class="row">
+            <div class="col-xl-6">
+                <p>deo za dodavanje novog jela</p>
+            </div>
+            <div class="col-xl-6">
+                
+            </div>
+        </div>
+        <!-- <div class="row">
             <div class="wrapper PrijavaRow">
                 <div class="col-lg-8 center">
                     <form class="form-signin" @submit.prevent>
@@ -19,15 +27,9 @@
                     </form>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            ovo je row gde ce da se prikazuju pristigle ali ne accepted narudzbine
-        </div>
-        <div class="row">
-            ovo je row gde ce da se prikazuju porudzbine u obradi
-        </div>
-        <div class="row">
-            ovo je row gde ce da se prikazuju porudzbine koje su obradjene ali nisu pokupljene od strane dostavljaca
+        </div> -->
+        <div v-else>
+            <AppSpinner/>
         </div>
         <div class="row">
             <Footer />
@@ -40,6 +42,7 @@
 import { defineComponent } from '@vue/composition-api'
 import  HeaderStore  from '@/components/HeaderStore.vue'
 import  Footer  from '@/components/Footer.vue'
+import AppSpinner from '@/components/AppSpinner.vue'
 //import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
@@ -47,27 +50,30 @@ export default defineComponent({
     components: {
         HeaderStore,
         Footer,
-        //StoreInfo
+        AppSpinner
     },
     data(){
         return{
-            novoVreme:0
+            novoVreme:0,
+            isDataLoaded:true
         }
     },
     methods:{
         async promeniVreme(){
             await this.$store.dispatch('changeTime', this.novoVreme)
         }
+    },
+    computed:{
+        kategorije(){
+            return this.$store.getters['getAllCategories']
+        }
+    },
+    async created(){
+        this.isDataLoaded = false
+        await this.$store.dispatch('getAllCategories').then(()=>{
+            this.isDataLoaded = true
+        })
     }
-    // computed:{
-    //     information(){
-    //         return this.$store.getters['getStoreCard']
-    //     }
-    // },
-    // async created(){
-    //     await this.$store.dispatch('getStoreCard').then(()=>{
-    //     })
-    // }
 })
 </script>
 
