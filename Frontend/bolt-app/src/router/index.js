@@ -10,6 +10,7 @@ import Search from '@/pages/Search'
 import Store from '@/pages/Store'
 import Customer from '@/pages/Customer'
 import Deliverer from '@/pages/Deliverer'
+import StoreMenu from '@/pages/StoreMenu'
 
 Vue.use(Router)
 
@@ -99,6 +100,11 @@ const router = new Router({
             path:'/Deliverer',
             name: 'Deliverer',
             component: Deliverer
+        },
+        {
+            path:'/StoreMenu',
+            name: 'StoreMenu',
+            component: StoreMenu
         },
         // {
         //     path: '/401',
