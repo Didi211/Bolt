@@ -32,7 +32,8 @@
                 <p>Salate</p>
             </div>
             <div class="col-md-6"> 
-                <p class="lead fw-normal text-black-50 mb-0">Llista hrane</p>
+                <p class="lead fw-normal text-black-50 mb-0">Lista hrane</p>
+                <Meal />
             </div>
             <div class="col-md-3 basket"> 
                 <p class="lead fw-normal text-black-50 mb-0">KOrpa</p>
@@ -55,12 +56,14 @@
 import { defineComponent } from '@vue/composition-api'
 import  Header  from '@/components/Header.vue'
 import  Footer  from '@/components/Footer.vue'
+import Meal from '@/components/MealComponent.vue'
 
 export default defineComponent({
     name: "StoreMenu",
     components: {
         Header,
         Footer,
+        Meal
     },
     setup() {
         
