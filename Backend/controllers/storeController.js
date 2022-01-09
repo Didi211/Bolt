@@ -8,6 +8,7 @@ const saltRounds = 10;
 function convertToDTO(store) { 
    
     let storeDTO = {
+        uuid: store._properties.get('uuid'),
         username: store._properties.get('username'),
         name: store._properties.get('name'),
         location: store._properties.get('location')
