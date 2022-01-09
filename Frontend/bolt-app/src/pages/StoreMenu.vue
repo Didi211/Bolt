@@ -13,7 +13,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6"> 
-                                <p class="lead fw-normal text-white-50 mb-0">Vreme pripreme</p>
+                                <p class="lead fw-normal text-white-50 mb-0">Vreme pripreme:{{store.preptime}}</p>
                             </div>
                             <div class="col-md-6"> 
                                 <p class="lead fw-normal text-white-50 mb-0">{{store.location}}</p>
