@@ -2,12 +2,11 @@ const express = require('express')
 const router = express.Router()
 
 const { CreateCustomer } = require('../controllers/customerController');
-const token = require('../config/token')
+const { CreateDeliverer } = require('../controllers/delivererController');
 
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 
 router.post('/customer',CreateCustomer)     
+ router.post('/deliverer',CreateDeliverer)
 
 module.exports = router
