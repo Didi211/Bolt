@@ -19,29 +19,31 @@ function convertToDTO(store) {
   
    
 }
-
 const GetTop5 = async (req,res) => { 
-    let allStores = await neo4j.model('Store').all()
-    // console.log("ALL STORES")
-    // console.log(allStores)
-    let temp = []
-    await allStores.forEach(async (store) => { 
+    async function makeArray(arr) {
+        let allStores = await neo4j.model('Store').all()
         
-        let stored_uuid = store._properties.get('uuid')
-        let result = await neo4j.cypher(
-            `MATCH (s:Store {uuid: '${stored_uuid}'})-[rel:PREPARES]->(o:Order) return count(rel)`
-        );
-    
-        result.records.forEach(element => {
-            let relCount = element._fields[0].low
+        await allStores.forEach(async (store) => { 
             
-            temp.push({
-                key: stored_uuid,
-                value: relCount
+            let stored_uuid = await store._properties.get('uuid')
+            let result = await neo4j.cypher(
+                `MATCH (s:Store {uuid: '${stored_uuid}'})-[rel:PREPARES]->(o:Order) return count(rel)`
+            );
+        
+            result.records.forEach(async (element) => {
+                let relCount = await element._fields[0].low;
+
+                await arr.push({
+                    key: stored_uuid,
+                    value: relCount
+                });
+                console.log(arr);
             })
-            console.log(temp);
-        })
-    });
+        });
+        return arr
+    }
+    temp = []
+    temp = await makeArray(temp)
     temp.sort()
     
     console.log("nasdasm l");
