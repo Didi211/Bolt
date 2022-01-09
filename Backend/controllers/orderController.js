@@ -33,4 +33,17 @@ const CreateOrder =  (req,res) => {
     }).catch(err => res.send(err).status(400));
 }
 
+
+/**
+ * const getNewOrders(role)
+ */
+
+/**
+ * const chooseOrder(role,orderID)
+ */
+
+/**
+ * const finishOrder(role,orderID)
+ */
+
 module.exports = {CreateOrder};

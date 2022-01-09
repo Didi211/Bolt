@@ -16,14 +16,15 @@ const CreateMeal = (req,res) => {
         name: mealBody.name,
         price: mealBody.price,
         category: mealBody.category,
-        servingSize: mealBody.servingSize
+        servingSize: mealBody.servingSize,
+        ingredients: mealBody.ingredients,
     }).then(meal => {    
         
             
             neo4j.cypher(`match (m:Meal {mealID: "${meal._properties.get("mealID")}"}),(store:Store {uuid: "${req.body.storeID}"}) create (store)-[rel:OFFERS]->(m) return m,store,rel`)
             .then(result => {                 
             })
-            .catch(err => console.log(err)          )
+            .catch(err => console.log(err))
        
         res.send(meal).status(200)
             

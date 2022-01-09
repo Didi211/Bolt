@@ -3,7 +3,7 @@
     <div class="row">
             <Header />
     </div>
-    <div class="row">
+    <div class="row" v-if="isDataLoaded">
         <div class="row">
             <header class="bg-dark ">
                 <div class="container naziv px-4 px-lg-5 my-5">
@@ -41,6 +41,9 @@
             <!-- <h1>STORE NAME</h1> -->
         </div>
     </div>
+    <div v-else>
+        <AppSpinner/>
+    </div>
     <div class="row">
             <Footer />
     </div>
@@ -54,19 +57,26 @@
 </template>
 <script>
 import { defineComponent } from '@vue/composition-api'
-import  Header  from '@/components/Header.vue'
+import  Header  from '@/components/HeaderCustomer.vue'
 import  Footer  from '@/components/Footer.vue'
 import Meal from '@/components/MealComponent.vue'
+import AppSpinner from '@/components/AppSpinner.vue'
 
 export default defineComponent({
     name: "StoreMenu",
     components: {
         Header,
         Footer,
-        Meal
+        Meal,
+        AppSpinner
     },
     setup() {
         
+    },
+    data(){
+        return{
+            isDataLoaded:true
+        }
     },
     computed:{
         store(){
@@ -77,7 +87,11 @@ export default defineComponent({
         // }
     },
     async created(){
-        await this.$store.dispatch('getStoreById')
+        this.isDataLoaded = false
+        const storeID = this.$route.params.id
+        await this.$store.dispatch('getStoreById',storeID).then(()=>{
+            this.isDataLoaded = true;
+        })
         // .then(res=>{
         //     this.$store.dispatch('postaviPickedStore', res.data.uuid)
         // })
