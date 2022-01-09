@@ -12,6 +12,9 @@ neo4j.extend('User','Deliverer',{
     vehicle: {
         type: 'string'
     },
+    avgTime : { 
+        type: 'number'
+    }
    
 });
 
