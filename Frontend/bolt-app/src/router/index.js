@@ -15,6 +15,7 @@ import OrderHistory from '@/pages/OrderHistory'
 
 Vue.use(Router)
 
+
 const router = new Router({
     routes:[
         {

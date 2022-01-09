@@ -9,14 +9,14 @@
                 <div class="container naziv px-4 px-lg-5 my-5">
                     <div class="text-center text-white">
                         <div class="row text">
-                        <h5 class="display-4 fw-bolder">Store name</h5>
+                        <h5 class="display-4 fw-bolder">{{store.name}}</h5>
                         </div>
                         <div class="row">
                             <div class="col-md-6"> 
                                 <p class="lead fw-normal text-white-50 mb-0">Vreme pripreme</p>
                             </div>
                             <div class="col-md-6"> 
-                                <p class="lead fw-normal text-white-50 mb-0">Lokacija</p>
+                                <p class="lead fw-normal text-white-50 mb-0">{{store.location}}</p>
                             </div>
                         </div>
                     </div>
@@ -65,6 +65,20 @@ export default defineComponent({
     setup() {
         
     },
+    computed:{
+        store(){
+            return  this.$store.getters['getStore']
+        }
+        // async meals(){
+        //     return await this.$store.dispatch('getMealsFromStore')
+        // }
+    },
+    async created(){
+        await this.$store.dispatch('getStoreById')
+        // .then(res=>{
+        //     this.$store.dispatch('postaviPickedStore', res.data.uuid)
+        // })
+    }
 })
 </script>
 

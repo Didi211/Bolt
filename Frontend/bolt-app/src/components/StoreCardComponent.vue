@@ -1,6 +1,6 @@
 <template>
     <div class="col mb-5">
-        <div class="card h-100" @click="open">
+        <div class="card h-100" @click="open" v-bind:id="store.uuid">
             <!-- Store name-->
             <h2>{{store.name}}</h2> 
             <!-- <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." /> -->
@@ -32,12 +32,16 @@ export default defineComponent({
            required: true,
            type: Object,
        },
-   },
-   methods:{
-       open(){
-           this.$router.push({ path: 'StoreMenu' })
+    },
+    methods:{
+     open(){
+            this.$router.push({ path: 'StoreMenu' })
+            this.$store.dispatch('postaviPickedStore', this.store.uuid)
        }
-   }
+    },
+    async created(){
+        
+    },
 })
 </script>
 
