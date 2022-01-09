@@ -34,7 +34,7 @@ app.use('/api/store',store);
 app.use('/api/login',login); 
 app.use('/api/register',register)
 app.use('/api/category',category)
-// app.use('/api/user',user); da ne bi smo mogli da kreiramo praznog usera jer je on kao abstraktna klasa 
+app.use('/api/user',user);// da ne bi smo mogli da kreiramo praznog usera jer je on kao abstraktna klasa 
 
 
 
