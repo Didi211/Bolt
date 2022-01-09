@@ -23,9 +23,9 @@ const CreateDeliverer = (req,res) => {
             webtoken = token.generateAccessToken(user)
             res.send({user,webtoken}).status(200)  
 
-        }).catch(err => res.send(err).status(400))
+        }).catch(err => res.status(400).send(err))
 
-    }).catch(err => res.send(err).status(500))
+    }).catch(err => res.status(500).send(err))
     
 }
 

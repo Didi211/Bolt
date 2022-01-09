@@ -1,6 +1,6 @@
 
 const neo4j = require('../config/neo4j_config');
-const ingredient = require('../models/ingredientModel');
+const ingredient = require('../models/categoryModel');
 
 const AddIngredient = (req,res) => { 
     ingr = req.body   

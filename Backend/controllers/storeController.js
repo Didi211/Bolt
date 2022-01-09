@@ -1,5 +1,9 @@
 const  neo4j  = require('../config/neo4j_config');
 const restoran = require('../models/storeModel');
+const token = require('../config/token')
+const bcrypt = require('bcrypt');
+
+const saltRounds = 10;
 
 function convertToDTO(store) { 
    
@@ -14,22 +18,29 @@ function convertToDTO(store) {
    
 }
 const CreateStore = async (req,res) => { 
-    const storeBody = req.body;
-    try { 
-        store = await neo4j.model("Store").create({
-            username: storeBody.username,
-            password: storeBody.password,
-            name: storeBody.name,
-            location: storeBody.location
-        })
-        let storeDTO = convertToDTO(store)
     
-        res.status(200).send(storeDTO)
+    bcrypt.hash(req.body.password, saltRounds).then(hash => {
 
-    }
-    catch(e) { 
-        res.status(500).end(e.message || e.toString())
-    }
+        neo4j.model("Store").create({
+            username: req.body.username,
+            password: req.body.password,
+            name: req.body.name,
+            location: req.body.location,
+            role: "Store"// Simple schema definition of property : type
+        
+        }).then(store => {
+
+            let user = {
+                username : store._properties.get("username"),
+                uuid :store._properties.get("uuid"),
+                role :store._properties.get("role")
+            }
+            webtoken = token.generateAccessToken(user)
+            res.send({user,webtoken}).status(200)  
+
+        }).catch(err => res.status(400).send(err))
+
+    }).catch(err => res.status(500).send(err))
 }
 
 const GetStore = async (req,res) => {
@@ -62,4 +73,4 @@ const GetAllStores = async (req,res) => {
     }
 }
 
-module.exports = {CreateStore, GetStore, GetAllStores};
+module.exports = {CreateStore, GetStore, GetAllStores}

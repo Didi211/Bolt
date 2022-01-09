@@ -3,14 +3,15 @@ const  neo4j  = require('../config/neo4j_config');
 
 neo4j.extend('User','Customer',{
     name: {
-        type: 'string'
+        type: 'string',
+        required: true
     },
     surname: {
-        type: 'string'
+        type: 'string',
+        required: true
     },
     location: {
-        type: 'string',
-        unique: true
+        type: 'string'
     },
    
     

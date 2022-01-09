@@ -3,12 +3,12 @@ const neo4j = require('../config/neo4j_config');
 const customer = require('../models/customerModel');
 const token = require('../config/token')
 const bcrypt = require('bcrypt');
-const nodemon = require('nodemon');
+
 const saltRounds = 10;
 
 
 const CreateCustomer = async (req,res) => {  
-    console.log(req) 
+
     bcrypt.hash(req.body.password, saltRounds).then(hash => {
 
         neo4j.model("Customer").create({
@@ -29,9 +29,9 @@ const CreateCustomer = async (req,res) => {
             webtoken = token.generateAccessToken(user)
             res.send({user,webtoken}).status(200)  
 
-        }).catch(err => res.send(err).status(400))
+        }).catch(err => res.status(400).send(err))
 
-    }).catch(err => res.send(err).status(500))
+    }).catch(err => res.status(500).send(err))
 }
 
 const GetCustomerByUsername = (req) => {

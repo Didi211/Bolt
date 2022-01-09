@@ -22,6 +22,9 @@ neo4j.model('Meal',{
         //ako ovo bude u gramima, moze u vezi sa sastojcima da se naznaci 
         //koji se sastojak koliko nalazi u obroku i da ovo bude suma toga
         type: 'number' //u gramima ili mozda bude string 
-    },    
+    },
+    ingredients:{
+        type: 'string'
+    }
     
 }); 
