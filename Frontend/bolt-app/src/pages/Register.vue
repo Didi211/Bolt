@@ -24,12 +24,11 @@
                     <div v-if="customerSel">
                         <form class="form-signin" @submit.prevent>
                             <h2 class="form-signin-heading text-center ml-2 mr-2">Registracija musterije</h2>
-                                <input v-model="formC.ime" type="text" class="form-control" name="name" placeholder="Ime" required="" autofocus="">
-                                <input v-model="formC.prezime" type="text" class="form-control" name="surname" placeholder="Prezime" required="" autofocus="">
+                                <input v-model="formC.name" type="text" class="form-control" name="name" placeholder="Ime" required="" autofocus="">
+                                <input v-model="formC.surname" type="text" class="form-control" name="surname" placeholder="Prezime" required="" autofocus="">
                                 <input v-model="formC.username" type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="">
-                                <input v-model="formC.adresa" type="text" class="form-control" name="address" placeholder="Adresa" required="" autofocus="">
-                                <input v-model="formC.sifra" type="password" class="form-control" name="password" placeholder="Šifra" required="" /> 
-                                <input v-model="formC.potvrdiSifru" type="password" class="form-control" name="confirm" placeholder="Potvrdi šifru" required="" /> 
+                                <input v-model="formC.location" type="text" class="form-control" name="address" placeholder="Adresa" required="" autofocus="">
+                                <input v-model="formC.password" type="password" class="form-control" name="password" placeholder="Šifra" required="" /> 
                                 <button @click.prevent="registerCustomer" class="btn btn-lg btn-primary dugme ">Registruj se</button>
                         </form>
                     </div>
@@ -88,26 +87,23 @@ export default defineComponent({
         delivererSel:false,
         isDataLoaded:true,
         formC: {
-          ime: "",
-          prezime: "",
-          username: "",
-          adresa: "",
-          sifra: "",
-          potvrdiSifru: ""
+          name: "",
+          surname: "",
+          password: "",
+          location: "",
+          username: ""
         },
         formR: {
           naziv: "",
           username: "",
           adresa: "",
-          sifra: "",
-          potvrdiSifru: ""
+          sifra: ""
         },
         formD: {
           ime: "",
           prezime: "",
           username: "",
-          sifra: "",
-          potvrdiSifru: ""
+          sifra: ""
         }
       }
     },
@@ -130,14 +126,14 @@ export default defineComponent({
             }
         },
         async registerCustomer(){
-            if(this.formC.ime==""){
+            if(this.formC.name==""){
             this.$toasted.show("Polje za ime mora biti popunjeno!", { 
                             theme: "bubble", 
                             position: "top-center", 
                             duration : 2000
                     })
             }
-            else if(this.formC.prezime==""){
+            else if(this.formC.surname==""){
             this.$toasted.show("Polje za prezime mora biti popunjeno!", { 
                             theme: "bubble", 
                             position: "top-center", 
@@ -151,29 +147,15 @@ export default defineComponent({
                             duration : 2000
                     })
             }
-            else if(this.formC.adresa==""){
+            else if(this.formC.location==""){
             this.$toasted.show("Polje za adresu mora biti popunjeno!", { 
                             theme: "bubble", 
                             position: "top-center", 
                             duration : 2000
                     })
             }
-            else if(this.formC.sifra==""){
+            else if(this.formC.password==""){
             this.$toasted.show("Polje za šifru mora biti popunjeno!", { 
-                            theme: "bubble", 
-                            position: "top-center", 
-                            duration : 2000
-                    })
-            }
-            else if(this.formC.potvrdiSifru==""){
-            this.$toasted.show("Morate potvrditi šifru!", { 
-                            theme: "bubble", 
-                            position: "top-center", 
-                            duration : 2000
-                    })
-            }
-            else if(this.formC.potvrdiSifru!=this.formC.sifra){
-            this.$toasted.show("Šifre se ne poklapaju, probajte ponovo!", { 
                             theme: "bubble", 
                             position: "top-center", 
                             duration : 2000

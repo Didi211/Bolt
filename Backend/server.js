@@ -10,7 +10,7 @@ const deliverer = require('./routes/deliverer');
 const meal = require('./routes/meal');
 const order = require('./routes/order');
 const store = require('./routes/store');
-const ingredient = require('./routes/ingredient')
+
 const login = require('./routes/login')
 const register = require('./routes/register')
 
@@ -33,7 +33,7 @@ app.use('/api/store',store);
 app.use('/api/login',login); 
 app.use('/api/register',register)
 // app.use('/api/user',user); da ne bi smo mogli da kreiramo praznog usera jer je on kao abstraktna klasa 
-app.use('/api/ingredient',ingredient);
+
 
 
 

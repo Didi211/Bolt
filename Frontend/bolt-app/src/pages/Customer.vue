@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <Header />
+            <HeaderCustomer />
         </div>
         <div class="row">
             <header class="bg-dark py-5">
@@ -211,14 +211,14 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-import  Header  from '@/components/Header.vue'
+import  HeaderCustomer  from '@/components/HeaderCustomer.vue'
 import  Footer  from '@/components/Footer.vue'
 //import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
     name: "Homepage",
     components: {
-        Header,
+        HeaderCustomer,
         Footer,
         //StoreInfo
     },

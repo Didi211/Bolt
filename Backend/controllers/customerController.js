@@ -3,11 +3,12 @@ const neo4j = require('../config/neo4j_config');
 const customer = require('../models/customerModel');
 const token = require('../config/token')
 const bcrypt = require('bcrypt');
-const nodemon = require('nodemon');
+
 const saltRounds = 10;
 
 
-const CreateCustomer = (req,res) => {   
+const CreateCustomer = async (req,res) => {  
+
     bcrypt.hash(req.body.password, saltRounds).then(hash => {
 
         neo4j.model("Customer").create({
@@ -28,12 +29,12 @@ const CreateCustomer = (req,res) => {
             webtoken = token.generateAccessToken(user)
             res.send({user,webtoken}).status(200)  
 
-        }).catch(err => res.send(err).status(400))
+        }).catch(err => res.status(400).send(err))
 
-    }).catch(err => res.send(err).status(500))
+    }).catch(err => res.status(500).send(err))
 }
 
-const GetCustomerByUsername = (req,customer) => {
+const GetCustomerByUsername = (req) => {
     neo4j.find('Customer', {username : req.body.username}).then(customer => {
         return customer
     }).catch(err => {console.log(err); return "ERROR!"})
@@ -45,25 +46,5 @@ const GetCustomer = (req,res) => {
         res.send(user).status(200)
     }).catch(err => res.send(err).status(400))
 }
-// const CreateFoodOrder = (req,res) => {
-//     Promise.all([
-//         neo4j.model('Customer').create({
-//             name: 'Dimitrije',
-//             surname: 'Mitic',
-//             location: 'Dragise Cvetkovica 22/12',
-//             username: 'miticd99',
-//             password: 'didididi'
 
-//         }),
-//         neo4j.model('Order').create({
-            
-
-//         })
-//     ]).then(([customer,order]) => { 
-//         customer.relateTo(order,'creates_order',{date: new Date().now(), time: new Date().now() })
-//             .then(res => {
-//                 console.log('Order created.');
-//             })
-//     }) 
-// }
 module.exports = {CreateCustomer,GetCustomer,GetCustomerByUsername};

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
 import Homepage from '@/pages/Homepage'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
