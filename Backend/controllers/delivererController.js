@@ -11,6 +11,7 @@ const CreateDeliverer = (req,res) => {
             name: req.body.name,  
             surname: req.body.surname,
             vehicle: req.body.vehicle,
+            avgTime: req.body.avgTime,
             username: req.body.username,
             password: hash,
             role: "Deliverer"// Simple schema definition of property : type

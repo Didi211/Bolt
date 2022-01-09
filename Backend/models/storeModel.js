@@ -14,5 +14,4 @@ neo4j.extend('User','Store',{
         type: 'number'
     }
    
-     
 });

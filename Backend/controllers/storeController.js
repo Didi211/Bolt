@@ -2,6 +2,7 @@ const  neo4j  = require('../config/neo4j_config');
 const restoran = require('../models/storeModel');
 const token = require('../config/token')
 const bcrypt = require('bcrypt');
+const e = require('express');
 
 const saltRounds = 10;
 
@@ -17,6 +18,35 @@ function convertToDTO(store) {
     return storeDTO
   
    
+}
+
+const GetTop5 = async (req,res) => { 
+    let allStores = await neo4j.model('Store').all()
+    // console.log("ALL STORES")
+    // console.log(allStores)
+    let temp = []
+    await allStores.forEach(async (store) => { 
+        
+        let stored_uuid = store._properties.get('uuid')
+        let result = await neo4j.cypher(
+            `MATCH (s:Store {uuid: '${stored_uuid}'})-[rel:PREPARES]->(o:Order) return count(rel)`
+        );
+    
+        result.records.forEach(element => {
+            let relCount = element._fields[0].low
+            
+            temp.push({
+                key: stored_uuid,
+                value: relCount
+            })
+            console.log(temp);
+        })
+    });
+    temp.sort()
+    
+    console.log("nasdasm l");
+    console.log(temp)
+    res.status(200).send("")
 }
 const CreateStore = async (req,res) => { 
     
@@ -90,4 +120,10 @@ const GetAllStores = async (req,res) => {
     }
 }
 
-module.exports = {CreateStore, GetStore, GetAllStores, changePrepTime}
+module.exports = {
+    CreateStore,
+    GetStore,
+    GetAllStores,
+    changePrepTime,
+    GetTop5
+}
