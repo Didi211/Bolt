@@ -124,7 +124,6 @@ export default new Vuex.Store({
                 Vue.$cookies.remove("id");
                 Vue.$cookies.remove("token");
                 Vue.$cookies.remove("tip");
-                router.push("/")
                 // commit('setToken', null);
                 // commit('setTip', null)
             //commit('LOGOUT_KORISNIK')
