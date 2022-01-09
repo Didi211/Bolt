@@ -15,6 +15,7 @@ import OrderHistory from '@/pages/OrderHistory'
 
 Vue.use(Router)
 
+
 const router = new Router({
     routes:[
         {
@@ -153,9 +154,10 @@ const router = new Router({
             }
         },
         {
-            path:'/StoreMenu',
+            path:'/StoreMenu/:id',
             name: 'StoreMenu',
             component: StoreMenu,
+            props: true,
             beforeEnter(to, from, next){
                 let tip = Vue.$cookies.get("tip")
                 if(tip == 'Customer'){

@@ -13,7 +13,10 @@ export default new Vuex.Store({
         token: null,
         tip: null,
         orderHistory:[],
-        allStores:[]
+        allStores:[],
+        pickedStore: null, //id izabranog restorana
+        mealsFromStore: [],
+        store: null,
     },
     getters:{
         getOrderHistory(state){
@@ -21,7 +24,17 @@ export default new Vuex.Store({
         },
         getAllStores(state){
             return state.allStores
-        }
+        },
+        getPickedStore(state){
+            return state.pickedStore
+        },
+        getAllMealsFromStore(state){
+            return state.meals
+        },
+        getStore(state){
+            console.log(state.store)
+            return state.store
+        },
     },
     actions:{
         async registerDeliverer({commit}, registerInfo){
@@ -190,6 +203,24 @@ export default new Vuex.Store({
                 commit('setAllStores', stores)
             })
         },
+        async getMealsFromStore({commit}){
+        //koristi id od pickedStore
+            return await Api().get('/api/meal/get/restaurant/'+this.state.pickedStore).then(res=>{
+                const meals = res.data
+                console.log(meals)
+                commit('setAllMealsFromStore', meals)
+            })  
+        },
+        async getStoreById({commit}, storeID){
+            //koristi id od pickedStore
+            console.log(this.state.pickedStore)
+            return await Api().get('/api/store/get/'+ storeID).then(res=>{
+                const store = res.data
+                console.log(store)
+                commit('setStore', store)
+            })  
+        },
+
         postaviToken({commit}, tok){
             commit('setToken', tok)
         },
@@ -198,6 +229,9 @@ export default new Vuex.Store({
         },
         postaviOsobaID({commit}, id){
             commit('setOsobaID', id)
+        },
+        postaviPickedStore({commit}, id){
+             commit('setPickedStore', id)
         }
     },
     mutations:{
@@ -218,6 +252,15 @@ export default new Vuex.Store({
         },
         setAllStores(state,stores){
             state.allStores = stores
+        },
+        setPickedStore(state, id){
+            state.pickedStore=id
+        },
+        setAllMealsFromStore(state, meals){
+            state.mealsFromStore=meals
+        },
+        setStore(state, store){
+            state.store=store
         }
     }
 })

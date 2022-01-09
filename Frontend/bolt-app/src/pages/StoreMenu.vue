@@ -3,20 +3,20 @@
     <div class="row">
             <Header />
     </div>
-    <div class="row">
+    <div class="row" v-if="isDataLoaded">
         <div class="row">
             <header class="bg-dark ">
                 <div class="container naziv px-4 px-lg-5 my-5">
                     <div class="text-center text-white">
                         <div class="row text">
-                        <h5 class="display-4 fw-bolder">Store name</h5>
+                        <h5 class="display-4 fw-bolder">{{store.name}}</h5>
                         </div>
                         <div class="row">
                             <div class="col-md-6"> 
                                 <p class="lead fw-normal text-white-50 mb-0">Vreme pripreme</p>
                             </div>
                             <div class="col-md-6"> 
-                                <p class="lead fw-normal text-white-50 mb-0">Lokacija</p>
+                                <p class="lead fw-normal text-white-50 mb-0">{{store.location}}</p>
                             </div>
                         </div>
                     </div>
@@ -40,6 +40,9 @@
             <!-- <h1>STORE NAME</h1> -->
         </div>
     </div>
+    <div v-else>
+        <AppSpinner/>
+    </div>
     <div class="row">
             <Footer />
     </div>
@@ -53,18 +56,43 @@
 </template>
 <script>
 import { defineComponent } from '@vue/composition-api'
-import  Header  from '@/components/Header.vue'
+import  Header  from '@/components/HeaderCustomer.vue'
 import  Footer  from '@/components/Footer.vue'
+import AppSpinner from '@/components/AppSpinner.vue'
 
 export default defineComponent({
     name: "StoreMenu",
     components: {
         Header,
         Footer,
+        AppSpinner
     },
     setup() {
         
     },
+    data(){
+        return{
+            isDataLoaded:true
+        }
+    },
+    computed:{
+        store(){
+            return  this.$store.getters['getStore']
+        }
+        // async meals(){
+        //     return await this.$store.dispatch('getMealsFromStore')
+        // }
+    },
+    async created(){
+        this.isDataLoaded = false
+        const storeID = this.$route.params.id
+        await this.$store.dispatch('getStoreById',storeID).then(()=>{
+            this.isDataLoaded = true;
+        })
+        // .then(res=>{
+        //     this.$store.dispatch('postaviPickedStore', res.data.uuid)
+        // })
+    }
 })
 </script>
 
