@@ -13,7 +13,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6"> 
-                                <p class="lead fw-normal text-white-50 mb-0">Vreme pripreme</p>
+                                <p class="lead fw-normal text-white-50 mb-0">Vreme pripreme:{{store.preptime}}</p>
                             </div>
                             <div class="col-md-6"> 
                                 <p class="lead fw-normal text-white-50 mb-0">{{store.location}}</p>
@@ -24,16 +24,21 @@
             </header>
         </div>
         <div class="row">
-            <div class="col-md-3"> 
+            <!-- <div class="col-md-3"> 
                 <p class="lead fw-normal text-black-50 mb-0">Odeljak</p>
                 <p>Pice</p>
                 <p>Paste</p>
                 <p>Pancerote</p>
                 <p>Salate</p>
-            </div>
-            <div class="col-md-6"> 
+            </div> -->
+            <div class="col-md-9"> 
                 <p class="lead fw-normal text-black-50 mb-0">Lista hrane</p>
-                <Meal />
+                <div v-for="meal in meals" :key="meal.meals.mealID">
+                    <h3>{{meal.section}}</h3>
+                    <Meal v-for="m in meal" 
+                            :key="m.mealID" 
+                            :m="meal" />
+                </div>
             </div>
             <div class="col-md-3 basket"> 
                 <p class="lead fw-normal text-black-50 mb-0">KOrpa</p>
@@ -81,6 +86,9 @@ export default defineComponent({
     computed:{
         store(){
             return  this.$store.getters['getStore']
+        },
+        meals(){
+            return this.$store.getters['getAllMealsFromStore']
         }
         // async meals(){
         //     return await this.$store.dispatch('getMealsFromStore')
@@ -92,6 +100,7 @@ export default defineComponent({
         await this.$store.dispatch('getStoreById',storeID).then(()=>{
             this.isDataLoaded = true;
         })
+        await this.$store.dispatch('getMealsFromStore', storeID)
         // .then(res=>{
         //     this.$store.dispatch('postaviPickedStore', res.data.uuid)
         // })

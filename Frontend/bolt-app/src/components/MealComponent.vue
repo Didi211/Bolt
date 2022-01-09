@@ -1,19 +1,25 @@
 <template>
     <div class="col mb-5 meal">
-        <div class="card h-100" @click="open" > 
+        <div class="card h-100" > 
             <!-- v-bind:id="store.uuid" -->
             <!-- Store name-->
-            <h5 class="fw-bolder">Ime jela</h5> 
+            <h5 class="fw-bolder">{{meal.name}}</h5> 
             <!-- <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." /> -->
             <!-- Store details-->
             <div class="card-body p-4">
                 <div class="text-center">
-                    <!-- Store location-->
-                    <h5>Sastojci</h5>
-                    <!-- Vreme isporuke-->
+                    <h5>Porcija: {{meal.servingSize}}</h5>
+                    <h5>Sastojci: {{meal.ingredients}}</h5>
                     <p></p>
                 </div>
             </div>
+            <div class="card-body p-4">
+                <div class="text-center">
+                    <h5>Cena: {{meal.price}}</h5>
+                    <p></p>
+                </div>
+            </div>
+
             <!-- Product actions
             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                 <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
@@ -29,10 +35,10 @@ import { defineComponent } from '@vue/composition-api'
 export default defineComponent({
    name: "StoreInfoComponent",
    props:{
-       store:{
+       meal:{
            required: true,
            type: Object,
-       },
+       }
     },
     methods:{
   

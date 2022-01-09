@@ -17,6 +17,8 @@ export default new Vuex.Store({
         pickedStore: null, //id izabranog restorana
         mealsFromStore: [],
         store: null,
+        kategorije:[],
+        unselectedOrdersDeliverer:[]
     },
     getters:{
         getOrderHistory(state){
@@ -32,9 +34,15 @@ export default new Vuex.Store({
             return state.meals
         },
         getStore(state){
-            console.log(state.store)
             return state.store
         },
+        getAllCategories(state){
+            console.log(state.kategorije)
+            return state.kategorije
+        },
+        getUnselectedOrders(state){
+            return state.unselectedOrdersDeliverer
+        }
     },
     actions:{
         async registerDeliverer({commit}, registerInfo){
@@ -110,7 +118,7 @@ export default new Vuex.Store({
                 commit('setOsobaID', Vue.$cookies.get("id"))
                 router.push("/Store")
             }).catch(()=>{
-                Vue.toasted.show("Već postoji korisnik sa tim username-om!", { 
+                Vue.toasted.show("Greska!", { 
                     theme: "bubble", 
                     position: "top-center", 
                     duration : 2000
@@ -203,24 +211,41 @@ export default new Vuex.Store({
                 commit('setAllStores', stores)
             })
         },
-        async getMealsFromStore({commit}){
+        async getMealsFromStore({commit}, storeID){
         //koristi id od pickedStore
-            return await Api().get('/api/meal/get/restaurant/'+this.state.pickedStore).then(res=>{
+            return await Api().get('/api/meal/get/restaurant/'+storeID).then(res=>{
                 const meals = res.data
-                console.log(meals)
+                console.log(res.data)
                 commit('setAllMealsFromStore', meals)
             })  
         },
         async getStoreById({commit}, storeID){
-            //koristi id od pickedStore
-            console.log(this.state.pickedStore)
             return await Api().get('/api/store/get/'+ storeID).then(res=>{
                 const store = res.data
                 console.log(store)
                 commit('setStore', store)
             })  
         },
+        async getAllCategories({commit}){
+            return await Api().get('/api/category/all').then(res=>{
+                const kat = res.data
+                commit('setCategories', kat)
+            })  
+        }, 
+        async changeTime( novoVreme){
+            return await Api().put('/api/store/preptime/change/'+ this.state.osobaID, novoVreme).then(()=>{
 
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        // async getUnselectedOrders({commit}){
+        //     return await Api().get('/api/category/all').then(res=>{
+        //         const kat = res.data
+        //         commit('setCategories', kat)
+        //     })  
+        // }, 
+        
         postaviToken({commit}, tok){
             commit('setToken', tok)
         },
@@ -261,6 +286,9 @@ export default new Vuex.Store({
         },
         setStore(state, store){
             state.store=store
+        },
+        setCategories(state, cat){
+            state.kategorije=cat
         }
     }
 })
