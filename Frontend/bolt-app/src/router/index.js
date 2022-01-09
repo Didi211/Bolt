@@ -5,12 +5,13 @@ import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import PageNotFound from '@/pages/PageNotFound'
 import Basket from '@/pages/Basket'
-import Search from '@/pages/Search'
+import SearchPage from '@/pages/SearchPage'
 import Store from '@/pages/Store'
 import Customer from '@/pages/Customer'
 import Deliverer from '@/pages/Deliverer'
 import StoreMenu from '@/pages/StoreMenu'
 import PageNotAuthenticated from '@/pages/PageNotAuthenticated'
+import OrderHistory from '@/pages/OrderHistory'
 
 Vue.use(Router)
 
@@ -82,9 +83,9 @@ const router = new Router({
             component: Basket
         },
         {
-            path:'/Search',
-            name: 'Search',
-            component: Search,
+            path:'/SearchPage',
+            name: 'SearchPage',
+            component: SearchPage,
             beforeEnter(to, from, next){
                 let tip = Vue.$cookies.get("tip")
                 if(tip == 'Customer'){
@@ -113,6 +114,20 @@ const router = new Router({
             path:'/Customer',
             name: 'Customer',
             component: Customer,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip == 'Customer'){
+                    next();
+                }
+                else{
+                    next({name: 'PageNotAuthenticated'})
+                }
+            }
+        },
+        {
+            path:'/OrderHistory',
+            name: 'OrderHistory',
+            component: OrderHistory,
             beforeEnter(to, from, next){
                 let tip = Vue.$cookies.get("tip")
                 if(tip == 'Customer'){

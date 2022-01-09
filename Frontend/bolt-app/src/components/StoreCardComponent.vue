@@ -2,15 +2,15 @@
     <div class="col mb-5">
         <div class="card h-100" @click="open">
             <!-- Store name-->
-            <h2>info.name</h2> 
+            <h2>{{store.name}}</h2> 
             <!-- <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." /> -->
             <!-- Store details-->
             <div class="card-body p-4">
                 <div class="text-center">
                     <!-- Store location-->
-                    <h5 class="fw-bolder">info.location</h5>
+                    <h5 class="fw-bolder">{{store.location}}</h5>
                     <!-- Vreme isporuke-->
-                    <p>info.time</p>
+                    <p></p>
                 </div>
             </div>
             <!-- Product actions
@@ -23,12 +23,12 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-import Vue from 'vue'
+// import Vue from 'vue'
 
 export default defineComponent({
    name: "StoreInfoComponent",
    props:{
-       info:{
+       store:{
            required: true,
            type: Object,
        },

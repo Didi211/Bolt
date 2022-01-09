@@ -12,9 +12,16 @@ export default new Vuex.Store({
         osobaID: null,
         token: null,
         tip: null,
+        orderHistory:[],
+        allStores:[]
     },
     getters:{
-
+        getOrderHistory(state){
+            return state.orderHistory
+        },
+        getAllStores(state){
+            return state.allStores
+        }
     },
     actions:{
         async registerDeliverer({commit}, registerInfo){
@@ -166,6 +173,23 @@ export default new Vuex.Store({
                 commit('setKorisnik', trenutniKorisnik)
             })
         },
+        async getOrderHistory({commit}){
+            return await Api().get('/'+this.state.osobaID,{
+                headers: {
+                  'Authorization': `Basic ${this.state.token}`
+                }
+              }).then(res=>{
+                const narudzbine = res.data
+                commit('setOrderHistory', narudzbine)
+            })
+        },
+        async getAllStores({commit}){
+            return await Api().get('/api/store/all').then(res=>{
+                const stores = res.data
+                console.log(stores)
+                commit('setAllStores', stores)
+            })
+        },
         postaviToken({commit}, tok){
             commit('setToken', tok)
         },
@@ -188,6 +212,12 @@ export default new Vuex.Store({
         },
         setOsobaID(state, osobaID){
             state.osobaID = osobaID;
+        },
+        setOrderHistory(state, narudz){
+            state.orderHistory = narudz
+        },
+        setAllStores(state,stores){
+            state.allStores = stores
         }
     }
 })

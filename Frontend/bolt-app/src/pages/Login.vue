@@ -66,11 +66,6 @@ export default defineComponent({
                    })
         }
         else{
-            this.$toasted.show("Ovde treba login funkcionalnost", { 
-                        theme: "bubble", 
-                        position: "top-center", 
-                        duration : 2000
-                   })
           this.isDataLoaded = false
           await this.$store.dispatch('loginKorisnik', this.loginInfo).then(()=>
           {

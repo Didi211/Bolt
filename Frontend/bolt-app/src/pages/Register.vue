@@ -175,11 +175,6 @@ export default defineComponent({
                     })
             }
             else{
-                this.$toasted.show("Ovde treba register customer funkcionalnost", { 
-                            theme: "bubble", 
-                            position: "top-center", 
-                            duration : 2000
-                    })
               this.isDataLoaded = false
               await this.$store.dispatch('registerCustomer', this.formC).then(()=>{
                 this.isDataLoaded = true
@@ -216,11 +211,6 @@ export default defineComponent({
                     })
             }
             else{
-                this.$toasted.show("Ovde treba register restaurant funkcionalnost", { 
-                            theme: "bubble", 
-                            position: "top-center", 
-                            duration : 2000
-                    })
               this.isDataLoaded = false
               await this.$store.dispatch('registerStore', this.formR).then(()=>{
                 this.isDataLoaded = true
@@ -264,11 +254,6 @@ export default defineComponent({
                     })
             }
             else{
-                this.$toasted.show("Ovde treba register deliverer funkcionalnost", { 
-                            theme: "bubble", 
-                            position: "top-center", 
-                            duration : 2000
-                    })
               this.isDataLoaded = false
               await this.$store.dispatch('registerDeliverer', this.formD).then(()=>{
                 this.isDataLoaded = true

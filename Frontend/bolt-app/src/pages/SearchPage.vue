@@ -1,9 +1,13 @@
 <template>
     <div class="container-fluid">
         <div class="row">
-            <HeaderDeliverer />
+            <HeaderCustomer />
         </div>
-
+            <div class="row">
+                <div class="col-xl-12">
+                    ovde ide pretraga na osnovu nekih filtera
+                </div>
+            </div>
         <div class="row">
             <Footer />
         </div>
@@ -13,17 +17,18 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-import  HeaderDeliverer  from '@/components/HeaderSAndD.vue'
+import  HeaderCustomer  from '@/components/HeaderCustomer.vue'
 import  Footer  from '@/components/Footer.vue'
 //import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
     name: "Homepage",
     components: {
-        HeaderDeliverer,
+        HeaderCustomer,
         Footer,
         //StoreInfo
     },
+    
     // computed:{
     //     information(){
     //         return this.$store.getters['getStoreCard']
