@@ -31,17 +31,23 @@
                 <p>Pancerote</p>
                 <p>Salate</p>
             </div> -->
-            <div class="col-md-9"> 
-                <p class="lead fw-normal text-black-50 mb-0">Lista hrane</p>
-                <div v-for="meal in meals" :key="meal.meals.mealID">
-                    <h3>{{meal.section}}</h3>
-                    <Meal v-for="m in meal" 
-                            :key="m.mealID" 
-                            :m="meal" />
+            <div class="col-md-9 lista"> 
+                <div v-for="ob in obj" :key="ob.meals.mealID">
+                    <h3>{{ob.section}}</h3>
+                    <Meal v-for="meal in ob.meals" 
+                            :key="meal.mealID" 
+                            :meal="meal" 
+                            @childToParentYes="onChildClickYes"/>
                 </div>
             </div>
-            <div class="col-md-3 basket"> 
-                <p class="lead fw-normal text-black-50 mb-0">KOrpa</p>
+            <div class="col-md-3"> 
+                <p class="lead fw-normal text-black-50 mb-0">Korpa</p>
+                <div class="basket"> 
+                    <li v-for="j in jela" :key="j.mealID"> {{j.name}} </li>
+                    <!-- <input type="text" v-model="customer.username"> -->
+
+
+                </div>
             </div>
             <!-- <h1>STORE NAME</h1> -->
         </div>
@@ -66,6 +72,7 @@ import  Header  from '@/components/HeaderCustomer.vue'
 import  Footer  from '@/components/Footer.vue'
 import Meal from '@/components/MealComponent.vue'
 import AppSpinner from '@/components/AppSpinner.vue'
+import Vue from 'vue'
 
 export default defineComponent({
     name: "StoreMenu",
@@ -80,27 +87,50 @@ export default defineComponent({
     },
     data(){
         return{
-            isDataLoaded:true
+            isDataLoaded:true,
+            jela:[],
+            jelaId:[],
+            user: null,
         }
     },
     computed:{
         store(){
             return  this.$store.getters['getStore']
         },
-        meals(){
+        obj(){
             return this.$store.getters['getAllMealsFromStore']
+        },
+        customer(){
+            return this.$store.getters['getTrenutniKorisnik']
+        },
+        userObj(){
+             this.user= this.$store.getters['getTrenutniKorisnik']
+             return this.user
         }
         // async meals(){
         //     return await this.$store.dispatch('getMealsFromStore')
         // }
     },
+    methods:{
+        onChildClickYes(value){
+          this.jela.push(value)
+          this.jelaId.push(value.mealID)
+          console.log(this.jelaId)
+        },
+    },
     async created(){
         this.isDataLoaded = false
         const storeID = this.$route.params.id
-        await this.$store.dispatch('getStoreById',storeID).then(()=>{
+        const customerID = Vue.$cookies.get("id");
+        Promise.all([await this.$store.dispatch('getStoreById',storeID), await this.$store.dispatch('getUserByID',customerID),
+        await this.$store.dispatch('getMealsFromStore', storeID)]).then(()=>{
             this.isDataLoaded = true;
         })
-        await this.$store.dispatch('getMealsFromStore', storeID)
+        // , await this.$store.dispatch('getCustomerByUsername', this.user.username)]
+        // await this.$store.dispatch('getStoreById',storeID).then(()=>{
+        //     this.isDataLoaded = true;
+        // })
+        // await this.$store.dispatch('getMealsFromStore', storeID)
         // .then(res=>{
         //     this.$store.dispatch('postaviPickedStore', res.data.uuid)
         // })
@@ -125,6 +155,14 @@ export default defineComponent({
 }
 .basket{
     position: relative;
+    border: solid black 1px;
+    border-radius: 10px;
+}
+.lista{
+    justify-content:left;
+}
+h3{
+    color:brown;
 }
 
 </style>

@@ -17,7 +17,8 @@ export default new Vuex.Store({
         pickedStore: null, //id izabranog restorana
         mealsFromStore: [],
         store: null,
-        kategorije:[]
+        kategorije:[],
+        customer:null,
     },
     getters:{
         getOrderHistory(state){
@@ -30,7 +31,9 @@ export default new Vuex.Store({
             return state.pickedStore
         },
         getAllMealsFromStore(state){
-            return state.meals
+            console.log("ovo je iz gettera")
+            console.log(state.mealsFromStore)
+            return state.mealsFromStore
         },
         getStore(state){
             return state.store
@@ -38,6 +41,12 @@ export default new Vuex.Store({
         getAllCategories(state){
             console.log(state.kategorije)
             return state.kategorije
+        },
+        getCustomer(state){
+            return state.customer
+        },
+        getTrenutniKorisnik(state){
+            return state.trenKorisnik
         }
     },
     actions:{
@@ -228,6 +237,14 @@ export default new Vuex.Store({
                 commit('setCategories', kat)
             })  
         }, 
+        async getCustomerByUsername({commit}, username){
+            //console.log(this.trenKorisnik.uuid)
+            return await Api().get('/api/Customer', username).then(res=>{
+                const customer = res.data
+                console.log(customer)
+                commit('setCustomer', customer)
+            })
+        },
         // async changeTime({commit}, novoVreme){
         //     return await Api().put('/'+ this.state.osobaID, novoVreme).then(res=>{
         //     })  
@@ -268,6 +285,8 @@ export default new Vuex.Store({
             state.pickedStore=id
         },
         setAllMealsFromStore(state, meals){
+            console.log("ovo je iz mutacija")
+            console.log(meals)
             state.mealsFromStore=meals
         },
         setStore(state, store){
@@ -275,6 +294,9 @@ export default new Vuex.Store({
         },
         setCategories(state, cat){
             state.kategorije=cat
-        }
+        },
+        setCustomer(state, customer){
+            state.customer=customer
+        },
     }
 })
