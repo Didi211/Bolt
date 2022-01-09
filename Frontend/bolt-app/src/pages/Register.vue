@@ -45,12 +45,22 @@
                     <div v-if="delivererSel">
                         <form class="form-signin" @submit.prevent>
                             <h2 class="form-signin-heading text-center ml-2 mr-2">Registracija dostavljaca</h2>
-                                <input v-model="formD.ime" type="text" class="form-control" name="name" placeholder="Ime" required="" autofocus="">
-                                <input v-model="formD.prezime" type="text" class="form-control" name="surname" placeholder="Prezime" required="" autofocus="">
+                                <input v-model="formD.name" type="text" class="form-control" name="name" placeholder="Ime" required="" autofocus="">
+                                <input v-model="formD.surname" type="text" class="form-control" name="surname" placeholder="Prezime" required="" autofocus="">
                                 <input v-model="formD.username" type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="">
-                                
-                                <input v-model="formD.sifra" type="password" class="form-control" name="password" placeholder="Šifra" required="" /> 
-                                <input v-model="formD.potvrdiSifru" type="password" class="form-control" name="confirm" placeholder="Potvrdi šifru" required="" /> 
+                                <input v-model="formD.password" type="password" class="form-control" name="password" placeholder="Šifra" required="" /> 
+                                <div class="row">
+                                    <div class="col-xl-12">
+                                        <input type="radio" class="btn-check" name="options" id="car" autocomplete="off" @click="toggleVehicle('Car')">
+                                        <label class="btn btn-secondary dugmezaprevoz" for="car">Automobil</label>
+
+                                        <input type="radio" class="btn-check" name="options" id="scooter" autocomplete="off" @click="toggleVehicle('Scooter')">
+                                        <label class="btn btn-secondary dugmezaprevoz" for="scooter">Skuter</label>
+
+                                        <input type="radio" class="btn-check " name="options" id="bike" autocomplete="off" @click="toggleVehicle('Bike')">
+                                        <label class="btn btn-secondary dugmezaprevoz" for="bike">Bicikla</label>
+                                    </div>
+                                </div>
                                 <button @click.prevent="registerDeliverer" class="btn btn-lg btn-primary dugme ">Registruj se</button>
                         </form>
                     </div>
@@ -99,10 +109,11 @@ export default defineComponent({
           password: ""
         },
         formD: {
-          ime: "",
-          prezime: "",
+          name: "",
+          surname: "",
           username: "",
-          sifra: ""
+          password: "",
+          vehicle: ""
         }
       }
     },
@@ -123,6 +134,9 @@ export default defineComponent({
                 this.restaurantSel=false
                 this.delivererSel=true
             }
+        },
+        toggleVehicle(tip){
+            this.formD=tip
         },
         async registerCustomer(){
             if(this.formC.name==""){
@@ -214,14 +228,14 @@ export default defineComponent({
             }
         },
            async registerDeliverer(){
-            if(this.formD.ime==""){
+            if(this.formD.name==""){
             this.$toasted.show("Polje za ime mora biti popunjeno!", { 
                             theme: "bubble", 
                             position: "top-center", 
                             duration : 2000
                     })
             }
-            else if(this.formD.prezime==""){
+            else if(this.formD.surname==""){
             this.$toasted.show("Polje za prezime mora biti popunjeno!", { 
                             theme: "bubble", 
                             position: "top-center", 
@@ -235,22 +249,15 @@ export default defineComponent({
                             duration : 2000
                     })
             }
-            else if(this.formD.sifra==""){
+            else if(this.formD.password==""){
             this.$toasted.show("Polje za šifru mora biti popunjeno!", { 
                             theme: "bubble", 
                             position: "top-center", 
                             duration : 2000
                     })
             }
-            else if(this.formD.potvrdiSifru==""){
-            this.$toasted.show("Morate potvrditi šifru!", { 
-                            theme: "bubble", 
-                            position: "top-center", 
-                            duration : 2000
-                    })
-            }
-            else if(this.formD.potvrdiSifru!=this.formD.sifra){
-            this.$toasted.show("Šifre se ne poklapaju, probajte ponovo!", { 
+            else if(this.formD.vehicle==""){
+            this.$toasted.show("Morate izabrati prevozno sredstvo!", { 
                             theme: "bubble", 
                             position: "top-center", 
                             duration : 2000
@@ -296,5 +303,8 @@ export default defineComponent({
 .lepodugme{
     margin-right:0.5rem;
     margin-top:1.1rem;
+}
+.dugmezaprevoz{
+    margin-right:0.5rem;
 }
 </style>
