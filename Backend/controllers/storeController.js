@@ -11,7 +11,8 @@ function convertToDTO(store) {
         uuid: store._properties.get('uuid'),
         username: store._properties.get('username'),
         name: store._properties.get('name'),
-        location: store._properties.get('location')
+        location: store._properties.get('location'),
+        preptime: store._properties.get('preptime')
     }
     return storeDTO
   
@@ -27,6 +28,7 @@ const CreateStore = async (req,res) => {
             password: hash,
             name: req.body.name,
             location: req.body.location,
+            preptime: req.body.preptime,
             role: "Store"// Simple schema definition of property : type
         
         }).then(store => {
