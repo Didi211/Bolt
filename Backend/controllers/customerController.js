@@ -6,6 +6,14 @@ const bcrypt = require('bcrypt');
 
 const saltRounds = 10;
 
+const RecordsToJSON = (records) =>{
+    let item= []    
+    records.forEach(element => {
+        if(element._fields[0].properties.status == 'Finished')
+            item.push(element._fields[0].properties)
+    })
+    return item
+} 
 
 const CreateCustomer = async (req,res) => {  
 
@@ -46,5 +54,13 @@ const GetCustomer = (req,res) => {
         res.send(user).status(200)
     }).catch(err => res.send(err).status(400))
 }
+const GetPreviousOrders = (req,res) => {
+    neo4j.cypher(`match (c:Customer {uuid : "${req.params.id}"})-[rel:ORDERED]->(o:Order) return o`).then(result => {
+        
+        orders = RecordsToJSON(result.records)
+        
+        res.send(orders).status(200)
+    }).catch(err => console.log(err))
+}
 
-module.exports = {CreateCustomer,GetCustomer,GetCustomerByUsername};
+module.exports = {CreateCustomer,GetCustomer,GetCustomerByUsername,GetPreviousOrders};

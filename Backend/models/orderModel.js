@@ -7,21 +7,28 @@ neo4j.model('Order',{
     // customer nekako treba da zapamtimo ko porucuje
     // store i nekako treba da zapamtimo iz kog restorana
     price: {
-        type: 'number',
-        required: true,
+        type: 'number'
+        
         
     },
     timeWaiting: {
-        type: 'number', //jel cemo ovo da pamtimo kao 35 minuta? tj sve u minute? string ili int?
-        required: true
+        type: 'number' //jel cemo ovo da pamtimo kao 35 minuta? tj sve u minute? string ili int?
+
     },
     onAddress: { 
         type: 'string',
-        required: true,
+        required: true
     },
     note: {
         type: 'string'
     },
+    status:{
+        type: 'string',
+        required: true,
+    },
+    orderID:{
+        type: 'uuid'
+    }
     
     
 });
