@@ -59,6 +59,19 @@ const GetStore = async (req,res) => {
         res.status(500).end(e.message || e.toString())
     }
 
+}
+
+const changePrepTime = async (req,res) => { 
+    try 
+    { 
+        let uuid = req.params.id
+        let storeDb = await neo4j.model('Store').find(uuid)
+        await storeDb.update({preptime: req.body.preptime})
+        res.status(200).send("")
+    }
+    catch(e) { 
+        res.status(500).end(e.message || e.toString())
+    }
     
 
 }
@@ -77,5 +90,4 @@ const GetAllStores = async (req,res) => {
     }
 }
 
-
-module.exports = {CreateStore, GetStore, GetAllStores}
+module.exports = {CreateStore, GetStore, GetAllStores, changePrepTime}
