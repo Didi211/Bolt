@@ -2,11 +2,18 @@
 const neo4j = require('../config/neo4j_config');
 const meal = require('../models/mealModel');
 
-const RecordsToJSON = (records) =>{
+const MealsToJSON = (records) =>{
     let item= []    
     records.forEach(element => {
-        console.log(element._fields[0].properties);
-        item.push(element._fields[0].properties)
+        let added = false
+        item.forEach(e => {
+            if (e.section == element._fields[0].properties.category){
+                e.meals.push(element._fields[0].properties)   
+                added = true    
+            }               
+        })
+        if (added == false)
+            item.push({section:element._fields[0].properties.category,meals:[element._fields[0].properties]})
     })
     return item
 } 
@@ -24,7 +31,7 @@ const CreateMeal = (req,res) => {
             neo4j.cypher(`match (m:Meal {mealID: "${meal._properties.get("mealID")}"}),(store:Store {uuid: "${req.body.storeID}"}) create (store)-[rel:OFFERS]->(m) return m,store,rel`)
             .then(result => {                 
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err)          )
        
         res.send(meal).status(200)
             
@@ -34,7 +41,7 @@ const CreateMeal = (req,res) => {
 const GetMealsByRestaurant = (req,res) => {
     neo4j.cypher(`match (store:Store {uuid : "${req.params.id}"})-[rel:OFFERS]->(meal:Meal) return meal`).then(result => {
         //console.log(result);
-        let meals = RecordsToJSON(result.records)
+        let meals = MealsToJSON(result.records)
     
         res.send(meals).status(200)
     }).catch(err => console.log(err))

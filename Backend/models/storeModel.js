@@ -10,6 +10,9 @@ neo4j.extend('User','Store',{
         required: true,
         unique: true
     },
+    preptime:{
+        type: 'number'
+    }
    
      
 });
