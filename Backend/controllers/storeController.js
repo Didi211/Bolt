@@ -9,7 +9,6 @@ function convertToDTO(store) {
    
     let storeDTO = {
         username: store._properties.get('username'),
-        password: store._properties.get('password'),
         name: store._properties.get('name'),
         location: store._properties.get('location')
     }
@@ -19,11 +18,12 @@ function convertToDTO(store) {
 }
 const CreateStore = async (req,res) => { 
     
+    
     bcrypt.hash(req.body.password, saltRounds).then(hash => {
 
         neo4j.model("Store").create({
             username: req.body.username,
-            password: req.body.password,
+            password: hash,
             name: req.body.name,
             location: req.body.location,
             role: "Store"// Simple schema definition of property : type
@@ -41,6 +41,7 @@ const CreateStore = async (req,res) => {
         }).catch(err => res.status(400).send(err))
 
     }).catch(err => res.status(500).send(err))
+    
 }
 
 const GetStore = async (req,res) => {

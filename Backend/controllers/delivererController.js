@@ -1,11 +1,13 @@
 
 const neo4j = require('../config/neo4j_config');
 const deliverer = require('../models/delivererModel');
+const token = require('../config/token')
+const bcrypt = require('bcrypt');
 
+const saltRounds = 10;
 const CreateDeliverer = (req,res) => {
     bcrypt.hash(req.body.password, saltRounds).then(hash => {
-
-        neo4j.model("Deliverer").create({
+            neo4j.model("Deliverer").create({
             name: req.body.name,  
             surname: req.body.surname,
             vehicle: req.body.vehicle,

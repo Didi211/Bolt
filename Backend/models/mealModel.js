@@ -14,7 +14,7 @@ neo4j.model('Meal',{
         type: 'number',
         required: true
     },
-    category: {
+    category: { // mozda treba da bude sekcija
         type: 'string',
         required: true
     },
