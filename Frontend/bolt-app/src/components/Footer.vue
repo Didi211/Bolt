@@ -18,9 +18,10 @@ export default defineComponent({
 
 <style scoped>
 
-/* .futer{
-    position:fixed;
-    bottom:0;
-} */
+.futer{
+    /* position:fixed; */
+    /* bottom:0; */
+    padding: 0;
+}
 
 </style>

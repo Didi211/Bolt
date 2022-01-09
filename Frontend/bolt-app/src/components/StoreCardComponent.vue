@@ -1,6 +1,6 @@
 <template>
     <div class="col mb-5">
-        <div class="card h-100">
+        <div class="card h-100" @click="open">
             <!-- Store name-->
             <h2>info.name</h2> 
             <!-- <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." /> -->
@@ -23,6 +23,7 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
+import Vue from 'vue'
 
 export default defineComponent({
    name: "StoreInfoComponent",
@@ -31,6 +32,11 @@ export default defineComponent({
            required: true,
            type: Object,
        },
+   },
+   methods:{
+       open(){
+           this.$router.push({ path: 'StoreMenu' })
+       }
    }
 })
 </script>

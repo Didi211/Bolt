@@ -9,6 +9,7 @@ import Search from '@/pages/Search'
 import Store from '@/pages/Store'
 import Customer from '@/pages/Customer'
 import Deliverer from '@/pages/Deliverer'
+import StoreMenu from '@/pages/StoreMenu'
 
 Vue.use(Router)
 
@@ -17,62 +18,62 @@ const router = new Router({
         {
             path:'/',
             name: 'Homepage',
-            component: Homepage
-            // beforeEnter(to, from, next){
-            //     let tip = Vue.$cookies.get("tip")
-            //     if(tip === 'A'){
-            //         next({name: 'AdminHomePage'});
-            //     }
-            //     else if(tip === 'M'){
-            //         next({name: 'MusterijaHomePage'})
-            //     }
-            //     else if(tip === 'R'){
-            //         next({name: 'RadnikHomePage'})
-            //     }
-            //     else{
-            //         next();
-            //     }
-            // }
+            component: Homepage,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip === 'Customer'){
+                    next({name: 'Customer'});
+                }
+                else if(tip === 'Store'){
+                    next({name: 'Store'})
+                }
+                else if(tip === 'Deliverer'){
+                    next({name: 'Deliverer'})
+                }
+                else{
+                    next();
+                }
+            }
         },
         {
             path:'/Login',
             name: 'Login',
-            component: Login
-            // beforeEnter(to, from, next){
-            //     let tip = Vue.$cookies.get("tip")
-            //     if(tip === 'A'){
-            //         next({name: 'AdminHomePage'});
-            //     }
-            //     else if(tip === 'M'){
-            //         next({name: 'MusterijaHomePage'})
-            //     }
-            //     else if(tip === 'R'){
-            //         next({name: 'RadnikHomePage'})
-            //     }
-            //     else{
-            //         next();
-            //     }
-            // }
+            component: Login,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip === 'Customer'){
+                    next({name: 'Customer'});
+                }
+                else if(tip === 'Store'){
+                    next({name: 'Store'})
+                }
+                else if(tip === 'Deliverer'){
+                    next({name: 'Deliverer'})
+                }
+                else{
+                    next();
+                }
+            }
         },
         {
             path:'/Register',
             name: 'Register',
-            component: Register
-            // beforeEnter(to, from, next){
-            //     let tip = Vue.$cookies.get("tip")
-            //     if(tip === 'A'){
-            //         next({name: 'AdminHomePage'});
-            //     }
-            //     else if(tip === 'M'){
-            //         next({name: 'MusterijaHomePage'})
-            //     }
-            //     else if(tip === 'R'){
-            //         next({name: 'RadnikHomePage'})
-            //     }
-            //     else{
-            //         next();
-            //     }
-            // }
+            component: Register,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip === 'Customer'){
+                    next({name: 'Customer'});
+                }
+                else if(tip === 'Store'){
+                    next({name: 'Store'})
+                }
+                else if(tip === 'Deliverer'){
+                    next({name: 'Deliverer'})
+                }
+                else{
+                    next();
+                }
+            }
         },
         {
             path:'/Basket',
@@ -98,6 +99,11 @@ const router = new Router({
             path:'/Deliverer',
             name: 'Deliverer',
             component: Deliverer
+        },
+        {
+            path:'/StoreMenu',
+            name: 'StoreMenu',
+            component: StoreMenu
         },
         // {
         //     path: '/401',
