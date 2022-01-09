@@ -60,7 +60,7 @@ const CreateStore = async (req,res) => {
             password: hash,
             name: req.body.name,
             location: req.body.location,
-            preptime: req.body.preptime,
+            preptime: null,
             role: "Store"// Simple schema definition of property : type
         
         }).then(store => {

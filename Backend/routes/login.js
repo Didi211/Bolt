@@ -31,10 +31,9 @@ router.post('/', async (req,res)=>{
                 error: "Incorrect password"})
         }
     })  
-   }
-    catch(e)
-    
-    {throw e}
+   }catch(e){
+        res.status(500).send(e)
+    }
   
 })
 
