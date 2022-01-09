@@ -136,7 +136,7 @@ export default defineComponent({
             }
         },
         toggleVehicle(tip){
-            this.formD=tip
+            this.formD.vehicle=tip
         },
         async registerCustomer(){
             if(this.formC.name==""){

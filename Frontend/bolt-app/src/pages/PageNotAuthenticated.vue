@@ -20,13 +20,13 @@
 </template>
 
 <script>
-import HeaderNot from "@/components/HeaderLoginRegister.vue";
-import { mapGetters } from 'vuex'
+import Header from "@/components/Header.vue";
+
 
 export default {
   name: "PageNotAuthenticated",
   components: {
-    HeaderNot
+    Header
   },
   computed:{
       // ...mapGetters({

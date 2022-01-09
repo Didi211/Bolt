@@ -10,6 +10,7 @@ import Store from '@/pages/Store'
 import Customer from '@/pages/Customer'
 import Deliverer from '@/pages/Deliverer'
 import StoreMenu from '@/pages/StoreMenu'
+import PageNotAuthenticated from '@/pages/PageNotAuthenticated'
 
 Vue.use(Router)
 
@@ -83,33 +84,78 @@ const router = new Router({
         {
             path:'/Search',
             name: 'Search',
-            component: Search
+            component: Search,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip == 'Customer'){
+                    next();
+                }
+                else{
+                    next({name: 'PageNotAuthenticated'})
+                }
+            }
         },
         {
             path:'/Store',
             name: 'Store',
-            component: Store
+            component: Store,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip == 'Store'){
+                    next();
+                }
+                else{
+                    next({name: 'PageNotAuthenticated'})
+                }
+            }
         },
         {
             path:'/Customer',
             name: 'Customer',
-            component: Customer
+            component: Customer,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip == 'Customer'){
+                    next();
+                }
+                else{
+                    next({name: 'PageNotAuthenticated'})
+                }
+            }
         },
         {
             path:'/Deliverer',
             name: 'Deliverer',
-            component: Deliverer
+            component: Deliverer,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip == 'Deliverer'){
+                    next();
+                }
+                else{
+                    next({name: 'PageNotAuthenticated'})
+                }
+            }
         },
         {
             path:'/StoreMenu',
             name: 'StoreMenu',
-            component: StoreMenu
+            component: StoreMenu,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip == 'Customer'){
+                    next();
+                }
+                else{
+                    next({name: 'PageNotAuthenticated'})
+                }
+            }
         },
-        // {
-        //     path: '/401',
-        //     name: 'PageNotAuthenticated',
-        //     component: PageNotAuthenticated
-        // },
+        {
+            path: '/401',
+            name: 'PageNotAuthenticated',
+            component: PageNotAuthenticated
+        },
         {
             path: '*',
             name: 'PageNotFound',
