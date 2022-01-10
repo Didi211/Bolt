@@ -19,7 +19,9 @@ export default new Vuex.Store({
         store: null,
         kategorije:[],
         customer:null,
-        unselectedOrdersDeliverer:[]
+        unselectedOrdersDeliverer:[],
+        top5Rest:[],
+        storesByCategory:[]
     },
     getters:{
         getOrderHistory(state){
@@ -51,6 +53,12 @@ export default new Vuex.Store({
         },
         getUnselectedOrders(state){
             return state.unselectedOrdersDeliverer
+        },
+        getTop5Rest(state){
+            return state.top5Rest
+        },
+        getStoresByCategory(state){
+            return state.storesByCategory
         }
     },
     actions:{
@@ -213,7 +221,6 @@ export default new Vuex.Store({
         async getAllStores({commit}){
             return await Api().get('/api/store/all').then(res=>{
                 const stores = res.data
-                console.log(stores)
                 commit('setAllStores', stores)
             })
         },
@@ -236,6 +243,20 @@ export default new Vuex.Store({
             return await Api().get('/api/category/all').then(res=>{
                 const kat = res.data
                 commit('setCategories', kat)
+            })  
+        },
+        async getTop5Rest({commit}){
+            return await Api().get('/api/store/mostPopular').then(res=>{
+                const rest = res.data
+                commit('setTop5Rest', rest)
+            })  
+        }, 
+        async getStoresByCategory({commit}, category){
+            console.log(category)
+            return await Api().post('/api/store/category/get', category).then(res=>{
+                console.log(res)
+                const stores = res.data
+                commit('setStoresByCategory', stores)
             })  
         }, 
         async getCustomerById({commit}){
@@ -328,5 +349,11 @@ export default new Vuex.Store({
         setCustomer(state, customer){
             state.customer=customer
         },
+        setTop5Rest(state, rest){
+            state.top5Rest = rest
+        },
+        setStoresByCategory(state,stores){
+            state.storesByCategory = stores
+        }
     }
 })
