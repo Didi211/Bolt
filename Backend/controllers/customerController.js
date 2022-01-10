@@ -62,4 +62,24 @@ const GetPreviousOrders = (req,res) => {
     }).catch(err => console.log(err))
 }
 
-module.exports = {CreateCustomer,GetCustomer,GetCustomerByUsername,GetPreviousOrders};
+const ChangeLocation = async (req,res) => { 
+    try { 
+        let customer = await neo4j.model('Customer').find(req.params.id)
+        if (!customer) {
+            res.status(400).send("Customer not found")
+            return
+        }
+        customer.update({location: req.body.location})
+        res.status(200).send("")
+    }
+    catch(e) { 
+        res.status(500).send(e)
+    }
+}
+module.exports = {
+    CreateCustomer,
+    GetCustomer,
+    GetCustomerByUsername,
+    GetPreviousOrders,
+    ChangeLocation
+};
