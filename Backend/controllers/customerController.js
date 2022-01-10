@@ -49,8 +49,15 @@ const GetCustomerByUsername = (req) => {
 
 
 const GetCustomer = (req,res) => {
-    neo4j.findById('Customer',req.body.uuid).then(user => {
-        res.send(user).status(200)
+    neo4j.find('Customer',req.params.id).then(user => {
+        userDTO = {
+            name: user._properties.get('name'),
+            surname: user._properties.get('surname'),
+            username: user._properties.get('username'),
+            uuid: user._properties.get('uuid'),
+            location: user._properties.get('location')
+        }
+        res.send(userDTO).status(200)
     }).catch(err => res.send(err).status(400))
 }
 const GetPreviousOrders = (req,res) => {

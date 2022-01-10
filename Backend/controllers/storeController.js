@@ -122,10 +122,35 @@ const GetAllStores = async (req,res) => {
     }
 }
 
+const GetStoresByCategory = async (req,res) => { 
+    try { 
+        let category = req.body.category
+        let foundStores = []
+        let result = await neo4j.cypher(
+            `MATCH (s:Store)-[:OFFERS]->(m:Meal)-[r:BELONGS_TO]->(c:Category {name: '${category}'}) RETURN DISTINCT s`)
+        result.records.forEach(record => { 
+            node = record._fields[0]
+
+            foundStores.push({ 
+                name: node.properties.name,
+                location: node.properties.location,
+                preptime: node.properties.preptime,
+                uuid: node.properties.uuid,
+                username: node.properties.username
+            })
+        })
+        res.status(200).send(foundStores)
+    }
+    catch(e) {
+        res.status(500).send(e)
+    }
+}
+
 module.exports = {
     CreateStore,
     GetStore,
     GetAllStores,
     changePrepTime,
-    GetTop5
+    GetTop5,
+    GetStoresByCategory
 }

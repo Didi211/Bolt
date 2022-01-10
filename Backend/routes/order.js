@@ -1,7 +1,18 @@
 const express = require("express");
 const router = express.Router()
 
-const {CreateOrder,AcceptOrderRestaraunt,GetAcceptedDeliverer,GetReadyStore,GetAcceptedStore,GetPendingStore,OrderFinished,OrderPickedUp,OrderReady,AcceptOrderDeliverer,DeclineOrderRestaraunt} = require('../controllers/orderController');
+const {CreateOrder,
+    AcceptOrderRestaraunt,
+    GetAcceptedDeliverer,
+    GetReadyStore,
+    GetAcceptedStore,
+    GetPendingStore,
+    OrderFinished,
+    OrderPickedUp,
+    OrderReady,
+    AcceptOrderDeliverer,
+    DeclineOrderRestaraunt
+} = require('../controllers/orderController');
 
 
 router.post('/',CreateOrder); 

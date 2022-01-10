@@ -6,7 +6,8 @@ const {
     GetStore,
     GetAllStores,
     changePrepTime,
-    GetTop5
+    GetTop5,
+    GetStoresByCategory
 } = require('../controllers/storeController');
 
 
@@ -15,5 +16,5 @@ router.get('/get/:id', GetStore);
 router.get('/all', GetAllStores);
 router.put('/preptime/change/:id',changePrepTime)
 router.get('/mostPopular',GetTop5)
-
+router.get('/category/get',GetStoresByCategory)
 module.exports = router;
