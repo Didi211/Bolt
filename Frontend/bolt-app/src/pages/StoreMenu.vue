@@ -43,9 +43,12 @@
             <div class="col-md-3"> 
                 <p class="lead fw-normal text-black-50 mb-0">Korpa</p>
                 <div class="basket"> 
-                    <li v-for="j in jela" :key="j.mealID"> {{j.name}} </li>
-                    <input type="text" v-model="customer.location">
+                    <li v-for="j in jela" :key="j.mealID"> {{j.name}} {{j.price}}din</li>
+                    <p>Adresa:</p>
+                    <input type="text" v-model="customer.location" id="location">
                     <button @click="change">Izmeni</button>
+                    <input type="textarea" placeholder="note" id="note" class="note">
+                    <!-- <button @click="order">Naruči</button> -->
 
 
                 </div>
@@ -92,6 +95,12 @@ export default defineComponent({
             jela:[],
             jelaId:[],
             user: null,
+            loc: {
+                location: ""
+            },
+            orderMeal:{
+
+            }
         }
     },
     computed:{
@@ -119,8 +128,13 @@ export default defineComponent({
           console.log(this.jelaId)
         },
         change(){
-            
-        }
+            this.loc.location=document.getElementById("location").value
+            console.log(this.loc)
+            this.$store.dispatch('changeCustomerLocation', this.loc)
+        },
+        // order(){
+
+        // }
     },
     async created(){
         this.isDataLoaded = false
@@ -170,6 +184,14 @@ export default defineComponent({
 }
 h3{
     color:brown;
+}
+p{
+    padding: 0;
+    margin: 0;
+}
+.note{
+    resize: horizontal;
+    overflow: auto;
 }
 
 </style>
