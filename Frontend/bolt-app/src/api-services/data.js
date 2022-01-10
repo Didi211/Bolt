@@ -249,9 +249,18 @@ export default new Vuex.Store({
                 commit('setCustomer', customer)
             })
         },
-        async changeCustomerLocation(uuid, location){
+        async changeCustomerLocation( location){
             console.log(location)
             return await Api().put('/api/customer/changeLocation/'+this.state.trenutniKorisnik.uuid, location).then(()=>{
+
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        async orderMeal(obj){
+            console.log("narudzbina")
+            console.log(obj)
+            return await Api().post('/api/order/',obj).then(()=>{
 
             }).catch(err=>{
                 console.log(err)

@@ -48,7 +48,7 @@
                     <input type="text" v-model="customer.location" id="location">
                     <button @click="change">Izmeni</button>
                     <input type="textarea" placeholder="note" id="note" class="note">
-                    <!-- <button @click="order">Naruči</button> -->
+                    <button @click="order" class="order">Naruči</button>
 
 
                 </div>
@@ -99,7 +99,10 @@ export default defineComponent({
                 location: ""
             },
             orderMeal:{
-
+                timeWaiting: null,
+                onAddress: "",
+                meals: [],
+                uuid: ""
             }
         }
     },
@@ -132,9 +135,14 @@ export default defineComponent({
             console.log(this.loc)
             this.$store.dispatch('changeCustomerLocation', this.loc)
         },
-        // order(){
-
-        // }
+        order(){
+            this.orderMeal.onAddress=document.getElementById("location").value
+            this.orderMeal.meals=this.jelaId
+            this.orderMeal.uuid=this.customer.uuid
+            console.log("ovo je iz order u store menu")
+            console.log(this.orderMeal)
+            this.$store.dispatch('orderMeal', this.orderMeal)
+        }
     },
     async created(){
         this.isDataLoaded = false
@@ -192,6 +200,9 @@ p{
 .note{
     resize: horizontal;
     overflow: auto;
+}
+.order{
+    width: 100%;
 }
 
 </style>
