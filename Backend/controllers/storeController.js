@@ -20,35 +20,59 @@ function convertToDTO(store) {
    
 }
 const GetTop5 = async (req,res) => { 
-    async function makeArray(arr) {
-        let allStores = await neo4j.model('Store').all()
-        
-        await allStores.forEach(async (store) => { 
-            
-            let stored_uuid = await store._properties.get('uuid')
-            let result = await neo4j.cypher(
+    async function makeArray(allStores) {
+        let arr = []
+        console.log(allStores)
+        for await (let store of allStores) { 
+            let stored_uuid =  store._properties.get('uuid')
+            let resCypher = await neo4j.cypher(
                 `MATCH (s:Store {uuid: '${stored_uuid}'})-[rel:PREPARES]->(o:Order) return count(rel)`
             );
-        
-            result.records.forEach(async (element) => {
-                let relCount = await element._fields[0].low;
-
-                await arr.push({
-                    key: stored_uuid,
-                    value: relCount
-                });
-                console.log(arr);
+            resCypher.records.forEach(record => { 
+                let relCount = record._fields[0].low
+                arr.push({key: stored_uuid, value: relCount})
             })
-        });
-        return arr
+        }
+        return arr 
     }
-    temp = []
-    temp = await makeArray(temp)
-    temp.sort()
+    let result = await neo4j.model('Store').all()
+    let allStores = result._values
+
+    let stores =  await makeArray(allStores)
+    stores = stores.sort((a,b) => { 
+       //#region OpisFje
+        // a,b
+        // > 0 sort b before a 
+        // < 0 sort a before b
+        // === 0 keep original order of a and b
+        //    function compare(a, b) {
+        //     if (a is less than b by some ordering criterion) {
+        //       return -1;
+        //     }
+        //     if (a is greater than b by the ordering criterion) {
+        //       return 1;
+        //     }
+        //     // a must be equal to b
+        //     return 0;
+        //   }
+       //#endregion
+        if (a.value > b.value) return  1
+        if (a.value < b.value) return -1
+        return 0
+    })
+    stores.reverse()
+    if (stores.length > 5) 
+        stores = stores.slice(0,5)
+    let top5 = []
+    for (let s of stores) { 
+        uuid = s.key
+        for (let restaurant of allStores) { 
+            if (restaurant._properties.get('uuid') == uuid) 
+                top5.push(convertToDTO(restaurant))
+        }
+    }
     
-    console.log("nasdasm l");
-    console.log(temp)
-    res.status(200).send("")
+    res.status(200).send(top5)
 }
 const CreateStore = async (req,res) => { 
     

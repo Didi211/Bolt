@@ -75,12 +75,22 @@ const GetMealPrice = async(id) =>{
         res.status(500).end(e.message || e.toString())
     }
 }
-const AddToCategory = (req,res) => {
+const AddToCategory = async (req,res) => {
+    let meal = await neo4j.model('Meal').find(req.body.mealID)
+    if (!meal) {
+        res.status(400).send("Meal not found!")
+        return
+    }
+    let category = await neo4j.model('Category').first('name',req.body.categoryName)
+    if (!category) {
+        res.status(400).send("Category not found!")
+        return
+    }
     neo4j.cypher(`match (m:Meal {mealID: "${req.body.mealID}"}),(c:Category {name: "${req.body.categoryName}"}) create (m)-[rel:BELONGS_TO]->(c) return m,c,rel`)
             .then(result => {  
                 console.log(result);
-                if(result.records == [])
-                    res.send(400) //error handle ne radi
+                if(result.records.length === 0) //error handle za ovo je obradjen iznad 
+                    res.send(400) //error handle ne radi 
                 res.send(result).status(200)         
                 
             })
