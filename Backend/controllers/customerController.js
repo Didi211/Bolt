@@ -55,18 +55,25 @@ const GetCustomer = (req,res) => {
             surname: user._properties.get('surname'),
             username: user._properties.get('username'),
             uuid: user._properties.get('uuid'),
-            location: user._properties.get('location')
+            location: user._properties.get('location') 
         }
         res.send(userDTO).status(200)
     }).catch(err => res.send(err).status(400))
 }
-const GetPreviousOrders = (req,res) => {
-    neo4j.cypher(`match (c:Customer {uuid : "${req.params.id}"})-[rel:ORDERED]->(o:Order {status: "Finished"}) return o`).then(result => {
-        console.log(result);
-        orders = RecordsToJSON(result.records)
-        
-        res.send(orders).status(200)
-    }).catch(err => console.log(err))
+const GetPreviousOrders = async (req,res) => {
+    let result = await neo4j.cypher(`match (c:Customer {uuid : "${req.params.id}"})-[rel:ORDERED]->(o:Order {status: "Finished"}) return o`)
+    let orders = RecordsToJSON(result.records)
+    let ordersWithMeals = []
+    for await (let order of orders) { 
+        let result = await neo4j.cypher(`match (m:Meal)<-[:CONTAINS]-(o:Order { orderID: '${order.orderID}'}) return m`)
+        let meals = RecordsToJSON(result.records)
+        ordersWithMeals.push({order: order, meals: meals})
+        // console.log("Meal:",meals);
+
+    }
+    // console.log("OrdersMeals",ordersWithMeals[0].meals);
+    res.send(ordersWithMeals).status(200)
+    
 }
 
 const ChangeLocation = async (req,res) => { 

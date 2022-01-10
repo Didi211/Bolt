@@ -19,8 +19,9 @@ const CreateOrder =  (req,res) => {
         price =+ await GetMealPrice(element)    
         
     });
-    
+    console.log(req.body.tralala)
     neo4j.model("Order").create({
+        
         price: price,  
         onAddress: req.body.onAddress,
         note: req.body.note,
