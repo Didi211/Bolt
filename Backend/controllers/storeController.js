@@ -170,6 +170,10 @@ const GetStoresByCategory = async (req,res) => {
     }
 }
 
+const getPendingOrders = async (req,res) => { 
+    
+}
+
 module.exports = {
     CreateStore,
     GetStore,
