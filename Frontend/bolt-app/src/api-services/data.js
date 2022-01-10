@@ -249,6 +249,14 @@ export default new Vuex.Store({
                 commit('setCustomer', customer)
             })
         },
+        async changeCustomerLocation(uuid, location){
+            console.log(location)
+            return await Api().put('/api/customer/changeLocation/'+this.state.trenutniKorisnik.uuid, location).then(()=>{
+
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
         // async changeTime({commit}, novoVreme){
         //     return await Api().put('/'+ this.state.osobaID, novoVreme).then(res=>{
         async changeTime( novoVreme){
