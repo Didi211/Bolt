@@ -44,7 +44,8 @@
                 <p class="lead fw-normal text-black-50 mb-0">Korpa</p>
                 <div class="basket"> 
                     <li v-for="j in jela" :key="j.mealID"> {{j.name}} </li>
-                    <!-- <input type="text" v-model="customer.username"> -->
+                    <input type="text" v-model="customer.location">
+                    <button @click="change">Izmeni</button>
 
 
                 </div>
@@ -101,12 +102,12 @@ export default defineComponent({
             return this.$store.getters['getAllMealsFromStore']
         },
         customer(){
-            return this.$store.getters['getTrenutniKorisnik']
+            return this.$store.getters['getCustomer']
         },
-        userObj(){
-             this.user= this.$store.getters['getTrenutniKorisnik']
-             return this.user
-        }
+        // userObj: function(){
+        //      return  this.$store.getters['getTrenutniKorisnik']
+        //     //  return this.user
+        // }
         // async meals(){
         //     return await this.$store.dispatch('getMealsFromStore')
         // }
@@ -117,15 +118,21 @@ export default defineComponent({
           this.jelaId.push(value.mealID)
           console.log(this.jelaId)
         },
+        change(){
+            
+        }
     },
     async created(){
         this.isDataLoaded = false
         const storeID = this.$route.params.id
         const customerID = Vue.$cookies.get("id");
-        Promise.all([await this.$store.dispatch('getStoreById',storeID), await this.$store.dispatch('getUserByID',customerID),
+        await this.$store.dispatch('getUserByID',customerID)
+        //const user = this.$store.getters['getTrenutniKorisnik']
+        Promise.all([await this.$store.dispatch('getStoreById',storeID), await this.$store.dispatch('getCustomerById') ,
         await this.$store.dispatch('getMealsFromStore', storeID)]).then(()=>{
             this.isDataLoaded = true;
         })
+        // , await this.$store.dispatch('getCustomerById')
         // , await this.$store.dispatch('getCustomerByUsername', this.user.username)]
         // await this.$store.dispatch('getStoreById',storeID).then(()=>{
         //     this.isDataLoaded = true;
@@ -154,7 +161,7 @@ export default defineComponent({
     margin: 0;
 }
 .basket{
-    position: relative;
+    position: absolute;
     border: solid black 1px;
     border-radius: 10px;
 }

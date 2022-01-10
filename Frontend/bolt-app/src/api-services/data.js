@@ -241,9 +241,9 @@ export default new Vuex.Store({
                 commit('setCategories', kat)
             })  
         }, 
-        async getCustomerByUsername({commit}, username){
+        async getCustomerById({commit}){
             //console.log(this.trenKorisnik.uuid)
-            return await Api().get('/api/Customer', username).then(res=>{
+            return await Api().get('/api/customer/get/'+ this.state.trenutniKorisnik.uuid).then(res=>{
                 const customer = res.data
                 console.log(customer)
                 commit('setCustomer', customer)
