@@ -71,6 +71,7 @@ export default new Vuex.Store({
                 Vue.$cookies.set("id",this.state.trenutniKorisnik.uuid,"1h");
                 Vue.$cookies.set("token",this.state.token,"1h");
                 Vue.$cookies.set("tip",this.state.trenutniKorisnik.role,"1h");
+                Vue.$cookies.set("username",this.state.trenutniKorisnik.username,"1h");
                 // commit('setToken', Vue.$cookies.get("token"))
                 commit('setTip', Vue.$cookies.get("tip"))
                 commit('setOsobaID', Vue.$cookies.get("id"))
@@ -101,6 +102,7 @@ export default new Vuex.Store({
                 Vue.$cookies.set("id",this.state.trenutniKorisnik.uuid,"1h");
                 Vue.$cookies.set("token",this.state.token,"1h");
                 Vue.$cookies.set("tip",this.state.trenutniKorisnik.role,"1h");
+                Vue.$cookies.set("username",this.state.trenutniKorisnik.username,"1h");
                 // commit('setToken', Vue.$cookies.get("token"))
                 commit('setTip', Vue.$cookies.get("tip"))
                 commit('setOsobaID', Vue.$cookies.get("id"))
@@ -130,6 +132,7 @@ export default new Vuex.Store({
                 Vue.$cookies.set("id",this.state.trenutniKorisnik.uuid,"1h");
                 Vue.$cookies.set("token",this.state.token,"1h");
                 Vue.$cookies.set("tip",this.state.trenutniKorisnik.role,"1h");
+                Vue.$cookies.set("username",this.state.trenutniKorisnik.username,"1h");
                 // commit('setToken', Vue.$cookies.get("token"))
                 commit('setTip', Vue.$cookies.get("tip"))
                 commit('setOsobaID', Vue.$cookies.get("id"))
@@ -159,6 +162,7 @@ export default new Vuex.Store({
                 Vue.$cookies.set("id",this.state.trenutniKorisnik.uuid,"1h");
                 Vue.$cookies.set("token",this.state.token,"1h");
                 Vue.$cookies.set("tip",this.state.trenutniKorisnik.role,"1h");
+                Vue.$cookies.set("username",this.state.trenutniKorisnik.username,"1h");
                 // commit('setToken', Vue.$cookies.get("token"))
                 commit('setTip', Vue.$cookies.get("tip"))
                 commit('setOsobaID', Vue.$cookies.get("id"))
@@ -201,6 +205,7 @@ export default new Vuex.Store({
                 Vue.$cookies.remove("id");
                 Vue.$cookies.remove("token");
                 Vue.$cookies.remove("tip");
+                Vue.$cookies.remove("username")
                 // commit('setToken', null);
                 // commit('setTip', null)
             //commit('LOGOUT_KORISNIK')
@@ -238,7 +243,6 @@ export default new Vuex.Store({
         async getStoreById({commit}, storeID){
             return await Api().get('/api/store/get/'+ storeID).then(res=>{
                 const store = res.data
-                console.log(store)
                 commit('setStore', store)
             })  
         },
@@ -287,11 +291,23 @@ export default new Vuex.Store({
                 console.log(err)
             })
         },
-        // async changeTime({commit}, novoVreme){
-        //     return await Api().put('/'+ this.state.osobaID, novoVreme).then(res=>{
-        async changeTime( novoVreme){
+        async makeNewMeal({commit},newMeal){
+            return await Api().post('/api/meal/create', newMeal).then(()=>{
+                commit('setNista')
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        async addMealToCategory({commit},novaKategorija){
+            return await Api().post('/api/meal/addToCategory', novaKategorija).then(()=>{
+                commit('setNista')
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        async changeTime({commit},novoVreme){
             return await Api().put('/api/store/preptime/change/'+ this.state.osobaID, novoVreme).then(()=>{
-
+                commit('setNista')
             }).catch(err=>{
                 console.log(err)
             })
@@ -357,6 +373,9 @@ export default new Vuex.Store({
         },
         setStoresByCategory(state,stores){
             state.storesByCategory = stores
+        },
+        setNista(){
+
         }
     }
 })

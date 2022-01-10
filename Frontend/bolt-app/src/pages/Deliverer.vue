@@ -3,14 +3,14 @@
         <div class="row">
             <HeaderDeliverer />
         </div>
-        <div class="row">
+        <div class="row mt-3">
             <h4>Izaberite porudzbinu koju zelite da dostavite:</h4>
         </div>
-        <div class="row">
+        <!-- <div class="row">
             <OrderCard v-for="order in unselectedOrders" 
                                     :key="order.id" 
                                     :order="order"/>
-        </div>
+        </div> -->
         <div class="row">
             <Footer />
         </div>
@@ -33,15 +33,15 @@ export default defineComponent({
         OrderCard
         //StoreInfo
     },
-    computed:{
-        unselectedOrders(){
-            return this.$store.getters['getUnselectedOrders']
-        }
-    },
-    async created(){
-        await this.$store.dispatch('getUnselectedOrders').then(()=>{
-        })
-    }
+    // computed:{
+    //     unselectedOrders(){
+    //         return this.$store.getters['getUnselectedOrders']
+    //     }
+    // },
+    // async created(){
+    //     await this.$store.dispatch('getUnselectedOrders').then(()=>{
+    //     })
+    // }
 })
 </script>
 
