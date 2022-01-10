@@ -217,12 +217,9 @@ export default new Vuex.Store({
             })
         },
         async getOrderHistory({commit}){
-            return await Api().get('/'+this.state.osobaID,{
-                headers: {
-                  'Authorization': `Basic ${this.state.token}`
-                }
-              }).then(res=>{
+            return await Api().get('/api/customer/previousOrders/'+this.state.osobaID).then(res=>{
                 const narudzbine = res.data
+                console.log(res)
                 commit('setOrderHistory', narudzbine)
             })
         },
@@ -274,10 +271,10 @@ export default new Vuex.Store({
                 commit('setCustomer', customer)
             })
         },
-        async changeCustomerLocation( location){
+        async changeCustomerLocation({commit},location){
             console.log(location)
-            return await Api().put('/api/customer/changeLocation/'+this.state.trenutniKorisnik.uuid, location).then(()=>{
-
+            return await Api().put('/api/customer/changeLocation/'+this.state.osobaID, location).then(()=>{
+                commit('setToken', Vue.$cookies.get("token") )
             }).catch(err=>{
                 console.log(err)
             })
