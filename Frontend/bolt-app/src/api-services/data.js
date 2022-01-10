@@ -257,11 +257,11 @@ export default new Vuex.Store({
                 console.log(err)
             })
         },
-        async orderMeal(obj){
+        async orderMeal({commit},order){
             console.log("narudzbina")
-            console.log(obj)
-            return await Api().post('/api/order/',obj).then(()=>{
-
+            console.log(order)
+            return await Api().post('/api/order/', order).then(()=>{
+                commit('setToken', Vue.$cookies.get("token") )
             }).catch(err=>{
                 console.log(err)
             })

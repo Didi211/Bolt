@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="col-md-3"> 
-                <p class="lead fw-normal text-black-50 mb-0">Korpa</p>
+                <h3>Korpa</h3>
                 <div class="basket"> 
                     <li v-for="j in jela" :key="j.mealID"> {{j.name}} {{j.price}}din</li>
                     <p>Adresa:</p>
@@ -99,8 +99,8 @@ export default defineComponent({
                 location: ""
             },
             orderMeal:{
-                timeWaiting: null,
                 onAddress: "",
+                note: "",
                 meals: [],
                 uuid: ""
             }
@@ -137,6 +137,7 @@ export default defineComponent({
         },
         order(){
             this.orderMeal.onAddress=document.getElementById("location").value
+            this.orderMeal.note=document.getElementById("note").value
             this.orderMeal.meals=this.jelaId
             this.orderMeal.uuid=this.customer.uuid
             console.log("ovo je iz order u store menu")
