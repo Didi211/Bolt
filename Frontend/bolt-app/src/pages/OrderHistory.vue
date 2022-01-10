@@ -6,7 +6,7 @@
         <div class="row">
             <OrderHistoryComponent
                 v-for="narudzbina in narudzbine"
-                :key="narudzbina.id"
+                :key="narudzbina.order.orderID"
                 :narudzbina="narudzbina"
             />
         </div>
@@ -31,20 +31,20 @@ export default defineComponent({
     },
     data() {
         return {
-            narudzbine:["prva", "druga", "treca","cetvrta"],
+           // narudzbine:["prva", "druga", "treca","cetvrta"],
             isDataLoaded:false,
         };
     },//OVO SVE TREBA OTKOMENTARISATI
-    // computed: {
-    //     narudzbine() {
-    //     return this.$store.getters["getOrderHistory"];
-    //     }
-    // },
-    // async created(){
-    //     await this.$store.dispatch("getOrderHistory").then(()=>{
-    //         this.isDataLoaded=true;
-    //     })
-    // }
+    computed: {
+        narudzbine() {
+        return this.$store.getters["getOrderHistory"];
+        }
+    },
+    async created(){
+        await this.$store.dispatch("getOrderHistory").then(()=>{
+            this.isDataLoaded=true;
+        })
+    }
 })
 </script>
 

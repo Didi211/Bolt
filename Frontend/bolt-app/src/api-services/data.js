@@ -204,12 +204,9 @@ export default new Vuex.Store({
             })
         },
         async getOrderHistory({commit}){
-            return await Api().get('/'+this.state.osobaID,{
-                headers: {
-                  'Authorization': `Basic ${this.state.token}`
-                }
-              }).then(res=>{
+            return await Api().get('/api/customer/previousOrders/'+this.state.osobaID).then(res=>{
                 const narudzbine = res.data
+                console.log(res)
                 commit('setOrderHistory', narudzbine)
             })
         },

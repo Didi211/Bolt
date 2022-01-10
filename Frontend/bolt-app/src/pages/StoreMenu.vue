@@ -46,9 +46,9 @@
                     <li v-for="j in jela" :key="j.mealID"> {{j.name}} {{j.price}}din</li>
                     <p>Adresa:</p>
                     <input type="text" v-model="customer.location" id="location">
-                    <button @click="change">Izmeni</button>
+                    <button @click="change" class="btn btn-dark">Izmeni</button>
                     <input type="textarea" placeholder="note" id="note" class="note">
-                    <button @click="order" class="order">Naruči</button>
+                    <button @click="order"  class="btn btn-dark order">Naruči</button>
 
 
                 </div>
