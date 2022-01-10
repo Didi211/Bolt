@@ -267,10 +267,10 @@ export default new Vuex.Store({
                 commit('setCustomer', customer)
             })
         },
-        async changeCustomerLocation( location){
+        async changeCustomerLocation({commit},location){
             console.log(location)
-            return await Api().put('/api/customer/changeLocation/'+this.state.trenutniKorisnik.uuid, location).then(()=>{
-
+            return await Api().put('/api/customer/changeLocation/'+this.state.osobaID, location).then(()=>{
+                commit('setToken', Vue.$cookies.get("token") )
             }).catch(err=>{
                 console.log(err)
             })

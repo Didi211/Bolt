@@ -57,7 +57,7 @@ export default defineComponent({
       },
     change(){
         this.loc.location=document.getElementById("location").value
-        console.log(this.loc)
+        console.log(this.loc.location)
         this.$store.dispatch('changeCustomerLocation', this.loc)
     },
     orderMeals(){
