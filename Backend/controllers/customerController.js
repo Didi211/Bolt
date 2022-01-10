@@ -41,9 +41,9 @@ const CreateCustomer = async (req,res) => {
     }).catch(err => res.status(500).send(err))
 }
 
-const GetCustomerByUsername = (req) => {
-    neo4j.find('Customer', {username : req.body.username}).then(customer => {
-        return customer
+const GetCustomerByUsername = (req,res) => {
+    neo4j.find('Customer', {username : req.params.id}).then(customer => {
+        res.send(RecordsToJSON(customer.records)) 
     }).catch(err => {console.log(err); return "ERROR!"})
 }
 
