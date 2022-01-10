@@ -22,7 +22,6 @@ const CreateOrder =  (req,res) => {
     
     neo4j.model("Order").create({
         price: price,  
-        timeWaiting: req.body.timeWaiting,
         onAddress: req.body.onAddress,
         note: req.body.note,
         status: "Pending"
