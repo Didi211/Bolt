@@ -2,6 +2,16 @@
 const neo4j = require('../config/neo4j_config');
 const meal = require('../models/mealModel');
 
+
+const RecordsToJSON = (records) =>{
+    let item= []    
+    records.forEach(element => {        
+        item.push(element._fields[0].properties)
+    })
+    return item
+} 
+
+
 const MealsToJSON = (records) =>{
     let item= []    
     records.forEach(element => {
@@ -96,7 +106,14 @@ const AddToCategory = async (req,res) => {
             })
             .catch(err => {res.status(400).send(result)})
 }
+const GetCategory = (req,res) =>{
+    neo4j.cypher(`match (m:Meal {mealID : "${req.params.id}"})-[rel:BELONGS_TO]->(c:Category) return c`).then(result => {
+        //console.log(result);
+        let meals = RecordsToJSON(result.records)
+    
+        res.send(meals).status(200)
+    }).catch(err => console.log(err))
+}
 
 
-
-module.exports = {CreateMeal,GetMealsByRestaurant,GetMealById,GetMealPrice,AddToCategory};
+module.exports = {CreateMeal,GetMealsByRestaurant,GetMealById,GetMealPrice,AddToCategory,GetCategory};
