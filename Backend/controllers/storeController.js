@@ -2,8 +2,7 @@ const  neo4j  = require('../config/neo4j_config');
 const restoran = require('../models/storeModel');
 const token = require('../config/token')
 const bcrypt = require('bcrypt');
-const e = require('express');
-
+const redis_client = require('../config/ws.config');
 const saltRounds = 10;
 
 function convertToDTO(store) { 
@@ -107,8 +106,9 @@ const GetStore = async (req,res) => {
 
     let uuid = req.params.id
     try { 
-        let store = await neo4j.model('Store').find(uuid)
-        let storeDTO = convertToDTO(store)
+        let store = await neo4j.model('Store').find(uuid);
+        let storeDTO = convertToDTO(store);
+        redis_client.publish('app:customer','poruka neka');
         res.status(200).send(storeDTO)
     }
     catch(e) { 
@@ -139,6 +139,7 @@ const GetAllStores = async (req,res) => {
         stores.forEach(element => {
             storesDTO.push(convertToDTO(element))
         });
+        
         res.status(200).send(storesDTO)
     }
     catch(e) { 

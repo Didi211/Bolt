@@ -5,7 +5,7 @@ const customer = require('../models/orderModel');
 const { GetMealPrice } = require('./mealController');
 const redis_client = require('../config/ws.config')
 
-redis_client.set('name','bilo sta')
+
 
 
 const RecordsToJSON = (records) =>{
