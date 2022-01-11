@@ -1,17 +1,17 @@
 <template>
-        <div class="col-xl-4 order">
+        <div class="col-xl-4 order border m-2 rounded">
             <div class="card-body p-4 order">
                 <div class="text-center">
                     <div class="row">
-                        <li v-for="m in narudzbina.meals" :key="m.mealID"> {{m.name}} {{m.price}}din</li>
+                        <li v-for="m in narudzbina.meals" :key="m.mealID"> {{m.name}} {{m.price}} din</li>
                         <div class="col-md-12">
                             <p>Adresa:</p>
-                            <input type="text" v-model="narudzbina.order.onAddress" id="location">
+                            <input class="m-3" type="text" v-model="narudzbina.order.onAddress" id="location">
                             <button @click="change" class="btn btn-dark" >Izmeni</button>
                         </div>
                     </div>
                     <div class="row">
-                    <input type="textarea" v-model="narudzbina.order.note" id="note" class="note">
+                    <input type="textarea" v-model="narudzbina.order.note" id="note" class="m-3 note">
                     </div>                   
                     <button type="button" class="btn btn-dark" @click="orderMeals" >Naruci ponovo</button>
                     <!-- @click="order" -->
@@ -78,6 +78,7 @@ export default defineComponent({
   },
   async created(){
        await this.$store.dispatch('getCustomerById')
+       console.log(this.narudzbina)
   }
 })
 </script>

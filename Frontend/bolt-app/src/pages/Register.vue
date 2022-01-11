@@ -113,7 +113,8 @@ export default defineComponent({
           surname: "",
           username: "",
           password: "",
-          vehicle: ""
+          vehicle: "",
+          avgTime:0
         }
       }
     },

@@ -3,7 +3,7 @@
         <div class="row">
             <HeaderCustomer />
         </div>
-        <div class="row">
+        <div class="row justify-content-center border rounded">
             <OrderHistoryComponent
                 v-for="narudzbina in narudzbine"
                 :key="narudzbina.order.orderID"
@@ -31,16 +31,16 @@ export default defineComponent({
     },
     data() {
         return {
-           // narudzbine:["prva", "druga", "treca","cetvrta"],
-            isDataLoaded:false,
+            isDataLoaded:true,
         };
-    },//OVO SVE TREBA OTKOMENTARISATI
+    },
     computed: {
         narudzbine() {
         return this.$store.getters["getOrderHistory"];
         }
     },
     async created(){
+        this.isDataLoaded=false
         await this.$store.dispatch("getOrderHistory").then(()=>{
             this.isDataLoaded=true;
         })

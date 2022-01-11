@@ -3,8 +3,9 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand disabled" href="/" disabled="disabled">Dobrodosli u Bolt!</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button> -->
+                <!-- ovo je bilo za div ispod:    class="collapse navbar-collapse" id="navbarSupportedContent" -->
+                <div >
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                          <router-link :to="{name: 'Homepage'}"><li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Početna</a></li></router-link>
                         <router-link :to="{name: 'Login'}"><li class="nav-item"><a class="nav-link" href="#!">Prijava</a></li></router-link>

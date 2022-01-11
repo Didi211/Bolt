@@ -21,7 +21,8 @@ export default new Vuex.Store({
         customer:null,
         unselectedOrdersDeliverer:[],
         top5Rest:[],
-        storesByCategory:[]
+        storesByCategory:[],
+        catForOneMeal:[]
     },
     getters:{
         getOrderHistory(state){
@@ -42,7 +43,6 @@ export default new Vuex.Store({
             return state.store
         },
         getAllCategories(state){
-            console.log(state.kategorije)
             return state.kategorije
         },
         getCustomer(state){
@@ -59,6 +59,9 @@ export default new Vuex.Store({
         },
         getStoresByCategory(state){
             return state.storesByCategory
+        },
+        getCategoriesForOneMeal(state){
+            return state.catForOneMeal
         }
     },
     actions:{
@@ -217,7 +220,7 @@ export default new Vuex.Store({
             })
         },
         async getOrderHistory({commit}){
-            return await Api().get('/api/customer/previousOrders/'+this.state.osobaID).then(res=>{
+            return await Api().get('/api/customer/previousOrders/'+Vue.$cookies.get("id")).then(res=>{
                 const narudzbine = res.data
                 console.log(res)
                 commit('setOrderHistory', narudzbine)
@@ -247,6 +250,13 @@ export default new Vuex.Store({
             return await Api().get('/api/category/all').then(res=>{
                 const kat = res.data
                 commit('setCategories', kat)
+            })  
+        },
+        async getAllCategoriesForMeal({commit}, mealID){
+            return await Api().get('/api/meal/getCategories/'+ mealID).then(res=>{
+                const kat = res.data
+                console.log(kat)
+                commit('setCategoriesForOneMeal', kat)
             })  
         },
         async getTop5Rest({commit}){
@@ -303,7 +313,7 @@ export default new Vuex.Store({
             })
         },
         async changeTime({commit},novoVreme){
-            return await Api().put('/api/store/preptime/change/'+ this.state.osobaID, novoVreme).then(()=>{
+            return await Api().put('/api/store/preptime/change/'+ Vue.$cookies.get("id"), novoVreme).then(()=>{
                 commit('setNista')
             }).catch(err=>{
                 console.log(err)
@@ -373,6 +383,9 @@ export default new Vuex.Store({
         },
         setNista(){
 
+        },
+        setCategoriesForOneMeal(state, kat){
+            state.catForOneMeal=kat
         }
     }
 })

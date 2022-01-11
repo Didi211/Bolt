@@ -1,6 +1,6 @@
 <template>
     <div class="col mb-2 meal">
-        <div class="card" >
+        <div class="" >
             <div class="row">
                 <h5 class="fw-bolder mt-3">{{meal.name}}</h5> 
             </div>
@@ -16,9 +16,9 @@
                     <div class="row">
                         <div class="col-xl-12">
                             <select v-model="novaKategorija.categoryName" id="novaKat" name="novaKat" class="form-control form-select form-select-sm" aria-label=".form-select-sm example">
-                                <option value="Pizza">Pizza</option>
-                                <option value="Pasta">Pasta</option>
-                                <option value="3">Three</option>
+                                <option v-for="kat in moguceKat" v-bind:value="kat.name" :key="kat.name">
+                                    {{ kat.name }}
+                                </option>
                             </select>
                         </div>
 
@@ -51,7 +51,8 @@ export default defineComponent({
             novaKategorija:{
                 categoryName:"",
                 mealID:null
-            }
+            },
+            moguceKat:[]
         }
     },
     methods:{
@@ -63,8 +64,32 @@ export default defineComponent({
                             position: "top-center", 
                             duration : 2000
                     })
+                    window.location.reload()
             })
         }
+    },
+    computed:{
+        allCat(){
+            return this.$store.getters["getAllCategories"];
+        },
+        catForMeal() {
+            return this.$store.getters["getCategoriesForOneMeal"];
+        }
+    },
+    async created(){
+        Promise.all([await this.$store.dispatch('getAllCategories'), await this.$store.dispatch('getAllCategoriesForMeal', this.meal.mealID)]).then(()=>{
+            // console.log("sve kat")
+            // console.log(this.allCat)
+            // console.log("vec stavljene kat")
+            // console.log(this.catForMeal)
+            this.allCat.forEach((el)=>{
+                if(this.catForMeal.some(item => item.name === el.name)==false){
+                    this.moguceKat.push(el)
+                }
+            })
+            // console.log("kat za biranje")
+            // console.log(this.moguceKat)
+        })
     }
 })
 </script>
