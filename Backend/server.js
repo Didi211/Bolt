@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const neo4j = require('./config/neo4j_config');
+const redis = require('./config/ws.config')
 
 
 const user = require('./routes/user');
@@ -12,7 +13,6 @@ const store = require('./routes/store');
 const category = require('./routes/category')
 const login = require('./routes/login')
 const register = require('./routes/register')
-
 
 
 

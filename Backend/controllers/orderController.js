@@ -3,6 +3,9 @@ const { status } = require('express/lib/response');
 const neo4j = require('../config/neo4j_config');
 const customer = require('../models/orderModel');
 const { GetMealPrice } = require('./mealController');
+const redis_client = require('../config/ws.config')
+
+redis_client.set('name','bilo sta')
 
 
 const RecordsToJSON = (records) =>{
@@ -13,7 +16,7 @@ const RecordsToJSON = (records) =>{
     return item
 } 
 
-const CreateOrder =  (req,res) => {       
+const CreateOrder =  (req,res) => { //push ka restoranu, kreira se u redis i neo4j bazama      
     let price = 0
     req.body.meals.forEach(async (element) => {    
         price =+ await GetMealPrice(element)    
@@ -42,7 +45,7 @@ const CreateOrder =  (req,res) => {
 
     }).catch(err => res.send(err).status(400));
 }
-const AcceptOrderRestaraunt = async (req,res) =>{   
+const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dostavljacima, status u redisu se menja  
 
     neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}),(s:Store  {uuid: "${req.body.storeID}"}) create (s)-[rel:PREPARES]->(o) return s,o,rel`).then(result => {                
     })
@@ -57,7 +60,7 @@ const AcceptOrderRestaraunt = async (req,res) =>{
     
 
 }
-const DeclineOrderRestaraunt =async (req,res) =>{
+const DeclineOrderRestaraunt =async (req,res) =>{ // push ka klijentu ,status u redisu se menja
     
     neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Declined" return o`).then(result => {    
         
@@ -68,7 +71,7 @@ const DeclineOrderRestaraunt =async (req,res) =>{
     })   
 
 }
-const AcceptOrderDeliverer = async(req,res) =>{ //redis resotorn dostavljac otvara se
+const AcceptOrderDeliverer = async(req,res) =>{ //push ka klijentu , ka dostavljacima ide forced refresh, ukoliko je prihvacena vec vrati resepnce da jeste,status u redisu se menja
     neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}),(d:Deliverer  {uuid: "${req.body.delivererID}"}) create (d)-[rel:DELIVERS]->(o) return d,o,rel`).then(result => {                
     })
     .catch(err => console.log(err))
@@ -79,7 +82,7 @@ const AcceptOrderDeliverer = async(req,res) =>{ //redis resotorn dostavljac otva
 
     res.send().status(200)
 }
-const OrderReady = async(req,res) =>{     //ide preko redisa
+const OrderReady = async(req,res) =>{     //push ka dostavljacima, status u redisu se menja
     neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Ready" return o`).then(result => {    
         
         res.send().status(200)            
@@ -90,8 +93,7 @@ const OrderReady = async(req,res) =>{     //ide preko redisa
 
     res.send().status(200)
 }
-
-const OrderPickedUp = async(req,res) =>{ //redis deliverer korisnik otvra se ,  resotorn dostavljac zatvara se 
+const OrderPickedUp = async(req,res) =>{ //push ka klijentu, statu u redisu se menja
     neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Delivering" return o`).then(result => {    
         
         res.send().status(200)            
@@ -102,7 +104,7 @@ const OrderPickedUp = async(req,res) =>{ //redis deliverer korisnik otvra se ,  
     //salje se notificija dostavalja se  ?mozda i cet
 
 }
-const OrderFinished = async(req,res) => { //redis deliverer korisnik zatvara se
+const OrderFinished = async(req,res) => { //push ka klijentu, status u neo4j se menja
     neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Finished" return o`).then(result => {    
         
         res.send().status(200)            
@@ -112,7 +114,9 @@ const OrderFinished = async(req,res) => { //redis deliverer korisnik zatvara se
         })   
 }
 
-const GetPendingStore = (req,res) => { //samo za restoran restroan uuid parametar
+
+
+const GetPendingStore = (req,res) => { 
     neo4j.cypher(`match (o:Order {status : "Pending"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store { uuid: "${req.params.storeID}"}) return DISTINCT o`).then(result => {
         //console.log(result);
         let orders = RecordsToJSON(result.records)    
@@ -132,7 +136,7 @@ const GetReadyStore = (req,res) => {
         res.send(orders).status(200)
     }).catch(err => console.log(err))//samo za restoran restroan uuid parametar
 }
-const GetAcceptedDeliverer = (req,res) => { // za dostavaljace
+const GetAcceptedDeliverer = (req,res) => {
     neo4j.cypher(`match (s:Store{uuid : "${req.params.delivererID}"})-[rel:PREPARES]->(o:Order {status : "Has a deliverer"})(s:Store{uuid : "${req.params.delivererID}"}) return o`).then(result => {
         
         let orders = RecordsToJSON(result.records)    
@@ -140,17 +144,5 @@ const GetAcceptedDeliverer = (req,res) => { // za dostavaljace
     }).catch(err => console.log(err))
 }
 
-
-/**
- * const getNewOrders(role)
- */
-
-/**
- * const chooseOrder(role,orderID)
- */
-
-/**
- * const finishOrder(role,orderID)
- */
 
 module.exports = {CreateOrder,AcceptOrderRestaraunt,GetAcceptedDeliverer,GetReadyStore,GetAcceptedStore,GetPendingStore,OrderFinished,OrderPickedUp,OrderReady,AcceptOrderDeliverer,DeclineOrderRestaraunt};
