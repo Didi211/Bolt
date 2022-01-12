@@ -200,7 +200,7 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
         let porukaDeliverer = { 
             orderID: req.body.orderID
         }
-        S
+        
         redis_client.publish('app:customer',porukaCustomer);
         redis_client.publish('app:deliverer',porukaDeliverer);''
     } catch (e) {
@@ -209,13 +209,9 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
     }
     
 
-    neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Has a deliverer" return o`).then(result => {
-    })
-    .catch(err => console.log(err))
-
-    res.send().status(200)
+    
 }
-const OrderReady = async(req,res) =>{     //push ka dostavljacima, status u redisu se menja
+const OrderReady = async (req,res) =>{     //push ka dostavljacima, status u redisu se menja
     neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Ready" return o`).then(result => {
 
         res.send().status(200)
@@ -253,6 +249,7 @@ const GetPendingStore = (req,res) => {
     neo4j.cypher(`match (o:Order {status : "Pending"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store { uuid: "${req.params.storeID}"}) return DISTINCT o`).then(result => {
         //console.log(result);
         let orders = RecordsToJSON(result.records)
+
         res.send(orders).status(200)
     }).catch(err => console.log(err))
 }
