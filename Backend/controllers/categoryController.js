@@ -1,4 +1,5 @@
 
+const { stringify } = require('nodemon/lib/utils');
 const neo4j = require('../config/neo4j_config');
 const redis_client = require('../config/redis_config');
 const category = require('../models/categoryModel');
@@ -40,8 +41,7 @@ const DeleteCategory = async (req,res) => {
 
 const GetAllCategories = async (req,res) =>  { 
     
-    try {     
-                   
+    try {            
         redisData = await redis_client.get('categories')
         if(redisData != null)
             res.status(200).send(JSON.parse(redisData))
@@ -49,13 +49,14 @@ const GetAllCategories = async (req,res) =>  {
             let categories = await neo4j.model("Category").all()
             let categoriesDTO = []
             categories.forEach(element => {
-                console.log(element)
+                
                 let elementDTO = { 
                     name: element._properties.get('name')
                 }
                 categoriesDTO.push(elementDTO)
                 
             })
+
             redis_client.setEx('categories', 600,JSON.stringify(categoriesDTO))
             res.status(200).send(categoriesDTO)
         }    
