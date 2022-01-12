@@ -258,14 +258,23 @@ const OrderPickedUp = async(req,res) =>{ //push ka klijentu, statu u redisu se m
 
 
 }
-const OrderFinished = async(req,res) => { //push ka klijentu, status u neo4j se menja
-    neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Finished" return o`).then(result => {
+const OrderFinished = async (req,res) => { //push ka klijentu, status u neo4j se menja
+    try {
+        let queryResult = await  neo4j.cypher(
+            `match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "${statusFlags.finished}" return o`);
+        if (queryResult.length < 1) { 
+            res.status(400).send("Couldn't find the order.");
+            return;
+        }
+        await redis_client.hDel('orders:delivering',`${req.body.orderID}`);
+        S
+    }
+    catch (e) {
+        console.log(e);
+        res.status(500).send(e);
+    }
 
-        res.send().status(200)
-        })
-        .catch(err => {
-            res.status(500).send()
-        })
+        
 }
 
 
