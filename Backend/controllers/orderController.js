@@ -108,7 +108,7 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
         
         let porukaCustomer = { 
             orderID : req.body.orderID,
-            customerID: GetCustomerID(req.body.orderID),
+            customerID: await GetCustomerID(req.body.orderID),
             status: StatusFlags.accepted
         }
         let porukaDeliverer = { 
@@ -118,19 +118,8 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
         console.log('porukaCostumer:',porukaCustomer);
         console.log('porukaDeliverer:',porukaDeliverer);
         redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
+        redis_client.publish('app:customer',JSON.stringify(porukaCustomer)); 
 
-
-
-        // redis_client.publish('app:customer',JSON.stringify(porukaCustomer)); 
-        //valjda cemo da pisemo medjufaze u redisu 
-        // relationResult = await neo4j.cypher(
-        //     `match (o:Order {orderID : "${req.body.orderID}"})
-        //     SET o.status = "${statusFlags.accepted}" return o`);
-
-        // if (relationResult.records.length < 1) {
-        //     throw new  Error("Couldn't create relation");
-        // }
-    
         res.status(200).send();
 
     }
@@ -155,7 +144,7 @@ const DeclineOrderRestaraunt = async (req,res) =>{ // push ka klijentu ,status u
         await redis_client.hDel('orders',`${req.body.orderID}`); 
         let poruka = { 
             orderID : req.body.orderID,
-            customerID: GetCustomerID(req.body.orderID),
+            customerID: await GetCustomerID(req.body.orderID),
             status: StatusFlags.declined
         }
         redis_client.publish('app:customer',JSON.stringify(poruka)); //ili da saljemo samo accepted 
@@ -191,7 +180,7 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
         // order.update({timeWaiting: }) //dovde sam stigao 
         //notify client, send avgTime
         let poruka = { 
-            customerID: GetCustomerID(req.body.orderID),
+            customerID: await GetCustomerID(req.body.orderID),
             orderID: req.body.orderID,
             timeWaiting: 0
 
