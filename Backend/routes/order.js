@@ -11,7 +11,8 @@ const {CreateOrder,
     OrderPickedUp,
     OrderReady,
     AcceptOrderDeliverer,
-    DeclineOrderRestaraunt
+    DeclineOrderRestaraunt,
+    GetPendingDeliverer
 } = require('../controllers/orderController');
 
 
@@ -25,9 +26,10 @@ router.post('/pickedUp',OrderPickedUp);
 router.post('/ready',OrderReady); 
 
 router.get('/readyOrders/:storeID',GetReadyStore); 
-router.get('/acceptedDeliverer/:delivererID',GetAcceptedDeliverer); 
 router.get('/accpetedStore/:storeID',GetAcceptedStore); 
 router.get('/pending/:storeID',GetPendingStore); 
+router.get('/acceptedDeliverer/:delivererID',GetAcceptedDeliverer); 
+router.get('/pendingDeliverer/',GetPendingDeliverer)
 
 
 
