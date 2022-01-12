@@ -141,12 +141,13 @@ const DeclineOrderRestaraunt = async (req,res) =>{ // push ka klijentu ,status u
             throw new  Error("Couldn't create relation");
         }
         
-        await redis_client.hDel('orders',`${req.body.orderID}`); 
+        // await redis_client.hDel('orders',`${req.body.orderID}`); 
         let poruka = { 
             orderID : req.body.orderID,
             customerID: await GetCustomerID(req.body.orderID),
             status: StatusFlags.declined
         }
+        console.log(poruka);
         redis_client.publish('app:customer',JSON.stringify(poruka)); //ili da saljemo samo accepted 
         res.status(200).send();
     }
