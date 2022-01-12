@@ -251,14 +251,30 @@ const OrderFinished = async(req,res) => { //push ka klijentu, status u neo4j se 
 
 const GetPendingStore = (req,res) => {
     neo4j.cypher(`match (o:Order {status : "Pending"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store { uuid: "${req.params.storeID}"}) return DISTINCT o`).then(result => {
-        //console.log(result);
+        
         let orders = RecordsToJSON(result.records)
+        orders.forEach(el => {
+            let meals = []
+            neo4j.cypher(`match (o:Order { odrerID = ${el.orderID}})-[rel:CONTAINS]->(m:Meal) return m`).then(result => {
+                let meal = RecordsToJSON(result.records)
+                meals.push(meal)
+            })
+            el.meals = meals        
+        })
         res.send(orders).status(200)
     }).catch(err => console.log(err))
 }
 const GetAcceptedStore = (req,res) => {
     neo4j.cypher(`match (s:Store{uuid : "${req.params.storeID}"})-[rel:PREPARES]->(o:Order) WHERE  o.status = "Accepted" OR o.status = "Has a deliverer" return o`).then(result => {
         let orders = RecordsToJSON(result.records)
+        orders.forEach(el => {
+            let meals = []
+            neo4j.cypher(`match (o:Order { odrerID = ${el.orderID}})-[rel:CONTAINS]->(m:Meal) return m`).then(result => {
+                let meal = RecordsToJSON(result.records)
+                meals.push(meal)
+            })
+            el.meals = meals        
+        })
         res.send(orders).status(200)
     }).catch(err => console.log(err)) //samo za restoran restroan uuid parametar
 }
@@ -266,6 +282,14 @@ const GetReadyStore = (req,res) => {
     neo4j.cypher(`match (s:Store{uuid : "${req.params.storeID}"})-[rel:PREPARES]->(o:Order {status : "Ready"}) return o`).then(result => {
 
         let orders = RecordsToJSON(result.records)
+        orders.forEach(el => {
+            let meals = []
+            neo4j.cypher(`match (o:Order { odrerID = ${el.orderID}})-[rel:CONTAINS]->(m:Meal) return m`).then(result => {
+                let meal = RecordsToJSON(result.records)
+                meals.push(meal)
+            })
+            el.meals = meals        
+        })
         res.send(orders).status(200)
     }).catch(err => console.log(err))//samo za restoran restroan uuid parametar
 }

@@ -15,5 +15,5 @@ module.exports = {
     NodeToJson : (node) => { 
         return Object.fromEntries(node._properties);
     }
-
+    
 }
