@@ -3,6 +3,8 @@ const neo4j = require('../config/neo4j_config');
 const deliverer = require('../models/delivererModel');
 const token = require('../config/token')
 const bcrypt = require('bcrypt');
+const {RecordsToJSON,NodeTOString, NodeToJson} = require('../helpers')
+
 
 const saltRounds = 10;
 const CreateDeliverer = (req,res) => {
@@ -32,6 +34,22 @@ const CreateDeliverer = (req,res) => {
     
 }
 
+const GetDelivererByID = async (req,res) => { 
+    try {
+        let deliverer = await neo4j.model('Deliverer').find(req.params.id);
+        if (!deliverer) { 
+            res.status(400).send("Couldn't find deliverer.");
+            return;
+        }
+
+        let delivererJson = NodeToJson(deliverer);
+        console.log(delivererJson);
+        res.status(200).send(delivererJson);
+    } catch (e) {
+        res.status(500).send(e);
+        console.log(e);
+    }
+}
 
 
-module.exports = {CreateDeliverer};
+module.exports = {CreateDeliverer, GetDelivererByID};
