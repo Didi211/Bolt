@@ -232,20 +232,10 @@ const OrderPickedUp = async(req,res) =>{ //push ka klijentu, statu u redisu se m
     try {
         await redis_client.hDel('orders:ready',`${req.body.orderID}`);
         await redis_client.hSet('orders:delivering',`${req.body.orderID}`,statusFlags.delivering);
-        let queryResult = await neo4j.cypher(
-            `match (c:Customer) -[:ORDERED]-> (o:Order {orderID: "${req.body.orderID}" }) return o`);
-        if (queryResult.length < 1) { 
-            res.status(400).send("Couldn't find customer.");
-            return;
-        }
-        let customer = RecordsToJSON(queryResult.records);
-        let customerJson;
-        customer.forEach(element => { 
-            customerJson = element;
-        })
+        
         let porukaCustomer = { 
             orderID: req.body.orderID,
-            customerID: customerJson.uuid,
+            customerID: await GetCustomerID(req.body.orderID),
             status: statusFlags.pickedUp
         }
        
@@ -267,8 +257,17 @@ const OrderFinished = async (req,res) => { //push ka klijentu, status u neo4j se
             res.status(400).send("Couldn't find the order.");
             return;
         }
-        let customerMsg = {
 
+       
+        queryResult = await neo4j.cypher(
+            `match (c:Customer)-[r:ORDERED]->(o:Order {orderID: "${req.body.orderID}"}) return c`);
+        if (queryResult.length < 1) { 
+            res.status(400).send("Couldn't find customer.");
+            return;
+        }
+        let customerMsg = {
+            customerID:  await GetCustomerID(req.body.orderID),
+            status: statusFlags.finished
         }
         await redis_client.hDel('orders:delivering',`${req.body.orderID}`);
         await redis_client.publish('app:customer',JSON.stringify(customerMsg))
