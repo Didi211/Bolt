@@ -275,7 +275,8 @@ export default new Vuex.Store({
         }, 
         async getCustomerById({commit}){
             //console.log(this.trenKorisnik.uuid)
-            return await Api().get('/api/customer/get/'+ this.state.trenutniKorisnik.uuid).then(res=>{
+            const customerId= Vue.$cookies.get("id")
+            return await Api().get('/api/customer/get/'+ customerId).then(res=>{
                 const customer = res.data
                 console.log(customer)
                 commit('setCustomer', customer)
@@ -292,7 +293,15 @@ export default new Vuex.Store({
         async orderMeal({commit},order){
             console.log("narudzbina")
             console.log(order)
-            return await Api().post('/api/order/', order).then(()=>{
+            return await Api().post('/api/order/', order).then(res=>{
+                if(res.status == 200){
+                    Vue.toasted.show("Vasa porudzbina je poslata!", { 
+                        theme: "bubble", 
+                        position: "top-center", 
+                        duration : 2000
+                   })
+                }
+
                 commit('setToken', Vue.$cookies.get("token") )
             }).catch(err=>{
                 console.log(err)

@@ -8,8 +8,10 @@
                 <div class="card-body p-4">
                     <div class="text-center">
                         <!-- Store location-->
+                        <p>Adresa:</p>
                         <h5 class="fw-bolder">{{store.location}}</h5>
-                        <h5 class="fw-bolder">{{store.preptime}}</h5>
+                        <p>Vreme pripreme:</p>
+                        <h5 class="fw-bolder">{{store.preptime}}min</h5>
                         <!-- Vreme isporuke-->
                         <p></p>
                     </div>
@@ -49,5 +51,8 @@ export default defineComponent({
 <style scoped>
 .h-100{
     padding: 24px;
+}
+p{
+    margin: 0;
 }
 </style>

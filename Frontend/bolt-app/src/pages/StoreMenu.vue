@@ -37,7 +37,8 @@
                     <Meal v-for="meal in ob.meals" 
                             :key="meal.mealID" 
                             :meal="meal" 
-                            @childToParentYes="onChildClickYes"/>
+                            @childToParentYes="onChildClickYes"
+                             @childToParentNo="onChildClickNo"/>
                 </div>
             </div>
             <div class="col-md-3"> 
@@ -130,6 +131,15 @@ export default defineComponent({
           this.jelaId.push(value.mealID)
           console.log(this.jelaId)
         },
+        onChildClickNo(value){
+            let index=this.jela.indexOf(value)
+            let id= this.jelaId.indexOf(value.mealID)
+            if(index > -1){
+              this.jela.splice(index,1)
+              this.jelaId.splice(id,1)
+                console.log(this.jelaId)
+            }
+        },
         change(){
             this.loc.location=document.getElementById("location").value
             console.log(this.loc)
@@ -142,6 +152,9 @@ export default defineComponent({
             this.orderMeal.uuid=this.customer.uuid
             console.log("ovo je iz order u store menu")
             console.log(this.orderMeal)
+            this.jela=[]
+            this.jelaId=[]
+            document.getElementById("note").value=""
             this.$store.dispatch('orderMeal', this.orderMeal)
         }
     },

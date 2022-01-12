@@ -33,7 +33,7 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
         let order = await neo4j.model("Order").create({
             price: price,
             onAddress: req.body.onAddress,
-            note: req.body.note != null? req.body.note : null,    
+            note: req.body.note != "" ? req.body.note : null,    
             status: StatusFlags.pending
         });
         let orderJson = NodeToJson(order);
