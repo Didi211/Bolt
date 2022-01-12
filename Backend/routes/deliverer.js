@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const CreateDeliverer = require('../controllers/delivererController');
+const { CreateDeliverer, GetDelivererByID }= require('../controllers/delivererController');
 
-// router.post('/', CreateDeliverer);
+router.get('/get/:id',GetDelivererByID);
 
 module.exports = router;
