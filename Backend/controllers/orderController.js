@@ -4,17 +4,10 @@ const neo4j = require('../config/neo4j_config');
 const customer = require('../models/orderModel');
 const { GetMealPrice } = require('./mealController');
 const redis_client = require('../config/ws.config')
+const {RecordsToJSON,NodeTOString} = require('../helpers')
 
 
 
-
-const RecordsToJSON = (records) =>{
-    let item= []    
-    records.forEach(element => {        
-        item.push(element._fields[0].properties)
-    })
-    return item
-} 
 
 const CreateOrder =  (req,res) => { //push ka restoranu, kreira se u redis i neo4j bazama      
     let price = 0
@@ -22,7 +15,7 @@ const CreateOrder =  (req,res) => { //push ka restoranu, kreira se u redis i neo
         price =+ await GetMealPrice(element)    
         
     });
-    console.log(req.body.tralala)
+    
     neo4j.model("Order").create({
         
         price: price,  
@@ -31,19 +24,26 @@ const CreateOrder =  (req,res) => { //push ka restoranu, kreira se u redis i neo
         status: "Pending"
     
     }).then(order => {
-        neo4j.cypher(`match (c:Customer {uuid : "${req.body.uuid}"}),(o:Order  {orderID: "${order._properties.get("orderID")}"}) create (c)-[rel:ORDERED]->(o) return c,o,rel`).then(result => {   
-                         
-        })
-        .catch(err => console.log(err))
+        neo4j.cypher(`match (c:Customer {uuid : "${req.body.uuid}"}),(o:Order  {orderID: "${order._properties.get("orderID")}"}) create (c)-[rel:ORDERED]->(o) return c,o,rel`).then(result => {}).catch(err => console.log(err))
+        let allmeals = []
         req.body.meals.forEach(element => {
-            neo4j.cypher(`match (o:Order {orderID : "${order._properties.get("orderID")}"}),(m:Meal  {mealID: "${element}"}) create (o)-[rel:CONTAINS]->(m) return o,m,rel`).then(result => {                
-            })
-            .catch(err => console.log(err))
+            neo4j.cypher(`match (o:Order {orderID : "${order._properties.get("orderID")}"}),(m:Meal  {mealID: "${element}"}) create (o)-[rel:CONTAINS]->(m) return m`).then(result => {   
+                
+            allmeals.push(RecordsToJSON(result.records))                
+            }).catch(err => console.log(err))
         });
+        let poruka = {
+            order:Object.fromEntries(order._properties),
+            storeID:req.body.storeID
+        }
+        poruka.order.meals = allmeals               
+        redis_client.publish("app:store",JSON.stringify(poruka))
+        redis_client.HSET('ordersPending',`${req.body.orderID}`,JSON.stringify(poruka))
+        res.send().status(200);
         
-        res.send(order).status(200);
+        
 
-    }).catch(err => res.send(err).status(400));
+    }).catch(err => res.status(400).send(err));
 }
 const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dostavljacima, status u redisu se menja  
 
