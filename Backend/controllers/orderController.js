@@ -5,7 +5,8 @@ const customer = require('../models/orderModel');
 const { GetMealPrice } = require('./mealController');
 const redis_client = require('../config/ws.config')
 const {RecordsToJSON,NodeTOString, NodeToJson} = require('../helpers')
-const StatusFlags = require('../statusFlags')
+const StatusFlags = require('../statusFlags');
+const statusFlags = require('../statusFlags');
 
 
 
@@ -66,16 +67,37 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
 }
 const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dostavljacima, status u redisu se menja
 
-    neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}),(s:Store  {uuid: "${req.body.storeID}"}) create (s)-[rel:PREPARES]->(o) return s,o,rel`).then(result => {
-    })
-    .catch(err => console.log(err))
+    try {
+        let relationResult = await neo4j.cypher(
+            `match (o:Order {orderID : "${req.body.orderID}"}),
+            (s:Store  {uuid: "${req.body.storeID}"})
+            create (s)-[rel:PREPARES]->(o) return rel`);
 
-    neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Accepted" return o`).then(result => {
-    })
-    .catch(err => console.log(err))
+        if (relationResult.records.length < 1) {
+            throw new  Error("Couldn't create relation");
+        }
+        await redis_client.hDel('orders',`${req.body.orderID}`); 
+        await redis_client.hSet('orders',`${req.body.orderID}`,StatusFlags.accepted);
+        let poruka = { 
+            orderID : req.body.orderID,
+            status: StatusFlags.accepted
+        }
+        redis_client.publish('app:customer',JSON.stringify(poruka)); //ili da saljemo samo accepted 
+        //valjda cemo da pisemo medjufaze u redisu 
+        // relationResult = await neo4j.cypher(
+        //     `match (o:Order {orderID : "${req.body.orderID}"})
+        //     SET o.status = "${statusFlags.accepted}" return o`);
 
+        // if (relationResult.records.length < 1) {
+        //     throw new  Error("Couldn't create relation");
+        // }
+    
+        res.send().status(200)
 
-    res.send().status(200)
+    }
+    catch(e) { 
+        res.status(500).send(e);
+    }
 
 
 }
