@@ -4,7 +4,9 @@ module.exports =  {
     declined: "Declined",
     hasDeliverer: "Has a deliverer",
     ready: "Ready",
+    pickedUp: "Pricked up",
     delivering: "Delivering",
     finished: "Finished"
+
     
 }    
