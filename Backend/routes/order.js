@@ -29,7 +29,7 @@ router.get('/readyOrders/:storeID',GetReadyStore);
 router.get('/accpetedStore/:storeID',GetAcceptedStore); 
 router.get('/pending/:storeID',GetPendingStore); 
 router.get('/acceptedDeliverer/:delivererID',GetAcceptedDeliverer); 
-router.get('/pendingDeliverer/:delivererID',GetPendingDeliverer)
+router.get('/pendingDeliverer/',GetPendingDeliverer)
 
 
 

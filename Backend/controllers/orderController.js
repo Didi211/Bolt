@@ -262,7 +262,7 @@ const GetReadyStore = (req,res) => {
     }).catch(err => console.log(err))//samo za restoran restroan uuid parametar
 }
 const GetPendingDeliverer = (req,res) => {
-    neo4j.cypher(`match (o:Order {status : "Accepted"})<-[re:DELIVERS]-(d:Deliverer{uuid : "${req.params.delivererID}"}) return o`).then(result => {
+    neo4j.cypher(`match (o:Order {status : "Accepted"}) return o`).then(result => {
 
         let orders = RecordsToJSON(result.records)
         res.send(orders).status(200)
