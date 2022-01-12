@@ -7,7 +7,6 @@ const redis_client = require('../config/ws.config')
 const {RecordsToJSON,NodeTOString, NodeToJson} = require('../helpers')
 const StatusFlags = require('../statusFlags');
 const statusFlags = require('../statusFlags');
-const { GetCustomer } = require('./customerController');
 
 const GetCustomerID = async (orderID) => { 
     try {
@@ -38,6 +37,9 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
             status: StatusFlags.pending
         });
         let orderJson = NodeToJson(order);
+        // console.log(orderJson);
+        // console.log(order);
+
         let relationResult = await neo4j.cypher(
             `match (c:Customer {uuid: "${req.body.uuid}"}),
                     (o:Order {orderID: "${order._properties.get('orderID')}"})
@@ -89,23 +91,35 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
         if (relationResult.records.length < 1) {
             throw new  Error("Couldn't create relation");
         }
-
+      
+        let order = await neo4j.model('Order').find(req.body.orderID);
+        let store = await neo4j.model('Store').find(req.body.storeID);
+        console.log("order:",order);
+        // console.log("store:",store);
         
-        await redis_client.hDel('orders',`${req.body.orderID}`); 
-        await redis_client.hSet('orders',`${req.body.orderID}`,StatusFlags.accepted);
-        let porukaCustomer = { 
-            orderID : req.body.orderID,
-            customerID: GetCustomer(req.body.orderID),
-            status: StatusFlags.accepted
-        }
-        let order = neo4j.model('Order').find(req.body.orderID);
-        let porukaDeliverer = { 
-            order: NodeToJson(order),
-            storeID: req.body.storeID
+        // if (order == null) { 
+        //     throw new Error("Couldn't find object.")
+        // }
+        // if (store == null) { 
+        //     throw new Error("Couldn't find object.")
+        // }
+        // await redis_client.hDel('orders',`${req.body.orderID}`); 
+        // await redis_client.hSet('orders',`${req.body.orderID}`,StatusFlags.accepted);
+        
+        // let porukaCustomer = { 
+        //     orderID : req.body.orderID,
+        //     customerID: GetCustomerID(req.body.orderID),
+        //     status: StatusFlags.accepted
+        // }
+        // let porukaDeliverer = { 
+        //     order: NodeToJson(order),
+        //     storeID: NodeToJson(store) 
+        // }
+        // redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
 
-        }
-        redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
-        redis_client.publish('app:customer',JSON.stringify(porukaCustomer)); //ili da saljemo samo accepted 
+
+
+        // redis_client.publish('app:customer',JSON.stringify(porukaCustomer)); 
         //valjda cemo da pisemo medjufaze u redisu 
         // relationResult = await neo4j.cypher(
         //     `match (o:Order {orderID : "${req.body.orderID}"})
@@ -120,6 +134,7 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
     }
     catch(e) { 
         res.status(500).send(e);
+        console.log(e);
     }
 
 
@@ -138,7 +153,7 @@ const DeclineOrderRestaraunt = async (req,res) =>{ // push ka klijentu ,status u
         await redis_client.hDel('orders',`${req.body.orderID}`); 
         let poruka = { 
             orderID : req.body.orderID,
-            customerID: GetCustomer(req.body.orderID),
+            customerID: GetCustomerID(req.body.orderID),
             status: StatusFlags.declined
         }
         redis_client.publish('app:customer',JSON.stringify(poruka)); //ili da saljemo samo accepted 
@@ -174,7 +189,7 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
         // order.update({timeWaiting: }) //dovde sam stigao 
         //notify client, send avgTime
         let poruka = { 
-            customerID: GetCustomer(req.body.orderID),
+            customerID: GetCustomerID(req.body.orderID),
             orderID: req.body.orderID,
             timeWaiting: 0
 

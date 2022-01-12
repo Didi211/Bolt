@@ -27,7 +27,8 @@ neo4j.model('Order',{
         required: true,
     },
     orderID:{
-        type: 'uuid'
+        type: 'uuid',
+        primary: true
     },
     // status: {
     //     type: 'string' //neki enum { Ordered, Cooking, Delivering, Finished}
