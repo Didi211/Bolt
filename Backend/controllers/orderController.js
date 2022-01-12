@@ -261,8 +261,15 @@ const GetReadyStore = (req,res) => {
         res.send(orders).status(200)
     }).catch(err => console.log(err))//samo za restoran restroan uuid parametar
 }
+const GetPendingDeliverer = (req,res) => {
+    neo4j.cypher(`match (o:Order {status : "Accepted"})<-[re:DELIVERS]-(d:Deliverer{uuid : "${req.params.delivererID}"}) return o`).then(result => {
+
+        let orders = RecordsToJSON(result.records)
+        res.send(orders).status(200)
+    }).catch(err => console.log(err))
+}
 const GetAcceptedDeliverer = (req,res) => {
-    neo4j.cypher(`match (s:Store{uuid : "${req.params.delivererID}"})-[rel:PREPARES]->(o:Order {status : "Has a deliverer"})(s:Store{uuid : "${req.params.delivererID}"}) return o`).then(result => {
+    neo4j.cypher(`match (o:Order {status : "Has a deliverer"})<-[re:DELIVERS]-(d:Deliverer{uuid : "${req.params.delivererID}"}) return o`).then(result => {
 
         let orders = RecordsToJSON(result.records)
         res.send(orders).status(200)
@@ -270,4 +277,4 @@ const GetAcceptedDeliverer = (req,res) => {
 }
 
 
-module.exports = {CreateOrder,AcceptOrderRestaraunt,GetAcceptedDeliverer,GetReadyStore,GetAcceptedStore,GetPendingStore,OrderFinished,OrderPickedUp,OrderReady,AcceptOrderDeliverer,DeclineOrderRestaraunt};
+module.exports = {CreateOrder,AcceptOrderRestaraunt,GetAcceptedDeliverer,GetReadyStore,GetAcceptedStore,GetPendingStore,OrderFinished,OrderPickedUp,OrderReady,GetPendingDeliverer,AcceptOrderDeliverer,DeclineOrderRestaraunt};
