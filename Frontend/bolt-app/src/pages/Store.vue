@@ -25,7 +25,12 @@
                 </div>
             </div>
             <div class="row">
-                ovo je row gde ce da se prikazuju pristigle ali ne accepted narudzbine
+                <div class="col-xl-12">
+                    <h3>Neobradjene porudzbine:</h3>
+                    <Order v-for="order in pendingOrders" 
+                                    :key="order.id" 
+                                    :order="order"/>
+                </div>
             </div>
             <div class="row">
                 ovo je row gde ce da se prikazuju porudzbine u obradi
@@ -50,6 +55,7 @@ import { defineComponent } from '@vue/composition-api'
 import  HeaderStore  from '@/components/HeaderStore.vue'
 import  Footer  from '@/components/Footer.vue'
 import AppSpinner from '@/components/AppSpinner.vue'
+import Order from '@/components/OrderStore.vue'
 //import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
@@ -57,13 +63,13 @@ export default defineComponent({
     components: {
         HeaderStore,
         Footer,
-        AppSpinner
-        //StoreInfo
+        AppSpinner,
+        Order
     },
     data(){
         return{
             novoVreme:{
-                preptime:null
+                preptime:""
             },
             isDataLoaded:true
         }
@@ -71,19 +77,28 @@ export default defineComponent({
     computed:{
         store(){
             return this.$store.getters['getStore']
-        }
+        },
+        pendingOrders(){
+            return this.$store.getters['getPendingOrdersStore']
+        },
+        acceptedOrders(){
+            return this.$store.getters['getAcceptedOrdersStore']
+        },
+        readyOrders(){
+            return this.$store.getters['getReadyOrdersStore']
+        },
     },
     methods:{
         async promeniVreme(){
             await this.$store.dispatch('changeTime', this.novoVreme).then(()=>{
-                window.location.reload()
             })
         }
     },
     async created(){
         this.isDataLoaded = false
-        await this.$store.dispatch('getStoreById', Vue.$cookies.get("id")).then(()=>{
-            this.isDataLoaded=true
+        Promise.all([await this.$store.dispatch('getStoreById', Vue.$cookies.get("id")), await this.$store.dispatch('getPendingOrdersStore') ,
+        await this.$store.dispatch('getAcceptedOrdersStore'),await this.$store.dispatch('getReadyOrdersStore')]).then(()=>{
+            this.isDataLoaded = true;
         })
     }
 })

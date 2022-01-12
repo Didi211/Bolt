@@ -22,7 +22,10 @@ export default new Vuex.Store({
         unselectedOrdersDeliverer:[],
         top5Rest:[],
         storesByCategory:[],
-        catForOneMeal:[]
+        catForOneMeal:[],
+        pendingOrdersStore:[],
+        acceptedOrdersStore:[],
+        readyOrdersStore:[]
     },
     getters:{
         getOrderHistory(state){
@@ -62,6 +65,15 @@ export default new Vuex.Store({
         },
         getCategoriesForOneMeal(state){
             return state.catForOneMeal
+        },
+        getPendingOrdersStore(state){
+            return state.pendingOrdersStore
+        },
+        getAcceptedOrdersStore(state){
+            return state.acceptedOrdersStore
+        },
+        getReadyOrdersStore(state){
+            return state.readyOrdersStore
         }
     },
     actions:{
@@ -236,7 +248,6 @@ export default new Vuex.Store({
         //koristi id od pickedStore
             return await Api().get('/api/meal/get/restaurant/'+storeID).then(res=>{
                 const meals = res.data
-                console.log(res.data)
                 commit('setAllMealsFromStore', meals)
             })  
         },
@@ -307,9 +318,9 @@ export default new Vuex.Store({
                 console.log(err)
             })
         },
-        async makeNewMeal({commit},newMeal){
+        async makeNewMeal({dispatch},newMeal){
             return await Api().post('/api/meal/create', newMeal).then(()=>{
-                commit('setNista')
+                dispatch('getMealsFromStore', Vue.$cookies.get("id"))
             }).catch(err=>{
                 console.log(err)
             })
@@ -321,20 +332,31 @@ export default new Vuex.Store({
                 console.log(err)
             })
         },
-        async changeTime({commit},novoVreme){
+        async changeTime({dispatch},novoVreme){
             return await Api().put('/api/store/preptime/change/'+ Vue.$cookies.get("id"), novoVreme).then(()=>{
-                commit('setNista')
+                dispatch('getStoreById', Vue.$cookies.get("id"))
             }).catch(err=>{
                 console.log(err)
             })
         },
-        // async getUnselectedOrders({commit}){
-        //     return await Api().get('/api/category/all').then(res=>{
-        //         const kat = res.data
-        //         commit('setCategories', kat)
-        //     })  
-        // }, 
-        
+        async getPendingOrdersStore({commit}){
+            return await Api().get('/api/order/pending/'+Vue.$cookies.get("id")).then(res=>{
+                const pendingOrders = res.data
+                commit('setPendingOrdersStore', pendingOrders)
+            })  
+        },
+        async getAcceptedOrdersStore({commit}){
+            return await Api().get('/api/order/acceptedStore/'+Vue.$cookies.get("id")).then(res=>{
+                const accOrders = res.data
+                commit('setAcceptedOrdersStore', accOrders)
+            })  
+        },
+        async getReadyOrdersStore({commit}){
+            return await Api().get('/api/order/readyOrders/'+Vue.$cookies.get("id")).then(res=>{
+                const readyOrders = res.data
+                commit('setReadyOrdersStore', readyOrders)
+            })  
+        },
         postaviToken({commit}, tok){
             commit('setToken', tok)
         },
@@ -395,6 +417,15 @@ export default new Vuex.Store({
         },
         setCategoriesForOneMeal(state, kat){
             state.catForOneMeal=kat
+        },
+        setPendingOrdersStore(state,orders){
+            state.pendingOrdersStore = orders
+        },
+        setAcceptedOrdersStore(state,orders){
+            state.acceptedOrdersStore = orders
+        },
+        setReadyOrdersStore(state,orders){
+            state.readyOrdersStore = orders
         }
     }
 })
