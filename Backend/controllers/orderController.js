@@ -33,7 +33,7 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
         let order = await neo4j.model("Order").create({
             price: price,
             onAddress: req.body.onAddress,
-            note: req.body.note,    
+            note: req.body.note != null? req.body.note : null,    
             status: StatusFlags.pending
         });
         let orderJson = NodeToJson(order);
@@ -66,12 +66,12 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
             storeID: req.body.storeID,
             meals: allMeals
         }
-        // console.log("Poruka:",poruka);
+        console.log("Poruka:",poruka);
         redis_client.publish("app:store",JSON.stringify(poruka));
         //ili ovako, da u redisu pamtimo samo  orderedok se ne izvrse ali ne cele objekte, vec njihov id i status 
         redis_client.hSet('orders',`${orderJson.orderID}`,StatusFlags.pending);
         // redis_client.hSet('ordersPending',`${orderJson.orderID}`,JSON.stringify(poruka));
-        redis_client.expire('ordersPending',24*60*60); //problem, hocu da se kes izbrise u 11:59 uvece
+        redis_client.expire('orders',24*60*60); //problem, hocu da se kes izbrise u 11:59 uvece
         res.status(200).end();
     }
     catch(e) { 
@@ -94,28 +94,30 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
       
         let order = await neo4j.model('Order').find(req.body.orderID);
         let store = await neo4j.model('Store').find(req.body.storeID);
-        console.log("order:",order);
+        // console.log("order:",order);
         // console.log("store:",store);
         
-        // if (order == null) { 
-        //     throw new Error("Couldn't find object.")
-        // }
-        // if (store == null) { 
-        //     throw new Error("Couldn't find object.")
-        // }
-        // await redis_client.hDel('orders',`${req.body.orderID}`); 
-        // await redis_client.hSet('orders',`${req.body.orderID}`,StatusFlags.accepted);
+        if (!order) { 
+            throw new Error("Couldn't find object.")
+        }
+        if (!store) { 
+            throw new Error("Couldn't find object.")
+        }
+        await redis_client.hDel('orders',`${req.body.orderID}`); 
+        await redis_client.hSet('orders',`${req.body.orderID}`,StatusFlags.accepted);
         
-        // let porukaCustomer = { 
-        //     orderID : req.body.orderID,
-        //     customerID: GetCustomerID(req.body.orderID),
-        //     status: StatusFlags.accepted
-        // }
-        // let porukaDeliverer = { 
-        //     order: NodeToJson(order),
-        //     storeID: NodeToJson(store) 
-        // }
-        // redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
+        let porukaCustomer = { 
+            orderID : req.body.orderID,
+            customerID: GetCustomerID(req.body.orderID),
+            status: StatusFlags.accepted
+        }
+        let porukaDeliverer = { 
+            order: NodeToJson(order),
+            storeID: NodeToJson(store) 
+        }
+        console.log('porukaCostumer:',porukaCustomer);
+        console.log('porukaDeliverer:',porukaDeliverer);
+        redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
 
 
 
