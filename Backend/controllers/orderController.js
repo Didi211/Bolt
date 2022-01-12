@@ -7,8 +7,21 @@ const redis_client = require('../config/ws.config')
 const {RecordsToJSON,NodeTOString, NodeToJson} = require('../helpers')
 const StatusFlags = require('../statusFlags');
 const statusFlags = require('../statusFlags');
+const { GetCustomer } = require('./customerController');
 
-
+const GetCustomerID = async (orderID) => { 
+    try {
+        let customer = await neo4j.cypher(
+            `match (c:Customer) -[:ORDERED]-> (o:Order {orderID: "${orderID}"}) return c`);
+        if (customer.records.length < 1) { 
+            throw new Error("Couldn't find customer.");
+        }
+        let customerID = RecordsToJSON(customer.records)[0].uuid;   
+        return customerID;
+    } catch (e) {
+        throw e;
+    }
+}
 
 const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis i neo4j bazama
     let price = 0
@@ -76,13 +89,23 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
         if (relationResult.records.length < 1) {
             throw new  Error("Couldn't create relation");
         }
+
+        
         await redis_client.hDel('orders',`${req.body.orderID}`); 
         await redis_client.hSet('orders',`${req.body.orderID}`,StatusFlags.accepted);
-        let poruka = { 
+        let porukaCustomer = { 
             orderID : req.body.orderID,
+            customerID: GetCustomer(req.body.orderID),
             status: StatusFlags.accepted
         }
-        redis_client.publish('app:customer',JSON.stringify(poruka)); //ili da saljemo samo accepted 
+        let order = neo4j.model('Order').find(req.body.orderID);
+        let porukaDeliverer = { 
+            order: NodeToJson(order),
+            storeID: req.body.storeID
+
+        }
+        redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
+        redis_client.publish('app:customer',JSON.stringify(porukaCustomer)); //ili da saljemo samo accepted 
         //valjda cemo da pisemo medjufaze u redisu 
         // relationResult = await neo4j.cypher(
         //     `match (o:Order {orderID : "${req.body.orderID}"})
@@ -92,7 +115,7 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
         //     throw new  Error("Couldn't create relation");
         // }
     
-        res.send().status(200)
+        res.status(200).send();
 
     }
     catch(e) { 
@@ -101,21 +124,67 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
 
 
 }
-const DeclineOrderRestaraunt =async (req,res) =>{ // push ka klijentu ,status u redisu se menja
+const DeclineOrderRestaraunt = async (req,res) =>{ // push ka klijentu ,status u redisu se menja
 
-    neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Declined" return o`).then(result => {
-
-    res.send().status(200)
-    })
-    .catch(err => {
-        res.status(500).send()
-    })
-
+    try {
+        let queryResult = await neo4j.cypher(
+            `match (o:Order {orderID : "${req.body.orderID}"})
+            SET o.status = "${StatusFlags.declined}" return o`);
+        
+        if (queryResult.records.length < 1) {
+            throw new  Error("Couldn't create relation");
+        }
+        
+        await redis_client.hDel('orders',`${req.body.orderID}`); 
+        let poruka = { 
+            orderID : req.body.orderID,
+            customerID: GetCustomer(req.body.orderID),
+            status: StatusFlags.declined
+        }
+        redis_client.publish('app:customer',JSON.stringify(poruka)); //ili da saljemo samo accepted 
+        res.status(200).send();
+    }
+    catch(e) { 
+        res.status(500).send(e);
+    }
 }
-const AcceptOrderDeliverer = async(req,res) =>{ //push ka klijentu , ka dostavljacima ide forced refresh, ukoliko je prihvacena vec vrati resepnce da jeste,status u redisu se menja
-    neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}),(d:Deliverer  {uuid: "${req.body.delivererID}"}) create (d)-[rel:DELIVERS]->(o) return d,o,rel`).then(result => {
-    })
-    .catch(err => console.log(err))
+const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavljacima ide forced refresh, ukoliko je prihvacena vec vrati resepnce da jeste,status u redisu se menja
+    try {
+        let queryResult = await neo4j.cypher(
+            `match (o:Order {orderID : "${req.body.orderID}"}) -[rel:DELIVERS]-> (d:Deliverer  {uuid: "${req.body.delivererID}"})
+            return rel`);
+        if (queryResult.records.length > 0) { 
+            res.status(226).send("Order already accepted.");
+            //potrebno osveziti prikaz nakon ove poruku (izbaciti taj order na frontu)
+            return;
+        }
+        queryResult = await neo4j.cypher(
+            `match (o:Order {orderID : "${req.body.orderID}"}),
+            (d:Deliverer  {uuid: "${req.body.delivererID}"})
+            create (d)-[rel:DELIVERS]->(o) rel`);
+        if (queryResult.records.length < 1) { 
+            throw new Error("Couldn't create relation.")
+        }
+        //redis change status
+        redis_client.hDel('orders',`${req.body.orderID}`);
+        redis_client.hSet('orders',`${req.body.orderID}`,`${statusFlags.hasDeliverer}`);
+        //update time Waiting
+        let order = await neo4j.model('Order').find(req.body.orderID);
+        let deliverer = await neo4j.model('Deliverer').find(req.body.delivererID);
+        // order.update({timeWaiting: }) //dovde sam stigao 
+        //notify client, send avgTime
+        let poruka = { 
+            customerID: GetCustomer(req.body.orderID),
+            orderID: req.body.orderID,
+            timeWaiting: 0
+
+        }
+        //notify delivery guys for refresh
+
+    } catch (e) {
+        res.status(500).send(e);
+    }
+    
 
     neo4j.cypher(`match (o:Order {orderID : "${req.body.orderID}"}) SET o.status = "Has a deliverer" return o`).then(result => {
     })
