@@ -4,7 +4,7 @@ const deliverer = require('../models/delivererModel');
 const token = require('../config/token')
 const bcrypt = require('bcrypt');
 const {RecordsToJSON,NodeTOString, NodeToJson} = require('../helpers')
-
+const vehicleAvgTime = require('../vehicleTime');
 
 const saltRounds = 10;
 const CreateDeliverer = (req,res) => {
@@ -13,7 +13,7 @@ const CreateDeliverer = (req,res) => {
             name: req.body.name,  
             surname: req.body.surname,
             vehicle: req.body.vehicle,
-            avgTime: req.body.avgTime,
+            avgTime: vehicleAvgTime[req.body.vehicle],
             username: req.body.username,
             password: hash,
             role: "Deliverer"// Simple schema definition of property : type
@@ -51,5 +51,20 @@ const GetDelivererByID = async (req,res) => {
     }
 }
 
-
-module.exports = {CreateDeliverer, GetDelivererByID};
+const ChangeVehicle = async (req,res) => { 
+    try {
+        let deliverer = await neo4j.model('Deliverer').find(req.params.id);
+        if (!deliverer) { 
+            res.status(400).send("Couldn't find deliverer.");
+            return;
+        }
+        console.log(vehicleAvgTime[req.body.vehicle]);
+        await deliverer.update('vehicle',`${vehicleAvgTime[req.body.vehicle]}`);
+        res.status(200).send();
+    } catch (e) {
+        console.log(e);
+        res.status(500).send(e);
+    }
+}
+ 
+module.exports = {CreateDeliverer, GetDelivererByID, ChangeVehicle};
