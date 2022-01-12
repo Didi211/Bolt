@@ -1,4 +1,4 @@
-export const StatusFlag = { 
+module.exports =  { 
     pending: "Pending",
     accepted: "Accepted",
     declined: "Declined",
@@ -6,7 +6,5 @@ export const StatusFlag = {
     ready: "Ready",
     delivering: "Delivering",
     finished: "Finished"
-
-
-
-}
+    
+}    

@@ -5,7 +5,7 @@ const customer = require('../models/orderModel');
 const { GetMealPrice } = require('./mealController');
 const redis_client = require('../config/ws.config')
 const {RecordsToJSON,NodeTOString, NodeToJson} = require('../helpers')
-
+const StatusFlags = require('../statusFlags')
 
 
 
@@ -16,13 +16,12 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
         for await (let element of req.body.meals) {
             price += await GetMealPrice(element)
         }
-    
-    
+        console.log(StatusFlags.pending);
         let order = await neo4j.model("Order").create({
             price: price,
             onAddress: req.body.onAddress,
             note: req.body.note,    
-            status: "Pending"
+            status: StatusFlags.pending
         });
         let orderJson = NodeToJson(order);
         let relationResult = await neo4j.cypher(
@@ -51,10 +50,11 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
             storeID: req.body.storeID,
             meals: allMeals
         }
-        console.log(req.body.orderID);
         // console.log("Poruka:",poruka);
         redis_client.publish("app:store",JSON.stringify(poruka));
-        redis_client.hSet('ordersPending',`${orderJson.orderID}`,JSON.stringify(poruka));
+        //ili ovako, da u redisu pamtimo samo  orderedok se ne izvrse ali ne cele objekte, vec njihov id i status 
+        redis_client.hSet('orders',`${orderJson.orderID}`,StatusFlags.pending);
+        // redis_client.hSet('ordersPending',`${orderJson.orderID}`,JSON.stringify(poruka));
         redis_client.expire('ordersPending',24*60*60); //problem, hocu da se kes izbrise u 11:59 uvece
         res.status(200).end();
     }
