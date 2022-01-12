@@ -18,7 +18,8 @@
             <div class="row">
                 <div class="card-body p-4">
                     <div class="text-center">
-                        <button @click="pushData">+</button>
+                        <button @click="pushDataYes">+</button>
+                         <button @click="pushDataNo">-</button>
                         <!-- <div class="col-md-4 cena"> -->
                         <!-- </div> -->
                         <!-- <div class="col-md-4 cena"> -->
@@ -61,11 +62,17 @@ export default defineComponent({
         }
     },
     methods:{
-        pushData(){
+        pushDataYes(){
             this.obj.mealID=this.meal.mealID
             this.obj.name=this.meal.name
             this.obj.price=this.meal.price
             this.$emit('childToParentYes', this.obj)
+        },
+        pushDataNo(){
+            this.obj.mealID=this.meal.mealID
+            this.obj.name=this.meal.name
+            this.obj.price=this.meal.price
+            this.$emit('childToParentNo', this.obj)
         }
         //lista meals-a treba da se postave u state sa postaviMeals funkcijom
     },

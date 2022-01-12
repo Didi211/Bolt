@@ -7,7 +7,7 @@
                         <div class="col-md-12">
                             <p>Adresa:</p>
                             <input class="m-3" type="text" v-model="narudzbina.order.onAddress" id="location">
-                            <button @click="change" class="btn btn-dark" >Izmeni</button>
+                            <!-- <button @click="change" class="btn btn-dark" >Izmeni</button> -->
                         </div>
                     </div>
                     <div class="row">
@@ -22,6 +22,7 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
+
 
 export default defineComponent({
     setup() {
@@ -55,11 +56,11 @@ export default defineComponent({
       naruciPonovo(){
           console.log('mozda da se napravi redirekcija ka storemenu za izabrani restoran za koji je bila porudzbina')
       },
-    change(){
-        this.loc.location=document.getElementById("location").value
-        console.log(this.loc.location)
-        this.$store.dispatch('changeCustomerLocation', this.loc)
-    },
+    // change(){
+    //     this.loc.location=document.getElementById("location").value
+    //     console.log(this.loc.location)
+    //     this.$store.dispatch('changeCustomerLocation', this.loc)
+    // },
     orderMeals(){
         this.orderMeal.onAddress=document.getElementById("location").value
         this.orderMeal.note=document.getElementById("note").value
