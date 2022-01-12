@@ -3,8 +3,21 @@
         <div class="row">
             <HeaderDeliverer />
         </div>
-        <div class="row mt-3">
-            <h4>Izaberite porudzbinu koju zelite da dostavite:</h4>
+        <div class="row mt-3 vozilo">
+            <h4>Vaše trenutno prevozno sredstvo je: </h4>
+            <!-- {{deliverer.vehicle}} -->
+           <div class="col-xl-4">
+                <h5 class="form-signin text-center">Izaberite novo prevozno sredstvo:</h5>
+            </div>
+            <div class="col-xl-4">
+                <select name="vehicle" id="vehicle">
+                    <option value="Bike">Bike</option>
+                    <option value="Car">Car</option>
+                    <option value="Scooter">Scooter</option>
+                </select>   
+                <button class="btn btn-dark dugme" >Promeni</button>     
+                <!-- @click="promeniVozilo"                  -->
+            </div>
         </div>
         <!-- <div class="row">
             <OrderCard v-for="order in unselectedOrders" 
@@ -36,6 +49,9 @@ export default defineComponent({
     // computed:{
     //     unselectedOrders(){
     //         return this.$store.getters['getUnselectedOrders']
+    //     },
+    //     deliverer(){
+    //         return this.$store.getters['getDeliverer']
     //     }
     // },
     // async created(){
@@ -48,5 +64,13 @@ export default defineComponent({
 <style scoped>
 .visina{
     height: 100px;
+}
+.dugme{
+    margin-left: 4%;
+    margin-bottom: 0.5%;
+}
+.vozilo{
+     display: flex;
+  justify-content: center;
 }
 </style>
