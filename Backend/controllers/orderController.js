@@ -249,49 +249,52 @@ const OrderFinished = async(req,res) => { //push ka klijentu, status u neo4j se 
 
 
 
-const GetPendingStore = (req,res) => {
-    neo4j.cypher(`match (o:Order {status : "Pending"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store { uuid: "${req.params.storeID}"}) return DISTINCT o`).then(result => {
-        
-        let orders = RecordsToJSON(result.records)
-        orders.forEach(el => {
-            let meals = []
-            neo4j.cypher(`match (o:Order { odrerID = ${el.orderID}})-[rel:CONTAINS]->(m:Meal) return m`).then(result => {
-                let meal = RecordsToJSON(result.records)
-                meals.push(meal)
-            })
-            el.meals = meals        
-        })
-        res.send(orders).status(200)
-    }).catch(err => console.log(err))
-}
-const GetAcceptedStore = (req,res) => {
-    neo4j.cypher(`match (s:Store{uuid : "${req.params.storeID}"})-[rel:PREPARES]->(o:Order) WHERE  o.status = "Accepted" OR o.status = "Has a deliverer" return o`).then(result => {
-        let orders = RecordsToJSON(result.records)
-        orders.forEach(el => {
-            let meals = []
-            neo4j.cypher(`match (o:Order { odrerID = ${el.orderID}})-[rel:CONTAINS]->(m:Meal) return m`).then(result => {
-                let meal = RecordsToJSON(result.records)
-                meals.push(meal)
-            })
-            el.meals = meals        
-        })
-        res.send(orders).status(200)
-    }).catch(err => console.log(err)) //samo za restoran restroan uuid parametar
-}
-const GetReadyStore = (req,res) => {
-    neo4j.cypher(`match (s:Store{uuid : "${req.params.storeID}"})-[rel:PREPARES]->(o:Order {status : "Ready"}) return o`).then(result => {
+const GetPendingStore = async (req,res) => {
 
-        let orders = RecordsToJSON(result.records)
-        orders.forEach(el => {
-            let meals = []
-            neo4j.cypher(`match (o:Order { odrerID = ${el.orderID}})-[rel:CONTAINS]->(m:Meal) return m`).then(result => {
-                let meal = RecordsToJSON(result.records)
-                meals.push(meal)
-            })
-            el.meals = meals        
-        })
+    try{
+        let order  = await neo4j.cypher(`match (o:Order {status : "Pending"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store { uuid: "${req.params.storeID}"}) return DISTINCT o`)
+        let orders = RecordsToJSON(order.records)
+        for await (let el of orders){
+                let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
+                let meals = RecordsToJSON(result.records)            
+                el.meals = meals        
+        }        
         res.send(orders).status(200)
-    }).catch(err => console.log(err))//samo za restoran restroan uuid parametar
+    }catch(e){
+        res.status(500).send(e)
+    }
+    
+    
+}
+const GetAcceptedStore = async (req,res) => {
+    try{
+        let order  = await neo4j.cypher(`match (s:Store{uuid : "${req.params.storeID}"})-[rel:PREPARES]->(o:Order) WHERE  o.status = "Accepted" OR o.status = "Has a deliverer" return o`)
+        let orders = RecordsToJSON(order.records)
+        for await (let el of orders){
+                let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
+                let meals = RecordsToJSON(result.records)            
+                el.meals = meals        
+        }        
+        res.send(orders).status(200)
+    }catch(e){
+        res.status(500).send(e)
+    }
+    
+
+}
+const GetReadyStore = async (req,res) => {
+    try{
+        let order  = await neo4j.cypher(`match (s:Store{uuid : "${req.params.storeID}"})-[rel:PREPARES]->(o:Order {status : "Ready"}) return o`)
+        let orders = RecordsToJSON(order.records)
+        for await (let el of orders){
+                let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
+                let meals = RecordsToJSON(result.records)            
+                el.meals = meals        
+        }        
+        res.send(orders).status(200)
+    }catch(e){
+        res.status(500).send(e)
+    }
 }
 const GetPendingDeliverer = (req,res) => {
     neo4j.cypher(`match (o:Order {status : "Accepted"}) return o`).then(result => {
