@@ -267,8 +267,11 @@ const OrderFinished = async (req,res) => { //push ka klijentu, status u neo4j se
             res.status(400).send("Couldn't find the order.");
             return;
         }
+        let customerMsg = {
+
+        }
         await redis_client.hDel('orders:delivering',`${req.body.orderID}`);
-        S
+        await redis_client.publish('app:customer',JSON.stringify(customerMsg))
     }
     catch (e) {
         console.log(e);
@@ -327,14 +330,25 @@ const GetReadyStore = async (req,res) => {
         res.status(500).send(e)
     }
 }
-const GetPendingDeliverer = (req,res) => {
-    neo4j.cypher(`match (o:Order {status : "Accepted"}) return o`).then(result => {
-
-        let orders = RecordsToJSON(result.records)
-        res.send(orders).status(200)
-    }).catch(err => console.log(err))
+const GetPendingDeliverer =async (req,res) => {
+try {
+    let orders = await neo4j.cypher(`match (o:Order {status : "Accepted"}) return o`)
+    let o = RecordsToJSON(orders)
+    for await (let el of o){
+        let restaraunt = await neo4j.cypher(`match (o:Order {orderID : "${el.orderID}"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store) return DISTINCT s`)
+        el.restaraunt = RecordsToJSON(restaraunt)
+    }
+    res.send(o).status(200)
+} catch (e) {
+    res.status(500).send(e)
 }
-const GetAcceptedDeliverer = (req,res) => {
+    // neo4j.cypher(`match (o:Order {status : "Accepted"}) return o`).then(result => {
+
+    //     let orders = RecordsToJSON(result.records)
+    //     res.send(orders).status(200)
+    // }).catch(err => console.log(err))
+}
+const GetAcceptedDeliverer =async (req,res) => {
     neo4j.cypher(`match (o:Order {status : "Has a deliverer"})<-[re:DELIVERS]-(d:Deliverer{uuid : "${req.params.delivererID}"}) return o`).then(result => {
 
         let orders = RecordsToJSON(result.records)
