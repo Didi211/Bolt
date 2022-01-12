@@ -19,6 +19,7 @@ export default new Vuex.Store({
         store: null,
         kategorije:[],
         customer:null,
+        deliverer:null,
         unselectedOrdersDeliverer:[],
         top5Rest:[],
         storesByCategory:[],
@@ -74,7 +75,10 @@ export default new Vuex.Store({
         },
         getReadyOrdersStore(state){
             return state.readyOrdersStore
-        }
+        },
+        getDeliverer(state){
+            return state.deliverer
+        },
     },
     actions:{
         async registerDeliverer({commit}, registerInfo){
@@ -293,6 +297,14 @@ export default new Vuex.Store({
                 commit('setCustomer', customer)
             })
         },
+        async getDelivererById({commit}){
+            const customerId= Vue.$cookies.get("id")
+            return await Api().get('/api/deliverer/get/'+ customerId).then(res=>{
+                const deliverer = res.data
+                console.log(deliverer)
+                commit('setDeliverer', deliverer)
+            })
+        },
         async changeCustomerLocation({commit},location){
             console.log(location)
             return await Api().put('/api/customer/changeLocation/'+this.state.osobaID, location).then(()=>{
@@ -335,6 +347,13 @@ export default new Vuex.Store({
         async changeTime({dispatch},novoVreme){
             return await Api().put('/api/store/preptime/change/'+ Vue.$cookies.get("id"), novoVreme).then(()=>{
                 dispatch('getStoreById', Vue.$cookies.get("id"))
+            }).catch(err=>{
+                console.log(err)
+            })
+        },
+        async changeVehicle({dispatch}, vozilo){
+            return await Api().put('api/deliverer/changeVehicle/'+Vue.$cookies.get("id"), vozilo).then(()=>{
+                dispatch('getDelivererById', Vue.$cookies.get("id"))
             }).catch(err=>{
                 console.log(err)
             })
@@ -426,6 +445,9 @@ export default new Vuex.Store({
         },
         setReadyOrdersStore(state,orders){
             state.readyOrdersStore = orders
-        }
+        },
+        setDeliverer(state, deliverer){
+            state.deliverer=deliverer
+        },
     }
 })

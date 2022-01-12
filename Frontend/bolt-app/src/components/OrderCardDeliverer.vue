@@ -1,9 +1,12 @@
 <template>
   <div class="col-xl-4 Usluga">
-    <!-- <h4>{{ order.naziv }}</h4>
-    <h5>Cena: {{ usluga.cenaUsluge }} dinara</h5>
-    <h5>Kapacitet: {{ usluga.kapacitet }} </h5>
-    <button @click="aktivirajUslugu" type="button" class="btn btn-primary dugme"> <font-awesome-icon :icon="['fas', 'lock-open']" />&nbsp;&nbsp; Aktiviraj uslugu</button> -->
+    <!-- <h4>Narudzbina</h4>
+    <h5>Restoran: {{ order.store.name }}</h5>
+    <h5>Adresa restorana: {{ order.store.location }} </h5>
+    <h5>Cena: {{ order.order.price }} dinara</h5>
+    <h5>Adresa musterije: {{ order.order.onAddress }} </h5>
+    <h5>Note: {{order.order.note}}</h5>
+    <button @click="acceptOrder" type="button" class="btn btn-primary dugme"> Prihvati </button> -->
     <!-- <div class="row">
       <div class="col-xl-6">
       </div>
@@ -28,7 +31,7 @@ export default {
     }
   },
   methods:{
-    // aktivirajUslugu(){
+    // acceptOrder(){
     //   this.$store.dispatch('aktivirajUsluguAdmin', this.usluga.id);
     // }
   }

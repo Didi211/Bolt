@@ -4,13 +4,13 @@
             <HeaderDeliverer />
         </div>
         <div class="row mt-3 vozilo">
-            <h4>Vaše trenutno prevozno sredstvo je: </h4>
+            <h4>Vaše trenutno prevozno sredstvo je: <b>{{deliverer.vehicle}}</b> </h4>
             <!-- {{deliverer.vehicle}} -->
            <div class="col-xl-4">
                 <h5 class="form-signin text-center">Izaberite novo prevozno sredstvo:</h5>
             </div>
             <div class="col-xl-4">
-                <select name="vehicle" id="vehicle">
+                <select class="vehicle" name="vehicle" id="vehicle">
                     <option value="Bike">Bike</option>
                     <option value="Car">Car</option>
                     <option value="Scooter">Scooter</option>
@@ -46,18 +46,30 @@ export default defineComponent({
         OrderCard
         //StoreInfo
     },
-    // computed:{
-    //     unselectedOrders(){
-    //         return this.$store.getters['getUnselectedOrders']
-    //     },
-    //     deliverer(){
-    //         return this.$store.getters['getDeliverer']
+    computed:{
+        // unselectedOrders(){
+        //     return this.$store.getters['getUnselectedOrders']
+        // },
+        deliverer(){
+            return this.$store.getters['getDeliverer']
+        }
+    },
+    // methods:{
+    //     promeniVozilo(){
+    //         var select = document.getElementById('vehicle');
+    //         var vozilo = select.options[select.selectedIndex].value;
+    //         this.$store.dispatch('changeVehicle', vozilo).then(()=>{
+                
+    //         })
     //     }
     // },
-    // async created(){
-    //     await this.$store.dispatch('getUnselectedOrders').then(()=>{
-    //     })
-    // }
+    async created(){
+        // await this.$store.dispatch('getUnselectedOrders').then(()=>{
+        // })
+        await this.$store.dispatch('getDelivererById').then(()=>{
+
+        })
+    }
 })
 </script>
 
@@ -72,5 +84,8 @@ export default defineComponent({
 .vozilo{
      display: flex;
   justify-content: center;
+}
+.vehicle{
+    height: 85%;
 }
 </style>
