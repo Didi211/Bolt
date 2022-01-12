@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const redis_client = require('../config/ws.config');
 const saltRounds = 10;
 
+
 function convertToDTO(store) { 
    
     let storeDTO = {
@@ -19,60 +20,72 @@ function convertToDTO(store) {
    
 }
 const GetTop5 = async (req,res) => { 
-    async function makeArray(allStores) {
-        let arr = []
-        console.log(allStores)
-        for await (let store of allStores) { 
-            let stored_uuid =  store._properties.get('uuid')
-            let resCypher = await neo4j.cypher(
-                `MATCH (s:Store {uuid: '${stored_uuid}'})-[rel:PREPARES]->(o:Order) return count(rel)`
-            );
-            resCypher.records.forEach(record => { 
-                let relCount = record._fields[0].low
-                arr.push({key: stored_uuid, value: relCount})
+        try {                
+        redisData = await redis_client.get('top5')
+        if(redisData != null)
+            res.status(200).send(JSON.parse(redisData))
+        else {    
+            async function makeArray(allStores) {
+                let arr = []
+                // console.log(allStores)
+                for await (let store of allStores) { 
+                    let stored_uuid =  store._properties.get('uuid')
+                    let resCypher = await neo4j.cypher(
+                        `MATCH (s:Store {uuid: '${stored_uuid}'})-[rel:PREPARES]->(o:Order) return count(rel)`
+                    );
+                    resCypher.records.forEach(record => { 
+                        let relCount = record._fields[0].low
+                        arr.push({key: stored_uuid, value: relCount})
+                    })
+                }
+                return arr 
+            }
+            let result = await neo4j.model('Store').all()
+            let allStores = result._values
+        
+            let stores =  await makeArray(allStores)
+            stores = stores.sort((a,b) => { 
+               //#region OpisFje
+                // a,b
+                // > 0 sort b before a 
+                // < 0 sort a before b
+                // === 0 keep original order of a and b
+                //    function compare(a, b) {
+                //     if (a is less than b by some ordering criterion) {
+                //       return -1;
+                //     }
+                //     if (a is greater than b by the ordering criterion) {
+                //       return 1;
+                //     }
+                //     // a must be equal to b
+                //     return 0;
+                //   }
+               //#endregion
+                if (a.value > b.value) return  1
+                if (a.value < b.value) return -1
+                return 0
             })
-        }
-        return arr 
-    }
-    let result = await neo4j.model('Store').all()
-    let allStores = result._values
-
-    let stores =  await makeArray(allStores)
-    stores = stores.sort((a,b) => { 
-       //#region OpisFje
-        // a,b
-        // > 0 sort b before a 
-        // < 0 sort a before b
-        // === 0 keep original order of a and b
-        //    function compare(a, b) {
-        //     if (a is less than b by some ordering criterion) {
-        //       return -1;
-        //     }
-        //     if (a is greater than b by the ordering criterion) {
-        //       return 1;
-        //     }
-        //     // a must be equal to b
-        //     return 0;
-        //   }
-       //#endregion
-        if (a.value > b.value) return  1
-        if (a.value < b.value) return -1
-        return 0
-    })
-    stores.reverse()
-    if (stores.length > 5) 
-        stores = stores.slice(0,5)
-    let top5 = []
-    for (let s of stores) { 
-        uuid = s.key
-        for (let restaurant of allStores) { 
-            if (restaurant._properties.get('uuid') == uuid) 
-                top5.push(convertToDTO(restaurant))
-        }
+            stores.reverse()
+            if (stores.length > 5) 
+                stores = stores.slice(0,5)
+            let top5 = []
+            for (let s of stores) { 
+                uuid = s.key
+                for (let restaurant of allStores) { 
+                    if (restaurant._properties.get('uuid') == uuid) 
+                        top5.push(convertToDTO(restaurant))
+                }
+            }
+            redis_client.setEx('top5', 600,JSON.stringify(top5))
+            res.status(200).send(top5)                
+        }    
     }
     
-    res.status(200).send(top5)
+    catch(e) {         
+        res.status(500).send(e.message || e.toString())
+    }
 }
+
 const CreateStore = async (req,res) => { 
     
     
@@ -133,20 +146,24 @@ const changePrepTime = async (req,res) => {
 }
 
 const GetAllStores = async (req,res) => { 
-    try { 
-        let stores = await neo4j.model('Store').all()
-        let storesDTO = []
-        stores.forEach(element => {
-            storesDTO.push(convertToDTO(element))
+    try {                
+        redisData = await redis_client.get('stores')
+        if(redisData != null)
+            res.status(200).send(JSON.parse(redisData))
+        else {           
+            let stores = await neo4j.model('Store').all()
+            let storesDTO = []
+            stores.forEach(element => {
+            storesDTO.push(convertToDTO(element))            
         });
-        
-        res.status(200).send(storesDTO)
+            redis_client.setEx('stores', 600,JSON.stringify(storesDTO))
+            res.status(200).send(storesDTO)
+        }    
     }
-    catch(e) { 
-        res.status(500).end(e.message || e.toString())
+    catch(e) {         
+        res.status(500).send(e.message || e.toString())
     }
 }
-
 const GetStoresByCategory = async (req,res) => { 
     try { 
         let category = req.body.category

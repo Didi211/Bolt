@@ -198,7 +198,7 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
         }
         //notify delivery guys for refresh
         let porukaDeliverer = { 
-            orderID: req.body.orderID
+            refreshFlag: true
         }
         
         redis_client.publish('app:customer',porukaCustomer);
