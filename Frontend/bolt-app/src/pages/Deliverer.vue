@@ -15,7 +15,7 @@
                     <option value="Car">Car</option>
                     <option value="Scooter">Scooter</option>
                 </select>   
-                <button class="btn btn-dark dugme" >Promeni</button>     
+                <button class="btn btn-dark dugme" @click="promeniVozilo" >Promeni</button>     
                 <!-- @click="promeniVozilo"                  -->
             </div>
         </div>
@@ -54,15 +54,18 @@ export default defineComponent({
             return this.$store.getters['getDeliverer']
         }
     },
-    // methods:{
-    //     promeniVozilo(){
-    //         var select = document.getElementById('vehicle');
-    //         var vozilo = select.options[select.selectedIndex].value;
-    //         this.$store.dispatch('changeVehicle', vozilo).then(()=>{
+    methods:{
+        promeniVozilo(){
+            var select = document.getElementById('vehicle');
+            var voz = select.options[select.selectedIndex].value;
+            var vozilo= JSON.stringify(voz)
+            console.log(vozilo)
+
+            this.$store.dispatch('changeVehicle', vozilo).then(()=>{
                 
-    //         })
-    //     }
-    // },
+            })
+        }
+    },
     async created(){
         // await this.$store.dispatch('getUnselectedOrders').then(()=>{
         // })
