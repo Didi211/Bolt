@@ -1,19 +1,16 @@
 <template>
-  <div class="col-xl-4 Usluga">
-    <!-- <h4>Narudzbina</h4>
-    <h5>Restoran: {{ order.store.name }}</h5>
-    <h5>Adresa restorana: {{ order.store.location }} </h5>
-    <h5>Cena: {{ order.order.price }} dinara</h5>
-    <h5>Adresa musterije: {{ order.order.onAddress }} </h5>
-    <h5>Note: {{order.order.note}}</h5>
-    <button @click="acceptOrder" type="button" class="btn btn-primary dugme"> Prihvati </button> -->
-    <!-- <div class="row">
-      <div class="col-xl-6">
-      </div>
-      <div class="col-xl-6">
-        <button type="button" class="btn btn-danger dugme" @click="izbrisiUslugu">Izbrisi uslugu</button>
-      </div>
-    </div> -->
+  <div class=" Usluga">
+    <h4><b>Narudzbina</b></h4>
+    <div v-for="r in order.restaraunt" :key="r.uuid">
+    <h5><b>Restoran:</b> {{ r.name }}</h5>
+    <h5><b>Adresa restorana:</b> {{ r.location }} </h5>
+
+    </div>
+    <h5><b>Cena:</b> {{ order.price }} dinara</h5>
+    <h5><b>Adresa musterije:</b> {{ order.onAddress }} </h5>
+    <h5><b>Note:</b> {{order.note}}</h5>
+    <h5><b>Status:</b> {{order.status}}</h5>
+    <button type="button" class="btn  btn-dark dugme"> Dostavljeno</button>
   </div>
 </template>
 
@@ -44,14 +41,16 @@ export default {
   /* background-color: rgba(242, 175, 88,0.5); */
   border-radius: 25px;
   /* border: 4px solid rgb(242, 175, 88); */
-  border: 4px solid rgb(255, 255, 255);
+  border: 2px solid gray;
+  padding: 0%;
 
-  margin-top: 20px;
+  /* margin-top: 20px;
   margin-bottom: 20px;
   margin-left: 47px; /*ovo bi trebalo na lepsi nacin da se resi*/
 
-  padding-bottom: 15px;
-  padding-top: 15px;
+  /* padding-bottom: 15px;
+  padding-top: 15px; */
+  justify-self: center;
 }
 .dugme{
   margin-top:5px;

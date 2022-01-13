@@ -16,19 +16,26 @@
                     <option value="Scooter">Scooter</option>
                 </select>   
                 <button class="btn btn-dark dugme" @click="promeniVozilo" >Promeni</button>     
-                <!-- @click="promeniVozilo"                  -->
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4">
+              <hr>
+        <div class="row orders">
+            <div class="col-md-5">
+            <h5 class="red">Neprihvacene narudzbine</h5>
+          
             <PendingOrderCard v-for="order in unselectedOrders" 
                                     :key="order.id" 
                                     :order="order"/>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
+            <h5 class="red">Prihvacene narudzbine</h5>
             <AcceptedOrderCard v-for="order in unselectedOrders" 
                                     :key="order.id" 
                                     :order="order"/>
+            </div>
+            <div class="col-md-2">
+            <h5 class="red">Notifikacije</h5>
+
             </div>
         </div>
         <div class="row">
@@ -57,9 +64,9 @@ export default defineComponent({
         //StoreInfo
     },
     computed:{
-        // unselectedOrders(){
-        //     return this.$store.getters['getUnselectedOrders']
-        // },
+        unselectedOrders(){
+            return this.$store.getters['getUnselectedOrdersDeliverer']
+        },
         deliverer(){
             return this.$store.getters['getDeliverer']
         }
@@ -80,8 +87,8 @@ export default defineComponent({
         }
     },
     async created(){
-        // await this.$store.dispatch('getUnselectedOrders').then(()=>{
-        // })
+        await this.$store.dispatch('getUnselectedOrdersDeliverer').then(()=>{
+        })
         await this.$store.dispatch('getDelivererById').then(()=>{
 
         })
@@ -103,5 +110,12 @@ export default defineComponent({
 }
 .vehicle{
     height: 85%;
+}
+.red{
+    color: brown;
+}
+.orders{
+    display:flex;
+    justify-content: center;
 }
 </style>

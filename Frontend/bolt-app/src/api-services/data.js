@@ -55,7 +55,7 @@ export default new Vuex.Store({
         getTrenutniKorisnik(state){
             return state.trenKorisnik
         },
-        getUnselectedOrders(state){
+        getUnselectedOrdersDeliverer(state){
             return state.unselectedOrdersDeliverer
         },
         getTop5Rest(state){
@@ -377,6 +377,12 @@ export default new Vuex.Store({
                 commit('setReadyOrdersStore', readyOrders)
             })  
         },
+        async getUnselectedOrdersDeliverer({commit}){
+            return await Api().get('/api/order/pendingDeliverer').then(res=>{
+                const pendingOrders=res.data
+                commit('setUnselectedOrdersDeliverer',pendingOrders)
+            })
+        },
         postaviToken({commit}, tok){
             commit('setToken', tok)
         },
@@ -449,6 +455,9 @@ export default new Vuex.Store({
         },
         setDeliverer(state, deliverer){
             state.deliverer=deliverer
+        },
+        setUnselectedOrdersDeliverer(state, orders){
+            state.unselectedOrdersDeliverer=orders
         },
     }
 })
