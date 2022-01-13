@@ -353,7 +353,7 @@ export default new Vuex.Store({
         },
         async changeVehicle({dispatch}, vozilo){
             console.log(vozilo)
-            return await Api().put('api/deliverer/vehicle/change/'+Vue.$cookies.get("id"), vozilo).then(()=>{
+            return await Api().put('/api/deliverer/vehicle/change/'+ Vue.$cookies.get("id"), vozilo).then(()=>{
                 dispatch('getDelivererById', Vue.$cookies.get("id"))
             }).catch(err=>{
                 console.log(err)
