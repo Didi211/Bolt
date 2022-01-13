@@ -8,6 +8,9 @@ const {RecordsToJSON,NodeTOString, NodeToJson} = require('../helpers')
 const StatusFlags = require('../statusFlags');
 const statusFlags = require('../statusFlags');
 
+
+
+
 const GetCustomerID = async (orderID) => { 
     try {
         let customer = await neo4j.cypher(
@@ -329,28 +332,31 @@ const GetReadyStore = async (req,res) => {
 }
 const GetPendingDeliverer =async (req,res) => {
 try {
-    let orders = await neo4j.cypher(`match (o:Order {status : "${statusFlags.accepted}"}) return o`)
-    let o = RecordsToJSON(orders)
+    let orders = await neo4j.cypher(`match (o:Order {status : "Accepted"}) return o`)
+    let o = RecordsToJSON(orders.records)
     for await (let el of o){
         let restaraunt = await neo4j.cypher(`match (o:Order {orderID : "${el.orderID}"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store) return DISTINCT s`)
-        el.restaraunt = RecordsToJSON(restaraunt)
+        el.restaraunt = RecordsToJSON(restaraunt.records)
+    
     }
     res.send(o).status(200)
 } catch (e) {
     res.status(500).send(e)
+}    
 }
-    // neo4j.cypher(`match (o:Order {status : "Accepted"}) return o`).then(result => {
-
-    //     let orders = RecordsToJSON(result.records)
-    //     res.send(orders).status(200)
-    // }).catch(err => console.log(err))
-}
-const GetAcceptedDeliverer =async (req,res) => {
-    neo4j.cypher(`match (o:Order {status : "${statusFlags.hasDeliverer}"})<-[re:DELIVERS]-(d:Deliverer{uuid : "${req.params.delivererID}"}) return o`).then(result => {
-
-        let orders = RecordsToJSON(result.records)
-        res.send(orders).status(200)
-    }).catch(err => console.log(err))
+const GetAcceptedDeliverer =async (req,res) => {    
+    try {   
+        let orders = await neo4j.cypher(`match (o:Order {status : "${statusFlags.hasDeliverer}"})<-[re:DELIVERS]-(d:Deliverer{uuid : "${req.params.delivererID}"}) return o`)
+        let o = RecordsToJSON(orders.records)
+        for await (let el of o){
+            let restaraunt = await neo4j.cypher(`match (o:Order {orderID : "${el.orderID}"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store) return DISTINCT s`)
+            el.restaraunt = RecordsToJSON(restaraunt.records)
+        
+        }
+        res.send(o).status(200)
+    } catch (e) {
+        res.status(500).send(e)
+    }   
 }
 
 

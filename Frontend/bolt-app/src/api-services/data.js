@@ -55,7 +55,7 @@ export default new Vuex.Store({
         getTrenutniKorisnik(state){
             return state.trenKorisnik
         },
-        getUnselectedOrders(state){
+        getUnselectedOrdersDeliverer(state){
             return state.unselectedOrdersDeliverer
         },
         getTop5Rest(state){
@@ -353,7 +353,7 @@ export default new Vuex.Store({
         },
         async changeVehicle({dispatch}, vozilo){
             console.log(vozilo)
-            return await Api().put('api/deliverer/vehicle/change/'+Vue.$cookies.get("id"), vozilo).then(()=>{
+            return await Api().put('/api/deliverer/vehicle/change/'+ Vue.$cookies.get("id"), vozilo).then(()=>{
                 dispatch('getDelivererById', Vue.$cookies.get("id"))
             }).catch(err=>{
                 console.log(err)
@@ -464,6 +464,9 @@ export default new Vuex.Store({
         },
         setDeliverer(state, deliverer){
             state.deliverer=deliverer
+        },
+        setUnselectedOrdersDeliverer(state, orders){
+            state.unselectedOrdersDeliverer=orders
         },
     }
 })

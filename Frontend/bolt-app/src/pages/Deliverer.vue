@@ -16,14 +16,28 @@
                     <option value="Scooter">Scooter</option>
                 </select>   
                 <button class="btn btn-dark dugme" @click="promeniVozilo" >Promeni</button>     
-                <!-- @click="promeniVozilo"                  -->
             </div>
         </div>
-        <!-- <div class="row">
-            <OrderCard v-for="order in unselectedOrders" 
+              <hr>
+        <div class="row orders">
+            <div class="col-md-5">
+            <h5 class="red">Neprihvacene narudzbine</h5>
+          
+            <PendingOrderCard v-for="order in unselectedOrders" 
                                     :key="order.id" 
                                     :order="order"/>
-        </div> -->
+            </div>
+            <div class="col-md-5">
+            <h5 class="red">Prihvacene narudzbine</h5>
+            <AcceptedOrderCard v-for="order in unselectedOrders" 
+                                    :key="order.id" 
+                                    :order="order"/>
+            </div>
+            <div class="col-md-2">
+            <h5 class="red">Notifikacije</h5>
+
+            </div>
+        </div>
         <div class="row">
             <Footer />
         </div>
@@ -35,7 +49,9 @@
 import { defineComponent } from '@vue/composition-api'
 import  HeaderDeliverer  from '@/components/HeaderSAndD.vue'
 import  Footer  from '@/components/Footer.vue'
-import OrderCard from '@/components/OrderCardDeliverer.vue'
+import PendingOrderCard from '@/components/PendingOrderCardDeliverer.vue'
+import AcceptedOrderCard from '@/components/AcceptedOrderCardDeliverer.vue'
+
 //import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
@@ -43,13 +59,14 @@ export default defineComponent({
     components: {
         HeaderDeliverer,
         Footer,
-        OrderCard
+        PendingOrderCard,
+        AcceptedOrderCard
         //StoreInfo
     },
     computed:{
-        // unselectedOrders(){
-        //     return this.$store.getters['getUnselectedOrders']
-        // },
+        unselectedOrders(){
+            return this.$store.getters['getUnselectedOrdersDeliverer']
+        },
         deliverer(){
             return this.$store.getters['getDeliverer']
         }
@@ -58,8 +75,11 @@ export default defineComponent({
         promeniVozilo(){
             var select = document.getElementById('vehicle');
             var voz = select.options[select.selectedIndex].value;
-            var vozilo= JSON.stringify(voz)
-            console.log(vozilo)
+            var vozilo={
+                vehicle:  voz
+            }
+            // var vozilo= JSON.stringify(voz)
+            // console.log(vozilo)
 
             this.$store.dispatch('changeVehicle', vozilo).then(()=>{
                 
@@ -67,8 +87,8 @@ export default defineComponent({
         }
     },
     async created(){
-        // await this.$store.dispatch('getUnselectedOrders').then(()=>{
-        // })
+        await this.$store.dispatch('getUnselectedOrdersDeliverer').then(()=>{
+        })
         await this.$store.dispatch('getDelivererById').then(()=>{
 
         })
@@ -90,5 +110,12 @@ export default defineComponent({
 }
 .vehicle{
     height: 85%;
+}
+.red{
+    color: brown;
+}
+.orders{
+    display:flex;
+    justify-content: center;
 }
 </style>
