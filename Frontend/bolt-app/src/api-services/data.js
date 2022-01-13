@@ -264,13 +264,13 @@ export default new Vuex.Store({
         async getAllCategories({commit}){
             return await Api().get('/api/category/all').then(res=>{
                 const kat = res.data
+                console.log(res.data)
                 commit('setCategories', kat)
             })  
         },
         async getAllCategoriesForMeal({commit}, mealID){
             return await Api().get('/api/meal/getCategories/'+ mealID).then(res=>{
                 const kat = res.data
-                console.log(kat)
                 commit('setCategoriesForOneMeal', kat)
             })  
         },
@@ -376,6 +376,21 @@ export default new Vuex.Store({
                 const readyOrders = res.data
                 commit('setReadyOrdersStore', readyOrders)
             })  
+        },
+        async acceptOrderStore({dispatch}, orderInfo){
+            return await Api().post('/api/order/acceptStore', orderInfo).then(()=>{
+                dispatch('getAcceptedOrdersStore', Vue.$cookies.get("id"))
+            })  
+        },
+        async declineOrderStore({dispatch}, orderInfo){
+            return await Api().post('/api/order/decline', orderInfo).then(()=>{
+                dispatch('getPendingOrdersStore', Vue.$cookies.get("id"))
+            })    
+        },
+        async addNewCategory({dispatch}, cat){
+            return await Api().post('/api/category/add', cat).then(()=>{
+                dispatch('getAllCategories')
+            })    
         },
         postaviToken({commit}, tok){
             commit('setToken', tok)

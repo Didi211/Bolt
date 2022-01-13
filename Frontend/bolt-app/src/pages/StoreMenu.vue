@@ -13,10 +13,10 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6"> 
-                                <p class="lead fw-normal text-white-50 mb-0">Vreme pripreme:{{store.preptime}}</p>
+                                <h4 class="lead fw-normal text-white-50 mb-0">Vreme pripreme: <span class=" mt-2 badge badge-secondary"> {{store.preptime}}min</span></h4>
                             </div>
                             <div class="col-md-6"> 
-                                <p class="lead fw-normal text-white-50 mb-0">{{store.location}}</p>
+                                <h4 class="lead fw-normal text-white-50 mb-0">Adresa restorana: <span class=" mt-2 badge badge-secondary"> {{store.location}}</span></h4>
                             </div>
                         </div>
                     </div>

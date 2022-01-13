@@ -3,16 +3,16 @@
         <router-link :to="{name:'StoreMenu',params:{id:store.uuid}}">
             <div class="card h-100" @click="open" v-bind:id="store.uuid">
                 <!-- Store name-->
-                <h2>{{store.name}}</h2> 
+                <h2><span class="badge badge-danger">{{store.name}}</span></h2> 
                 <!-- <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." /> -->
                 <!-- Store details-->
-                <div class="card-body p-4">
+                <div class="card-body pb-3 pr-4 pl-4">
                     <div class="text-center">
                         <!-- Store location-->
                        <p>Adresa:</p>
-                        <h5 class="fw-bolder">{{store.location}}</h5>
+                        <h5 class=" mt-1 fw-bolder">{{store.location}}</h5>
                         <p>Vreme pripreme:</p>
-                        <h5 class="fw-bolder">{{store.preptime}}min</h5>
+                        <h4><span class=" mt-2 badge badge-secondary">{{store.preptime}}min</span></h4>
                         <!-- Vreme isporuke-->
                     </div>
                 </div>

@@ -64,6 +64,32 @@
                 </div>
             </div>
             <div class="row mt-3 justify-content-center">
+                <div class="col-xl-8">
+                    <div class="row justify-content-center">
+                       <h4 class="mb-3">Postojece kategorije hrane:</h4>
+                        <div class="col-xl-2 mr-2 alert alert-primary"  v-for="k in kategorije" :key="k.id">
+                            {{k.name}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8">
+                    <h5 class="mb-3 text-muted">Nudite jelo koje ne pripada nijednoj ponudjenoj kategoriji? Napravite novu kategoriju!</h5>
+                    <form id="forma2" action="/action_page.php" @submit.prevent>
+                        <div class="form-group">
+                                <label class="labele" for="imeKat">Naziv nove kategorije:</label>
+                                <input
+                                    v-model="novaKat.name"
+                                    type="text"
+                                    class="form-control"
+                                    id="imeKat"
+                                    placeholder="Upišite ime nove kategorije"
+                                    name="imeKat"/>
+                            </div>
+                        <button @click="dodajNovuKategoriju" type="submit" class="btn btn-primary marstil">Dodaj kategoriju</button>
+                    </form>
+                </div> 
+            </div>
+            <div class="row mt-3 justify-content-center">
                 <h4 class="mb-3">Trenutna jela u restoranu</h4>
                 <div class="col-xl-8">
                     <div v-for="ob in svaJela" :key="ob.meals.mealID">
@@ -113,6 +139,9 @@ export default defineComponent({
                 ingredients:"",
                 storeID:null
             },
+            novaKat:{
+                name:""
+            },
             isDataLoaded:true
         }
     },
@@ -137,7 +166,19 @@ export default defineComponent({
                                 })
                 })
             }
-        } 
+        },
+        async dodajNovuKategoriju(){
+            if(this.novaKat.name==""){
+                this.$toasted.show("Morate da upisete ime nove kategorije!", { 
+                                        theme: "bubble", 
+                                        position: "top-center", 
+                                        duration : 2000
+                                })
+            }
+            else{
+                await this.$store.dispatch('addNewCategory', this.novaKat)
+            }
+        }
     },
     computed:{
         kategorije(){

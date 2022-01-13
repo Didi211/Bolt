@@ -24,19 +24,29 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xl-12">
+            <div class="row justify-content-center mt-3">
+                <div class="col-xl-8">
                     <h3>Neobradjene porudzbine:</h3>
                     <Order v-for="order in pendingOrders" 
                                     :key="order.id" 
                                     :order="order"/>
                 </div>
             </div>
-            <div class="row">
-                ovo je row gde ce da se prikazuju porudzbine u obradi
+            <div class="row justify-content-center mt-3">
+                <div class="col-xl-8">
+                    <h3>Prihvacene porudzbine:</h3>
+                    <Order v-for="order in acceptedOrders" 
+                                    :key="order.id" 
+                                    :order="order"/>
+                </div>
             </div>
-            <div class="row">
-                ovo je row gde ce da se prikazuju porudzbine koje su obradjene ali nisu pokupljene od strane dostavljaca
+            <div class="row justify-content-center mt-3">
+                <div class="col-xl-8">
+                    <h3>Porudzbine spremne za dostavu:</h3>
+                    <Order v-for="order in readyOrders" 
+                                    :key="order.id" 
+                                    :order="order"/>
+                </div>
             </div>
         </div>
         <div v-else>

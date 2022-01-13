@@ -4,11 +4,17 @@
             <HeaderCustomer />
         </div>
         <div class="row justify-content-center border rounded">
-            <OrderHistoryComponent
-                v-for="narudzbina in narudzbine"
-                :key="narudzbina.order.orderID"
-                :narudzbina="narudzbina"
-            />
+            <div v-if="narudzbine.length==0">
+                <h4>Do sada niste narucili nijednom!</h4>
+            </div>
+            <div v-else>
+                <OrderHistoryComponent
+                    v-for="narudzbina in narudzbine"
+                    :key="narudzbina.order.orderID"
+                    :narudzbina="narudzbina"
+                />
+            </div>
+            
         </div>
         <div class="row">
             <Footer />
