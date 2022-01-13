@@ -58,8 +58,10 @@ const ChangeVehicle = async (req,res) => {
             res.status(400).send("Couldn't find deliverer.");
             return;
         }
-        console.log(vehicleAvgTime[req.body.vehicle]);
-        await deliverer.update('vehicle',`${vehicleAvgTime[req.body.vehicle]}`);
+        await deliverer.update({
+            avgTime: vehicleAvgTime[req.body.vehicle],
+            vehicle: req.body.vehicle
+        });
         res.status(200).send();
     } catch (e) {
         console.log(e);
