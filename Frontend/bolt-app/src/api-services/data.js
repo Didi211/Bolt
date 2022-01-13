@@ -13,6 +13,7 @@ export default new Vuex.Store({
         token: null,
         tip: null,
         orderHistory:[],
+        webSocket:"",
         allStores:[],
         pickedStore: null, //id izabranog restorana
         mealsFromStore: [],
@@ -403,6 +404,9 @@ export default new Vuex.Store({
         },
         postaviPickedStore({commit}, id){
              commit('setPickedStore', id)
+        },
+        postaviWebSocket({commit}, ws){
+            commit('setWebSocket', ws)
         }
     },
     mutations:{
@@ -468,5 +472,8 @@ export default new Vuex.Store({
         setUnselectedOrdersDeliverer(state, orders){
             state.unselectedOrdersDeliverer=orders
         },
+        setWebSocket(state,ws){
+            state.webSocket=ws
+        }
     }
 })

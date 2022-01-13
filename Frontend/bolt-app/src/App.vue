@@ -35,6 +35,23 @@ export default {
       await this.$store.dispatch("postaviOsobaID", this.korisnik.id)
       await this.$store.dispatch("getUserByID", this.korisnik.id)
     }
+    if(this.korisnik.tip == 'Customer'){
+      //otvori web socket za njegov port
+      const ws = new WebSocket("ws://localhost:3000/");
+      await this.$store.dispatch("postaviWebSocket", ws)
+    }
+    else if(this.korisnik.tip == 'Deliverer'){
+      //otvori web socket za njegov port
+      const ws = new WebSocket("ws://localhost:3001/");
+      await this.$store.dispatch("postaviWebSocket", ws)
+
+    }
+    else if(this.korisnik.tip == 'Store'){
+      //otvori web socket za njegov port
+      const ws = new WebSocket("ws://localhost:3002/");
+      await this.$store.dispatch("postaviWebSocket", ws)
+
+    }
 
   }
 }
