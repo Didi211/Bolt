@@ -11,6 +11,7 @@
                         <h5>Sastojci: {{meal.ingredients}}</h5>
                         <h5>Cena: {{meal.price}}</h5>
                     </div>
+                    <li v-for="m in order.meals" :key="m.mealID"> {{m.name}} {{m.price}}din</li>
                 </div>
                 <div class="col-xl-4 pr-5 justify-content-center">
                     <div class="row">

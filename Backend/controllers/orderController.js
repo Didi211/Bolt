@@ -295,9 +295,7 @@ const GetPendingStore = async (req,res) => {
         res.send(orders).status(200)
     }catch(e){
         res.status(500).send(e)
-    }
-    
-    
+    } 
 }
 const GetAcceptedStore = async (req,res) => {
     try{
