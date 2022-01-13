@@ -59,7 +59,7 @@ const ChangeVehicle = async (req,res) => {
             return;
         }
         console.log(vehicleAvgTime[req.body.vehicle]);
-        await deliverer.update('vehicle',`${vehicleAvgTime[req.body.vehicle]}`);
+        await deliverer.update('vehicle',vehicleAvgTime[req.body.vehicle]);
         res.status(200).send();
     } catch (e) {
         console.log(e);
