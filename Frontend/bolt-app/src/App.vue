@@ -74,15 +74,17 @@ export default {
     else if(this.korisnik.tip == 'Store'){
       //otvori web socket za njegov port
       const ws = new WebSocket("ws://localhost:3002/");
-      //primaju se nove porudzbine
       ws.onmessage = async (event) => {
         let message = JSON.parse(event.data)
-        console.log("ulaz u onmessage")
-        console.log(message)
+        
         if(message.storeID == this.korisnik.id){
-            await this.$store.dispatch("getPendingOrdersStore").then(()=>{
-              // window.location.reload()
-            })
+          if(message.messageType=="newOrder"){
+              await this.$store.dispatch("getPendingOrdersStore")
+          }
+          else if(message.messageType=="HasDeliverer"){
+            console.log("usao u else if za hasDeliverer")
+              await this.$store.dispatch("changeDisabledOrderID", message.orderID)
+          }
         }
       }
       // await this.$store.dispatch("postaviWebSocket", ws)

@@ -29,8 +29,9 @@ export default new Vuex.Store({
         pendingOrdersStore:[],
         acceptedOrdersStore:[],
         readyOrdersStore:[],
-        obCustomer: null,
+        obCustomer: "",
         obDeliverer: null,
+        changeDisabledOrderID:""
     },
     getters:{
         getOrderHistory(state){
@@ -89,6 +90,10 @@ export default new Vuex.Store({
         },
         getAcceptedOrdersByDeliverer(state){
             return state.acceptedOrdersDeliverer
+        },
+        getChangeDisabledOrderID(state){
+            console.log("usao u getter")
+            return state.changeDisabledOrderID
         }
     },
     actions:{
@@ -381,6 +386,7 @@ export default new Vuex.Store({
         async acceptOrderDeliverer({dispatch}, accept){
             console.log(accept)
             return await Api().post('/api/order/acceptDeliverer/', accept).then(()=>{
+                dispatch('getUnselectedOrdersDeliverer')
                 dispatch('getAcceptedOrdersByDeliverer')
             })
         },
@@ -444,6 +450,10 @@ export default new Vuex.Store({
         },
         primiObavestenjeDeliverer({commit}, message){
             commit("primiObavestenjeDeliverer", message)
+        },
+        changeDisabledOrderID({commit},orderID){
+            console.log("usao u dispatch")
+            commit('setChangeDisabledOrderID', orderID)
         }
     },
     mutations:{
@@ -518,6 +528,10 @@ export default new Vuex.Store({
         },
         setAcceptedOrdersByDeliverer(state, orders){
             state.acceptedOrdersDeliverer=orders
+        },
+        setChangeDisabledOrderID(state, orderID){
+            console.log("usao u setter")
+            state.changeDisabledOrderID = orderID
         }
     }
 })
