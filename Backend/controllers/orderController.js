@@ -205,6 +205,7 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
         
         await redis_client.publish('app:customer',JSON.stringify(porukaCustomer));
         await redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
+        res.status(200).send();
     } catch (e) {
         res.status(500).send(e);
         console.log(e);
@@ -218,9 +219,21 @@ const OrderReady = async (req,res) =>{     //push ka dostavljacima, status u red
         await redis_client.sRem('orders:hasdeliverer',`'${req.body.orderID}'`);
         await redis_client.sAdd('orders:ready',`'${req.body.orderID}'`);
         await redis_client.expire('orders:ready',24*60*60);
+        let queryResult = await neo4j.cypher(
+            `match (d:Deliverer) -[:DELIVERS]->(o:Order {orderID: "${req.body.orderID}"}) return d`);
+        if (queryResult.records.length === 0) { 
+            res.status(400).send("Couldn't find deliverer.");
+            return;
+        }
+        let deliverer = RecordsToJSON(queryResult.records);
+        let delivererJson;
+        deliverer.forEach(element => {
+            delivererJson = element;
+        });
         let porukaDeliverer = { 
             orderID: req.body.orderID,
-            delivererID: req.body.delivererID
+            delivererID: delivererJson.uuid,
+            status: statusFlags.ready
         }
         await redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
         res.status(200).send();
