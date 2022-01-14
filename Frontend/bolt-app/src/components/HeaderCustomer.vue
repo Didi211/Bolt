@@ -3,15 +3,35 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand disabled" href="#!" disabled="disabled">Dobrodosli, {{username}}!</a>
-                <div v-show="statusObavestenja.status=='Accepted'" >
+                <div v-show="statusObavestenja.status=='Accepted'" id="hide">
                     <div class=" mr-2 alert alert-primary">
                         Vasa porudzbina je prihvacena!
                     </div>
+                    <button type="btn btn-primary" @click="hide">x</button>
                 </div>
-                <div v-show="statusObavestenja.status=='Declined'" >
+                <div v-show="statusObavestenja.status=='Declined'" id="hide">
                     <div class=" mr-2 alert alert-primary">
                         Vasa porudzbina je odbijena!
                     </div>
+                    <button type="btn btn-primary" @click="hide">x</button>
+                </div>
+                <div v-show="statusObavestenja.status=='Has a deliverer'" id="hide">
+                    <div class=" mr-2 alert alert-primary">
+                        Vasa porudzbina se sprema! Stize za {{statusObavestenja.timeWaiting}}min
+                    </div>
+                    <button type="btn btn-primary" @click="hide">x</button>
+                </div>
+                <div v-show="statusObavestenja.status=='Picked up'" id="hide" >
+                    <div class=" mr-2 alert alert-primary" >
+                        Vasu porudzbinu je pokupio dostavljac!
+                    </div>
+                    <button type="btn btn-primary" @click="hide">x</button>
+                </div>
+                <div v-show="statusObavestenja.status=='Finished'" id="hide" >
+                    <div class=" mr-2 alert alert-primary">
+                        Vasa porudzbina je dostavljena. Uzivajte!
+                    </div>
+                    <button type="btn btn-primary" @click="hide">x</button>
                 </div>
                 <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button> -->
                 <div >
@@ -97,7 +117,10 @@ export default defineComponent({
     methods:{
         logoutKorisnik(){
             this.$store.dispatch("logoutKorisnik")
-      }
+        },
+        hide(){
+
+        }
     },
     created(){
         this.username=Vue.$cookies.get("username")
