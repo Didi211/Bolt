@@ -7,6 +7,7 @@ const redis_client = require('../config/ws.config')
 const {RecordsToJSON,NodeTOString, NodeToJson} = require('../helpers')
 const StatusFlags = require('../statusFlags');
 const statusFlags = require('../statusFlags');
+const { JsonWebTokenError } = require('jsonwebtoken');
 
 
 
@@ -200,9 +201,15 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
         let porukaDeliverer = { 
             refreshFlag: true
         }
+        let porukaStore = { 
+            status: statusFlags.hasDeliverer,
+            orderID: req.body.orderID,
+            storeID: storeJson.uuid
+        }
         
         await redis_client.publish('app:customer',JSON.stringify(porukaCustomer));
         await redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
+        await redis_client.pubSubChannels('app:store',JSON.stringify(porukaStore));
         res.status(200).send();
     } catch (e) {
         res.status(500).send(e);
