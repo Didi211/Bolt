@@ -367,6 +367,7 @@ export default new Vuex.Store({
         async getPendingOrdersStore({commit}){
             return await Api().get('/api/order/pending/'+Vue.$cookies.get("id")).then(res=>{
                 const pendingOrders = res.data
+                console.log("izvrseno")
                 commit('setPendingOrdersStore', pendingOrders)
             })  
         },
