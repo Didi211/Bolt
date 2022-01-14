@@ -29,7 +29,7 @@
             </div>
             <div class="col-md-5">
             <h5 class="red">Prihvacene narudzbine</h5>
-            <AcceptedOrderCard v-for="order in unselectedOrders" 
+            <AcceptedOrderCard v-for="order in acceptedOrders" 
                                     :key="order.id" 
                                     :order="order"/>
             </div>
@@ -66,6 +66,9 @@ export default defineComponent({
     computed:{
         unselectedOrders(){
             return this.$store.getters['getUnselectedOrdersDeliverer']
+        },
+        acceptedOrders(){
+            return this.$store.getters['getAcceptedOrdersByDeliverer']
         },
         deliverer(){
             return this.$store.getters['getDeliverer']

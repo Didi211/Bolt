@@ -22,6 +22,7 @@ export default new Vuex.Store({
         customer:null,
         deliverer:null,
         unselectedOrdersDeliverer:[],
+        acceptedOrdersDeliverer:[],
         top5Rest:[],
         storesByCategory:[],
         catForOneMeal:[],
@@ -83,6 +84,9 @@ export default new Vuex.Store({
         },
         getObCustomer(state){
             return state.obCustomer
+        },
+        getAcceptedOrdersByDeliverer(state){
+            return state.acceptedOrdersDeliverer
         }
     },
     actions:{
@@ -373,6 +377,11 @@ export default new Vuex.Store({
             })
 
         },
+        async getAcceptedOrdersByDeliverer({commit}){
+            return await Api().get('/api/order/acceptedDeliverer/' + Vue.$cookies.get("id")).then(res=>{
+                commit('setAcceptedOrdersByDeliverer', res.data)
+            })
+        },
         async getPendingOrdersStore({commit}){
             return await Api().get('/api/order/pending/'+Vue.$cookies.get("id")).then(res=>{
                 const pendingOrders = res.data
@@ -496,6 +505,9 @@ export default new Vuex.Store({
         },
         postaviObavestenjeMusteriji(state, status){
             state.obCustomer = status
+        },
+        setAcceptedOrdersByDeliverer(state, orders){
+            state.acceptedOrdersDeliverer=orders
         }
     }
 })
