@@ -415,7 +415,9 @@ export default new Vuex.Store({
             })  
         },
         async readyOrderStore({dispatch}, orderInfo){
+            console.log(orderInfo)
             return await Api().post('/api/order/ready', orderInfo).then(()=>{
+                console.log("izvrsena promena u ready")
                 dispatch('getAcceptedOrdersStore', Vue.$cookies.get("id"))
                 dispatch('getReadyOrdersStore', Vue.$cookies.get("id"))
             })  
