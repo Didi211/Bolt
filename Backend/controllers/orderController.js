@@ -179,7 +179,7 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
         
         let deliverer = await neo4j.model('Deliverer').find(req.body.delivererID);
         queryResult = await neo4j.cypher(
-            `match (s:Store) -[:PREPARES]-> (o:Order {orderID: "${req.body.orderID}"}) return s`);
+            `match (s:Store) -[:PREPARES]-> (o:Order {orderID: "${req.body.orderID}"})  return s`);
         if (queryResult.records.length < 1) { 
             res.status(400).send("Couldn't find store.");
             return;
@@ -329,7 +329,8 @@ const GetAcceptedStore = async (req,res) => {
         for await (let el of orders){
                 let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
                 let meals = RecordsToJSON(result.records)            
-                el.meals = meals        
+                el.meals = meals
+                el.status = "Accepted"        
         }       
         res.send(orders).status(200)}
     }catch(e){
@@ -349,7 +350,8 @@ const GetReadyStore = async (req,res) => {
         for await (let el of orders){
                 let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
                 let meals = RecordsToJSON(result.records)            
-                el.meals = meals        
+                el.meals = meals
+                el.status = "Ready"        
         }        
         res.send(orders).status(200)}
 
@@ -369,6 +371,7 @@ try {
     for await (let el of o){
         let restaraunt = await neo4j.cypher(`match (o:Order {orderID : "${el.orderID}"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store) return DISTINCT s`)
         el.restaraunt = RecordsToJSON(restaraunt.records)
+        el.status = "Accepted"
     
     }
     res.send(o).status(200)}
@@ -388,7 +391,7 @@ const GetAcceptedDeliverer =async (req,res) => {
         for await (let el of o){
             let restaraunt = await neo4j.cypher(`match (o:Order {orderID : "${el.orderID}"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store) return DISTINCT s`)
             el.restaraunt = RecordsToJSON(restaraunt.records)
-        
+            el.status = "Has a deliverer"
         }
         res.send(o).status(200)
     }
