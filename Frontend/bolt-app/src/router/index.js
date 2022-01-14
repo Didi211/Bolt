@@ -4,7 +4,6 @@ import Homepage from '@/pages/Homepage'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import PageNotFound from '@/pages/PageNotFound'
-import Basket from '@/pages/Basket'
 import SearchPage from '@/pages/SearchPage'
 import Store from '@/pages/Store'
 import Customer from '@/pages/Customer'
@@ -78,11 +77,6 @@ const router = new Router({
                     next();
                 }
             }
-        },
-        {
-            path:'/Basket',
-            name: 'Basket',
-            component: Basket
         },
         {
             path:'/SearchPage',

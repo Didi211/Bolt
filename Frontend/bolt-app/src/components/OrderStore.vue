@@ -5,12 +5,19 @@
                 
             </div>
             <div class="row">
-                <div class="col-xl-8 card-body">
+                <div v-if="order.status==='Ready'" class="col-xl-12 card-body">
                     <div class="text-center">
                         <h5 class="fw-bolder mt-3">ID narudzbine: {{order.orderID}}</h5> 
                         <h5>Napomena: {{order.note}}</h5>
                     </div>
-                    <li class="list-group-item border" v-for="m in order.meals" :key="m.mealID"> {{m.name}}</li>
+                    <li class="list-group-item border" v-for="m in order.meals" :key="m.id"> {{m.name}}</li>
+                </div>
+                <div v-else class="col-xl-8 card-body">
+                    <div class="text-center">
+                        <h5 class="fw-bolder mt-3">ID narudzbine: {{order.orderID}}</h5> 
+                        <h5>Napomena: {{order.note}}</h5>
+                    </div>
+                    <li class="list-group-item border" v-for="m in order.meals" :key="m.id"> {{m.name}}</li>
                 </div>
                 <div class="col-xl-4  justify-content-center  align-items-center d-flex">
                     <div v-if="order.status === 'Pending'" class="row card-body">
@@ -27,6 +34,13 @@
                         <div class="col-xl-12">
                             <div class="text-center m-3">
                                 <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil" :disabled="disabledDugme">Zavrsi obradu porudzbine</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else-if="order.status === 'Has a deliverer'" class="row card-body">
+                        <div class="col-xl-12">
+                            <div class="text-center m-3">
+                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil" :disabled="false">Zavrsi obradu porudzbine</button>
                             </div>
                         </div>
                     </div>
@@ -82,9 +96,9 @@ export default defineComponent({
                 orderID:this.order.orderID
             }
             console.log(orderInfo)
-            //  await this.$store.dispatch('readyOrderStore', orderInfo).then(()=>{
-            //     console.log("sve izvrseno")
-            // })
+             await this.$store.dispatch('readyOrderStore', orderInfo).then(()=>{
+                console.log("sve izvrseno")
+            })
         }
     },
     computed:{
@@ -100,7 +114,7 @@ export default defineComponent({
                 this.$toasted.show("Narudzbina: "+this.order.orderID +" ima dostavljaca, mozete da zavrsite obradu nje!", { 
                         theme: "bubble", 
                         position: "top-center", 
-                        duration : 2000
+                        duration : 5000
                    })
             }
         }

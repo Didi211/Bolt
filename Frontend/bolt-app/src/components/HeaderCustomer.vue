@@ -3,35 +3,35 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand disabled" href="#!" disabled="disabled">Dobrodosli, {{username}}!</a>
-                <div v-show="statusObavestenja.status=='Accepted'" id="hide">
+                <div v-show="statusObavestenja.status=='Accepted'" id="a" class="hide">
                     <div class=" mr-2 alert alert-primary">
                         Vasa porudzbina je prihvacena!
+                    <button type="button" class="btn btn-primary btn-sm dugme" @click="hide">x</button>
                     </div>
-                    <button type="btn btn-primary" @click="hide">x</button>
                 </div>
-                <div v-show="statusObavestenja.status=='Declined'" id="hide">
+                <div v-show="statusObavestenja.status=='Declined'" id="d" class="hide">
                     <div class=" mr-2 alert alert-primary">
                         Vasa porudzbina je odbijena!
+                    <button type="button" class="btn btn-primary btn-sm dugme" @click="hide">x</button>
                     </div>
-                    <button type="btn btn-primary" @click="hide">x</button>
                 </div>
-                <div v-show="statusObavestenja.status=='Has a deliverer'" id="hide">
+                <div v-show="statusObavestenja.status=='Has a deliverer'" id="h" class="hide">
                     <div class=" mr-2 alert alert-primary">
                         Vasa porudzbina se sprema! Stize za {{statusObavestenja.timeWaiting}}min
+                    <button type="button" class="btn btn-primary btn-sm dugme" @click="hide">x</button>
                     </div>
-                    <button type="btn btn-primary" @click="hide">x</button>
                 </div>
-                <div v-show="statusObavestenja.status=='Picked up'" id="hide" >
+                <div v-show="statusObavestenja.status=='Picked up'" id="p" class="hide">
                     <div class=" mr-2 alert alert-primary" >
                         Vasu porudzbinu je pokupio dostavljac!
+                    <button type="button" class="btn btn-primary btn-sm dugme" @click="hide">x</button>
                     </div>
-                    <button type="btn btn-primary" @click="hide">x</button>
                 </div>
-                <div v-show="statusObavestenja.status=='Finished'" id="hide" >
+                <div v-show="statusObavestenja.status=='Finished'" id="f" class="hide" >
                     <div class=" mr-2 alert alert-primary">
                         Vasa porudzbina je dostavljena. Uzivajte!
+                    <button type="button" class="btn btn-primary btn-sm dugme" @click="hide">x</button>
                     </div>
-                    <button type="btn btn-primary" @click="hide">x</button>
                 </div>
                 <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button> -->
                 <div >
@@ -50,43 +50,8 @@
                             </ul>
                         </li> -->
                     </ul>
-                     <!-- <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <router-link :to="{name: 'Basket'}">
-                            <i class="bi-cart-fill me-1"></i>
-                            Korpa
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </router-link>
-                        </button>
-                    </form> -->
+                    
                 </div>
-                
-            <!-- <div v-if="statusObavestenja=='Declined'">
-                <div  data-autohide="false" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <strong class="mr-auto">Obavestenje</strong>
-                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="toast-body">
-                        Vasa porudzbina je odbijena, pokusajte drugi restoran!
-                    </div>
-                </div>
-            </div>
-            <div v-if="statusObavestenja=='Has a deliverer'">
-                <div data-autohide="false"  class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <strong class="mr-auto">Obavestenje</strong>
-                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="toast-body">
-                        Vasa porudzbina je pokupljena!
-                    </div>
-                </div>
-            </div> -->
 
             </div>
             
@@ -119,6 +84,22 @@ export default defineComponent({
             this.$store.dispatch("logoutKorisnik")
         },
         hide(){
+            if(this.statusObavestenja.status=="Accepted"){
+                document.getElementById("a").style.display = "none";
+            }
+            if(this.statusObavestenja.status=="Declined"){
+                document.getElementById("d").style.display = "none";
+            }
+            if(this.statusObavestenja.status=="Has a deliverer"){
+                document.getElementById("h").style.display = "none";
+            }
+            if(this.statusObavestenja.status=="Picked up"){
+                document.getElementById("p").style.display = "none";
+            }
+            if(this.statusObavestenja.status=="Finished"){
+                document.getElementById("f").style.display = "none";
+            }
+
 
         }
     },
@@ -132,5 +113,8 @@ export default defineComponent({
 a.disabled {
   pointer-events: none;
   cursor: default;
+}
+.hide{
+    display: block;
 }
 </style>

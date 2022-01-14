@@ -76,14 +76,19 @@ export default {
       const ws = new WebSocket("ws://localhost:3002/");
       ws.onmessage = async (event) => {
         let message = JSON.parse(event.data)
-        
+        console.log(message)
         if(message.storeID == this.korisnik.id){
-          if(message.messageType=="newOrder"){
+          if(message.messageType=="NewOrder"){
               await this.$store.dispatch("getPendingOrdersStore")
           }
           else if(message.messageType=="HasDeliverer"){
             console.log("usao u else if za hasDeliverer")
+            
               await this.$store.dispatch("changeDisabledOrderID", message.orderID)
+          }
+          else if(message.messageType=="PickedUp"){
+            console.log("usao u else if za PickedUp")
+              await this.$store.dispatch("getReadyOrdersStore")
           }
         }
       }

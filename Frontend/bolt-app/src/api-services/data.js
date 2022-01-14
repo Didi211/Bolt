@@ -390,6 +390,11 @@ export default new Vuex.Store({
                 dispatch('getAcceptedOrdersByDeliverer')
             })
         },
+        async pickedUpOrderDeliverer({commit}, order){
+            return await Api().post('api/order/pickedUp',order).then(()=>{
+                commit('setNista')
+            })
+        },
         async getPendingOrdersStore({commit}){
             return await Api().get('/api/order/pending/'+Vue.$cookies.get("id")).then(res=>{
                 const pendingOrders = res.data
@@ -415,7 +420,9 @@ export default new Vuex.Store({
             })  
         },
         async readyOrderStore({dispatch}, orderInfo){
+            console.log(orderInfo)
             return await Api().post('/api/order/ready', orderInfo).then(()=>{
+                console.log("izvrsena promena u ready")
                 dispatch('getAcceptedOrdersStore', Vue.$cookies.get("id"))
                 dispatch('getReadyOrdersStore', Vue.$cookies.get("id"))
             })  
