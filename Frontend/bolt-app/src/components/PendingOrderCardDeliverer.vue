@@ -10,12 +10,14 @@
     <h5><b>Adresa musterije:</b> {{ order.onAddress }} </h5>
     <h5><b>Note:</b> {{order.note}}</h5>
     <h5><b>Status:</b> {{order.status}}</h5>
-    <button type="button" class="btn btn-dark dugme"> Prihvati </button>
+    <button type="button" class="btn btn-dark dugme" @click="acceptOrder"> Prihvati </button>
     <!-- @click="acceptOrder" -->
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+
 export default {
   name: "OrderCardDeliverer",
   props: {
@@ -26,12 +28,18 @@ export default {
   },
   data(){
     return{
+      accept:{
+        orderID:"",
+        delivererID:""
+      }
     }
   },
   methods:{
-    // acceptOrder(){
-    //   this.$store.dispatch('aktivirajUsluguAdmin', this.usluga.id);
-    // }
+    acceptOrder(){
+      this.accept.orderID=this.$props.order.orderID
+      this.accept.delivererID= Vue.$cookies.get("id")
+      this.$store.dispatch('acceptOrderDeliverer', this.accept);
+    }
   }
 };
 </script>

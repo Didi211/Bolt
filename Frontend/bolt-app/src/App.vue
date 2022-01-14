@@ -55,9 +55,19 @@ export default {
       ws.onmessage = async (event) => {
         let message = JSON.parse(event.data)
         console.log(message)
-        // await this.$store.dispatch("primiObavestenjeDeliverer", message)
-        await this.$store.dispatch('getUnselectedOrdersDeliverer')
+        // if(message.refreshFlag){
+        //   await this.$store.dispatch('getUnselectedOrdersDeliverer')
+        // }
+        // else if(message.status == 'Ready'){
+        //   if(message.delivererID==this.korisnik.id){
+        //     // await this.$store.dispatch("primiObavestenjeDeliverer", message)
+
+        //   }
+        // }
+        // else{
+        //   }
         
+        await this.$store.dispatch('getUnselectedOrdersDeliverer')
       }
 
     }

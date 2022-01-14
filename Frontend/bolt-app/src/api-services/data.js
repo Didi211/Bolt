@@ -382,6 +382,12 @@ export default new Vuex.Store({
                 commit('setAcceptedOrdersByDeliverer', res.data)
             })
         },
+        async acceptOrderDeliverer({dispatch}, accept){
+            console.log(accept)
+            return await Api().post('/api/order/acceptDeliverer/', accept).then(()=>{
+                dispatch('getAcceptedOrdersByDeliverer')
+            })
+        },
         async getPendingOrdersStore({commit}){
             return await Api().get('/api/order/pending/'+Vue.$cookies.get("id")).then(res=>{
                 const pendingOrders = res.data

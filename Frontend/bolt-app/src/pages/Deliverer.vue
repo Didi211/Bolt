@@ -3,40 +3,45 @@
         <div class="row">
             <HeaderDeliverer />
         </div>
-        <div class="row mt-3 vozilo">
-            <h4>Vaše trenutno prevozno sredstvo je: <b>{{deliverer.vehicle}}</b> </h4>
-            <!-- {{deliverer.vehicle}} -->
-           <div class="col-xl-4">
-                <h5 class="form-signin text-center">Izaberite novo prevozno sredstvo:</h5>
-            </div>
+        <div v-if="isDataLoaded">
+            <div class="row mt-3 vozilo">
+                <h4>Vaše trenutno prevozno sredstvo je: <b>{{deliverer.vehicle}}</b> </h4>
+                <!-- {{deliverer.vehicle}} -->
             <div class="col-xl-4">
-                <select class="vehicle" name="vehicle" id="vehicle">
-                    <option value="Bike">Bike</option>
-                    <option value="Car">Car</option>
-                    <option value="Scooter">Scooter</option>
-                </select>   
-                <button class="btn btn-dark dugme" @click="promeniVozilo" >Promeni</button>     
+                    <h5 class="form-signin text-center">Izaberite novo prevozno sredstvo:</h5>
+                </div>
+                <div class="col-xl-4">
+                    <select class="vehicle" name="vehicle" id="vehicle">
+                        <option value="Bike">Bike</option>
+                        <option value="Car">Car</option>
+                        <option value="Scooter">Scooter</option>
+                    </select>   
+                    <button class="btn btn-dark dugme" @click="promeniVozilo" >Promeni</button>     
+                </div>
+            </div>
+                <hr>
+            <div class="row orders">
+                <div class="col-md-5">
+                <h5 class="red">Neprihvacene narudzbine</h5>
+            
+                <PendingOrderCard v-for="order in unselectedOrders" 
+                                        :key="order.id" 
+                                        :order="order"/>
+                </div>
+                <div class="col-md-5">
+                <h5 class="red">Prihvacene narudzbine</h5>
+                <AcceptedOrderCard v-for="order in acceptedOrders" 
+                                        :key="order.id" 
+                                        :order="order"/>
+                </div>
+                <div class="col-md-2">
+                <h5 class="red">Notifikacije</h5>
+
+                </div>
             </div>
         </div>
-              <hr>
-        <div class="row orders">
-            <div class="col-md-5">
-            <h5 class="red">Neprihvacene narudzbine</h5>
-          
-            <PendingOrderCard v-for="order in unselectedOrders" 
-                                    :key="order.id" 
-                                    :order="order"/>
-            </div>
-            <div class="col-md-5">
-            <h5 class="red">Prihvacene narudzbine</h5>
-            <AcceptedOrderCard v-for="order in acceptedOrders" 
-                                    :key="order.id" 
-                                    :order="order"/>
-            </div>
-            <div class="col-md-2">
-            <h5 class="red">Notifikacije</h5>
-
-            </div>
+        <div v-else>
+            <AppSpinner />
         </div>
         <div class="row">
             <Footer />
@@ -51,6 +56,7 @@ import  HeaderDeliverer  from '@/components/HeaderSAndD.vue'
 import  Footer  from '@/components/Footer.vue'
 import PendingOrderCard from '@/components/PendingOrderCardDeliverer.vue'
 import AcceptedOrderCard from '@/components/AcceptedOrderCardDeliverer.vue'
+import AppSpinner from '@/components/AppSpinner.vue'
 
 //import StoreCard from '@/components/StoreCardComponent.vue'
 
@@ -60,8 +66,14 @@ export default defineComponent({
         HeaderDeliverer,
         Footer,
         PendingOrderCard,
-        AcceptedOrderCard
+        AcceptedOrderCard,
+        AppSpinner
         //StoreInfo
+    },
+    data(){
+        return{
+            isDataLoaded:true
+        }
     },
     computed:{
         unselectedOrders(){
@@ -90,11 +102,13 @@ export default defineComponent({
         }
     },
     async created(){
-        await this.$store.dispatch('getUnselectedOrdersDeliverer').then(()=>{
+        this.isDataLoaded = false
+        Promise.all([await this.$store.dispatch('getUnselectedOrdersDeliverer'),
+        await this.$store.dispatch('getAcceptedOrdersByDeliverer'),
+        await this.$store.dispatch('getDelivererById')]).then(()=>{
+            this.isDataLoaded = true;
         })
-        await this.$store.dispatch('getDelivererById').then(()=>{
-
-        })
+      
     }
 })
 </script>
