@@ -26,7 +26,7 @@
                     <div v-else-if="order.status === 'Accepted'" class="row card-body">
                         <div class="col-xl-12">
                             <div class="text-center m-3">
-                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil">Zavrsi obradu porudzbine</button>
+                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil" :disabled="disabledDugme">Zavrsi obradu porudzbine</button>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@ export default defineComponent({
     },
     data(){
         return{
-
+            disabledDugme:true
         }
     },
     methods:{
@@ -81,16 +81,32 @@ export default defineComponent({
             let orderInfo = {
                 orderID:this.order.orderID
             }
-             await this.$store.dispatch('readyOrderStore', orderInfo).then(()=>{
-                console.log("sve izvrseno")
-            })
+            console.log(orderInfo)
+            //  await this.$store.dispatch('readyOrderStore', orderInfo).then(()=>{
+            //     console.log("sve izvrseno")
+            // })
         }
     },
     computed:{
-
+        changeDisabledOrderID(){
+            return this.$store.getters['getChangeDisabledOrderID']
+        }
+    },
+    watch:{
+        changeDisabledOrderID(){
+            console.log("usao u watch")
+            if(this.changeDisabledOrderID == this.order.orderID){
+                this.disabledDugme=false
+                this.$toasted.show("Narudzbina: "+this.order.orderID +" ima dostavljaca, mozete da zavrsite obradu nje!", { 
+                        theme: "bubble", 
+                        position: "top-center", 
+                        duration : 2000
+                   })
+            }
+        }
     },
     async created(){
-        console.log(this.order)
+
     }
 })
 </script>
