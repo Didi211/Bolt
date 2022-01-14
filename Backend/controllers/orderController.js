@@ -40,8 +40,6 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
             status: StatusFlags.pending
         });
         let orderJson = NodeToJson(order);
-        // console.log(orderJson);
-        // console.log(order);
 
         let relationResult = await neo4j.cypher(
             `match (c:Customer {uuid: "${req.body.uuid}"}),
@@ -63,7 +61,6 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
             });
             
         }
-        // console.log(allMeals);
         let poruka = { 
             order : orderJson,
             storeID: req.body.storeID,
@@ -72,7 +69,7 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
         console.log("Poruka:",poruka);
         await redis_client.publish("app:store",JSON.stringify(poruka));
         //ili ovako, da u redisu pamtimo samo  orderedok se ne izvrse ali ne cele objekte, vec njihov id i status 
-        await redis_client.hSet('orders:pending',`${orderJson.orderID}`,StatusFlags.pending);
+        await redis_client.sAdd('orders:pending',`'${orderJson.orderID}'`);
         // redis_client.hSet('ordersPending',`${orderJson.orderID}`,JSON.stringify(poruka));
         await redis_client.expire('orders:pending',24*60*60); //problem, hocu da se kes izbrise u 11:59 uvece
         res.status(200).end();
@@ -105,8 +102,8 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
         if (!store) { 
             throw new Error("Couldn't find object.")
         }
-        await redis_client.hDel('orders:pending',`${req.body.orderID}`); 
-        await redis_client.hSet('orders:accepted',`${req.body.orderID}`,StatusFlags.accepted);
+        await redis_client.sRem('orders:pending',`'${req.body.orderID}'`); 
+        await redis_client.sAdd('orders:accepted',`'${req.body.orderID}'`);
         await redis_client.expire('orders:accepted',24*60*60); //problem, hocu da se kes izbrise u 11:59 uvece
         let porukaCustomer = { 
             orderID : req.body.orderID,
@@ -149,7 +146,7 @@ const DeclineOrderRestaraunt = async (req,res) =>{ // push ka klijentu ,status u
             customerID: await GetCustomerID(req.body.orderID),
             status: StatusFlags.declined
         }
-        await redis_client.hDel('orders:pending',`${req.body.orderID}`)
+        await redis_client.sRem('orders:pending',`'${req.body.orderID}'`);
         await redis_client.publish('app:customer',JSON.stringify(poruka)); //ili da saljemo samo accepted 
         res.status(200).send();
     }
@@ -175,8 +172,9 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
             throw new Error("Couldn't create relation.")
         }
         //redis change status
-        await redis_client.hDel('orders:accepted',`${req.body.orderID}`);
-        await redis_client.hSet('orders:hasdeliverer',`${req.body.orderID}`,`${statusFlags.hasDeliverer}`);
+        await redis_client.sRem('orders:accepted',`'${req.body.orderID}'`);
+        await redis_client.sAdd('orders:hasdeliverer',`'${req.body.orderID}'`);
+        await redis_client.expire('orders:hasdeliverer',24*60*60);
         //update time Waiting
         
         let deliverer = await neo4j.model('Deliverer').find(req.body.delivererID);
@@ -217,8 +215,9 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
 }
 const OrderReady = async (req,res) =>{     //push ka dostavljacima, status u redisu se menja
     try {
-        await redis_client.hDel('orders:hasdeliverer',`${req.body.orderID}`);
-        await redis_client.hSet('orders:ready',`${req.body.orderID}`,statusFlags.ready);
+        await redis_client.sRem('orders:hasdeliverer',`'${req.body.orderID}'`);
+        await redis_client.sAdd('orders:ready',`'${req.body.orderID}'`);
+        await redis_client.expire('orders:ready',24*60*60);
         let porukaDeliverer = { 
             orderID: req.body.orderID,
             delivererID: req.body.delivererID
@@ -233,8 +232,10 @@ const OrderReady = async (req,res) =>{     //push ka dostavljacima, status u red
 }
 const OrderPickedUp = async(req,res) =>{ //push ka klijentu, statu u redisu se menja
     try {
-        await redis_client.hDel('orders:ready',`${req.body.orderID}`);
-        await redis_client.hSet('orders:delivering',`${req.body.orderID}`,statusFlags.delivering);
+        await redis_client.sRem('orders:ready',`'${req.body.orderID}'`);
+        await redis_client.sAdd('orders:delivering',`'${req.body.orderID}'`);
+        await redis_client.expire('orders:delivering',24*60*60);
+
         
         let porukaCustomer = { 
             orderID: req.body.orderID,
@@ -260,19 +261,19 @@ const OrderFinished = async (req,res) => { //push ka klijentu, status u neo4j se
             res.status(400).send("Couldn't find the order.");
             return;
         }
-
-       
         queryResult = await neo4j.cypher(
             `match (c:Customer)-[r:ORDERED]->(o:Order {orderID: "${req.body.orderID}"}) return c`);
         if (queryResult.length < 1) { 
-            res.status(400).send("Couldn't find customer.");
+            res.status(400).send("Couldn't find the customer.");
             return;
         }
+
+       
         let customerMsg = {
             customerID:  await GetCustomerID(req.body.orderID),
             status: statusFlags.finished
         }
-        await redis_client.hDel('orders:delivering',`${req.body.orderID}`);
+        await redis_client.sRem('orders:delivering',`'${req.body.orderID}'`);
         await redis_client.publish('app:customer',JSON.stringify(customerMsg))
     }
     catch (e) {
@@ -302,18 +303,15 @@ const GetPendingStore = async (req,res) => {
 }
 const GetAcceptedStore = async (req,res) => {
     try{
-        console.log("jel si tu");
-        let narudzbine = JSON.parse( await redis_client.get("app:accepted"))
-        // narudzbine.push(JSON.parse( await redis_client.get("app:deliverer")))
-        let obj = await redis_client.lRange("order",0,-1)
-        console.log(obj)
-        // let restaranove = narudzbine.filter(e => {
-            // e == req.params.storeID
-        // })
-        // console.log(restaranove);
+        let ordersAcceptedIDs =  await redis_client.sMembers("orders:accepted");
+        let ordersHasDelivererIDs = await redis_client.sMembers("orders:hasdeliverer");
+        let ordersIDs = ordersAcceptedIDs.concat(ordersHasDelivererIDs);
+        
+        
 
-        let order  = await neo4j.cypher(`match (o:Order) where o.orderID in [${obj}] return o`)
-        let orders = RecordsToJSON(order.records)
+        let orderResult  = await neo4j.cypher(
+            `match (o:Order) <-[:PREPARES]- (s:Store {uuid: "${req.params.storeID}"}) where o.orderID in [${ordersIDs}] return o `);
+        let orders = RecordsToJSON(orderResult.records)
         for await (let el of orders){
                 let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
                 let meals = RecordsToJSON(result.records)            
