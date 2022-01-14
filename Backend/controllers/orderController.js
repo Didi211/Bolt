@@ -303,13 +303,19 @@ const GetPendingStore = async (req,res) => {
 }
 const GetAcceptedStore = async (req,res) => {
     try{
-        let ordersAcceptedIDs =  await redis_client.sMembers("orders:accepted");
+        console.log("u apiuju");
+        let ordersAcceptedIDs =  await redis_client.sMembers("orders:accepted").catch();
         console.log(ordersAcceptedIDs)
-        let ordersHasDelivererIDs = await redis_client.sMembers("orders:hasdeliverer");
-        let ordersIDs = ordersAcceptedIDs.concat(ordersHasDelivererIDs);
+        let ordersHasDelivererIDs = await redis_client.sMembers("orders:hasdeliverer").catch();
         
         
-
+        let ordersIDs = ordersAcceptedIDs.concat(ordersHasDelivererIDs);   
+        console.log(typeof ordersIDs);
+        
+        if(ordersIDs.length == 0){
+        console.log("u ifu");
+            res.status(200).send(ordersIDs)}
+        else{        
         let orderResult  = await neo4j.cypher(
             `match (o:Order) <-[:PREPARES]- (s:Store {uuid: "${req.params.storeID}"}) where o.orderID in [${ordersIDs}] return o `);
         let orders = RecordsToJSON(orderResult.records)
@@ -317,8 +323,8 @@ const GetAcceptedStore = async (req,res) => {
                 let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
                 let meals = RecordsToJSON(result.records)            
                 el.meals = meals        
-        }        
-        res.send(orders).status(200)
+        }       
+        res.send(orders).status(200)}
     }catch(e){
         res.status(500).send(e)
     }
@@ -327,21 +333,29 @@ const GetAcceptedStore = async (req,res) => {
 }
 const GetReadyStore = async (req,res) => {
     try{
-        let order  = await neo4j.cypher(`match (s:Store{uuid : "${req.params.storeID}"})-[rel:PREPARES]->(o:Order {status : "${statusFlags.ready}"}) return o`)
+        let ordersIDs = await redis_client.sMembers("orders:ready");
+        if(ordersIDs.length == 0){            
+            res.status(200).send(ordersIDs)}
+        else{       
+        let order  = await neo4j.cypher(`match (s:Store{uuid : "${req.params.storeID}"}) where o.orderID in [${ordersIDs}] return o`)
         let orders = RecordsToJSON(order.records)
         for await (let el of orders){
                 let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
                 let meals = RecordsToJSON(result.records)            
                 el.meals = meals        
         }        
-        res.send(orders).status(200)
+        res.send(orders).status(200)}
+
     }catch(e){
         res.status(500).send(e)
     }
 }
 const GetPendingDeliverer =async (req,res) => {
 try {
-    let orders = await neo4j.cypher(`match (o:Order {status : "Accepted"}) return o`)
+
+    let ordersIDs = await redis_client.sMembers("orders:accepted");
+
+    let orders = await neo4j.cypher(`match (o:Order) where o.orderID in [${ordersIDs}] return o`)
     let o = RecordsToJSON(orders.records)
     for await (let el of o){
         let restaraunt = await neo4j.cypher(`match (o:Order {orderID : "${el.orderID}"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store) return DISTINCT s`)
@@ -354,8 +368,11 @@ try {
 }    
 }
 const GetAcceptedDeliverer =async (req,res) => {    
-    try {   
-        let orders = await neo4j.cypher(`match (o:Order {status : "${statusFlags.hasDeliverer}"})<-[re:DELIVERS]-(d:Deliverer{uuid : "${req.params.delivererID}"}) return o`)
+    try {
+        let ordersIDs = await redis_client.sMembers("orders:hasdeliverer");
+
+
+        let orders = await neo4j.cypher(`match (o:Order)<-[re:DELIVERS]-(d:Deliverer{uuid : "${req.params.delivererID}"}) where o.orderID in [${ordersIDs}] return o`)
         let o = RecordsToJSON(orders.records)
         for await (let el of o){
             let restaraunt = await neo4j.cypher(`match (o:Order {orderID : "${el.orderID}"})-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store) return DISTINCT s`)
