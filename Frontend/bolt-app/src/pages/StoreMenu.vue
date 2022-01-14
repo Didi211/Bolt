@@ -103,7 +103,8 @@ export default defineComponent({
                 onAddress: "",
                 note: "",
                 meals: [],
-                uuid: ""
+                uuid: "",
+                storeID: null
             }
         }
     },
@@ -150,6 +151,7 @@ export default defineComponent({
             this.orderMeal.note=document.getElementById("note").value
             this.orderMeal.meals=this.jelaId
             this.orderMeal.uuid=this.customer.uuid
+            this.orderMeal.storeID= this.$route.params.id
             console.log("ovo je iz order u store menu")
             console.log(this.orderMeal)
             this.jela=[]
