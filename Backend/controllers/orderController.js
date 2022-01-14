@@ -8,6 +8,7 @@ const {RecordsToJSON,NodeTOString, NodeToJson} = require('../helpers')
 const StatusFlags = require('../statusFlags');
 const statusFlags = require('../statusFlags');
 const { JsonWebTokenError } = require('jsonwebtoken');
+const { changePrepTime } = require('./storeController');
 
 
 
@@ -346,29 +347,35 @@ const GetPendingStore = async (req,res) => {
         res.status(500).send(e)
     } 
 }
+async function _getOrders(channelName, statusFlag) { 
+    try {
+        let ordersIDs = await redis_client.sMembers(channelName);
+        if (ordersIDs.length === 0) {
+            return [];
+        }
+        let orderResult  = await neo4j.cypher(
+            `match (o:Order) <-[:PREPARES]- (s:Store {uuid: "${req.params.storeID}"}) where o.orderID in [${ordersIDs}] return DISTINCT o `);
+        let orders = RecordsToJSON(orderResult.records)
+        for await (let el of orders){
+                let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
+                let meals = RecordsToJSON(result.records)            
+                el.meals = meals
+                el.status = statusFlag      
+        }    
+        return  orders;
+    } catch (e) {
+        throw e;
+    }
+}
 const GetAcceptedStore = async (req,res) => {
     try{
-        let ordersAcceptedIDs =  await redis_client.sMembers("orders:accepted").catch();
-        let ordersHasDelivererIDs = await redis_client.sMembers("orders:hasdeliverer").catch();
+        let ordersAccepted = await _getOrders("orders:accepted",statusFlags.accepted);
+        let ordersHasDeliverer = await _getOrders("orders:hasdeliverer",statusFlags.hasDeliverer);
+        let orders = ordersAccepted.concat(ordersHasDeliverer);
         
-        
-        let ordersIDs = ordersAcceptedIDs.concat(ordersHasDelivererIDs);   
-        
-        if(ordersIDs.length == 0){
-            res.status(200).send(ordersIDs)}
-        else{        
-            let orderResult  = await neo4j.cypher(
-                `match (o:Order) <-[:PREPARES]- (s:Store {uuid: "${req.params.storeID}"}) where o.orderID in [${ordersIDs}] return DISTINCT o `);
-            let orders = RecordsToJSON(orderResult.records)
-            for await (let el of orders){
-                    let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
-                    let meals = RecordsToJSON(result.records)            
-                    el.meals = meals
-                    el.status = "Accepted"        
-            }       
-            res.send(orders).status(200)
-        }
-    }catch(e){
+        res.status(200).send(orders);
+    }
+    catch(e) {
         res.status(500).send(e)
         console.log(e);
     }
