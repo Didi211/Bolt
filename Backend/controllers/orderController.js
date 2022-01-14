@@ -347,14 +347,14 @@ const GetPendingStore = async (req,res) => {
         res.status(500).send(e)
     } 
 }
-async function _getOrders(channelName, statusFlag) { 
+async function _getOrders(channelName, statusFlag, storeID) { 
     try {
         let ordersIDs = await redis_client.sMembers(channelName);
         if (ordersIDs.length === 0) {
             return [];
         }
         let orderResult  = await neo4j.cypher(
-            `match (o:Order) <-[:PREPARES]- (s:Store {uuid: "${req.params.storeID}"}) where o.orderID in [${ordersIDs}] return DISTINCT o `);
+            `match (o:Order) <-[:PREPARES]- (s:Store {uuid: "${storeID}"}) where o.orderID in [${ordersIDs}] return DISTINCT o `);
         let orders = RecordsToJSON(orderResult.records)
         for await (let el of orders){
                 let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
@@ -369,8 +369,8 @@ async function _getOrders(channelName, statusFlag) {
 }
 const GetAcceptedStore = async (req,res) => {
     try{
-        let ordersAccepted = await _getOrders("orders:accepted",statusFlags.accepted);
-        let ordersHasDeliverer = await _getOrders("orders:hasdeliverer",statusFlags.hasDeliverer);
+        let ordersAccepted = await _getOrders("orders:accepted",statusFlags.accepted,req.params.storeID);
+        let ordersHasDeliverer = await _getOrders("orders:hasdeliverer",statusFlags.hasDeliverer,req.params.storeID);
         let orders = ordersAccepted.concat(ordersHasDeliverer);
         
         res.status(200).send(orders);
