@@ -3,6 +3,16 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand disabled" href="#!" disabled="disabled">Dobrodosli, {{username}}!</a>
+                <div v-show="statusObavestenja=='Accepted'" >
+                    <div class=" mr-2 alert alert-primary">
+                        Vasa porudzbina je prihvacena!
+                    </div>
+                </div>
+                <div v-show="statusObavestenja=='Declined'" >
+                    <div class=" mr-2 alert alert-primary">
+                        Vasa porudzbina je odbijena!
+                    </div>
+                </div>
                 <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button> -->
                 <div >
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -30,8 +40,38 @@
                         </button>
                     </form> -->
                 </div>
+                
+            <!-- <div v-if="statusObavestenja=='Declined'">
+                <div  data-autohide="false" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="mr-auto">Obavestenje</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="toast-body">
+                        Vasa porudzbina je odbijena, pokusajte drugi restoran!
+                    </div>
+                </div>
             </div>
+            <div v-if="statusObavestenja=='Has a deliverer'">
+                <div data-autohide="false"  class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="mr-auto">Obavestenje</strong>
+                        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="toast-body">
+                        Vasa porudzbina je pokupljena!
+                    </div>
+                </div>
+            </div> -->
+
+            </div>
+            
         </nav>
+        
     </div>
 </template>
 
@@ -47,6 +87,12 @@ export default defineComponent({
         return{
             username:""
         }
+    },
+    computed:{
+        statusObavestenja(){
+            return this.$store.getters["getObCustomer"];
+        }
+
     },
     methods:{
         logoutKorisnik(){

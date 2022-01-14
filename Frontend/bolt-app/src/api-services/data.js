@@ -27,7 +27,8 @@ export default new Vuex.Store({
         catForOneMeal:[],
         pendingOrdersStore:[],
         acceptedOrdersStore:[],
-        readyOrdersStore:[]
+        readyOrdersStore:[],
+        obCustomer:""
     },
     getters:{
         getOrderHistory(state){
@@ -80,6 +81,9 @@ export default new Vuex.Store({
         getDeliverer(state){
             return state.deliverer
         },
+        getObCustomer(state){
+            return state.obCustomer
+        }
     },
     actions:{
         async registerDeliverer({commit}, registerInfo){
@@ -407,6 +411,10 @@ export default new Vuex.Store({
         },
         postaviWebSocket({commit}, ws){
             commit('setWebSocket', ws)
+        },
+        primiObavestenjeMusteriji({commit}, message){
+
+            commit("postaviObavestenjeMusteriji", message.status)
         }
     },
     mutations:{
@@ -474,6 +482,9 @@ export default new Vuex.Store({
         },
         setWebSocket(state,ws){
             state.webSocket=ws
+        },
+        postaviObavestenjeMusteriji(state, status){
+            state.obCustomer = status
         }
     }
 })

@@ -35,13 +35,16 @@ export default {
       await this.$store.dispatch("postaviOsobaID", this.korisnik.id)
       await this.$store.dispatch("getUserByID", this.korisnik.id)
     }
+
     if(this.korisnik.tip == 'Customer'){
       //otvori web socket za njegov port
       const ws = new WebSocket("ws://localhost:3000/");
-      ws.onmessage = (event) => {
-        let message = event.data
-        console.log(message.customerID)
-        // await this.$store.dispatch("postaviWebSocket", ws)
+      ws.onmessage = async (event) => {
+        let message = JSON.parse(event.data)
+        console.log(message)
+        if(message.customerID == this.korisnik.id){
+            await this.$store.dispatch("primiObavestenjeMusteriji", message)
+        }
       }
 
       
@@ -55,9 +58,19 @@ export default {
     else if(this.korisnik.tip == 'Store'){
       //otvori web socket za njegov port
       const ws = new WebSocket("ws://localhost:3002/");
-      await this.$store.dispatch("postaviWebSocket", ws)
-
+      //primaju se nove porudzbine
+      ws.onmessage = async (event) => {
+        let message = JSON.parse(event.data)
+        console.log(message)
+        if(message.storeID == this.korisnik.id){
+            await this.$store.dispatch("getPendingOrdersStore").then(()=>{
+              // window.location.reload()
+            })
+        }
+      }
+      // await this.$store.dispatch("postaviWebSocket", ws)
     }
+
 
   }
 }
