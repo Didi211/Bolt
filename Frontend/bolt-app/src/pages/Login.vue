@@ -13,7 +13,7 @@
                         <h2 class="form-signin-heading text-center">Prijava</h2>
                         <input type="text" class="form-control" v-model="loginInfo.username" name="username" placeholder="Username" autofocus="">           
                         <input type="password" class="form-control" v-model="loginInfo.password" name="sifra" placeholder="password"/>
-                        <button class="btn btn-lg btn-primary dugme" @click="login">Prijavi se</button>
+                        <button class="btn btn-lg btn-dark dugme" @click="login">Prijavi se</button>
                     </form>
                     <div class="row nemanalog">
                         <router-link :to="{name:'Register'}"><a class="nav-link" href="#!">Nemate nalog?</a></router-link>

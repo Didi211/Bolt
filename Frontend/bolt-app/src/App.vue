@@ -67,6 +67,7 @@ export default {
       //primaju se nove porudzbine
       ws.onmessage = async (event) => {
         let message = JSON.parse(event.data)
+        console.log("ulaz u onmessage")
         console.log(message)
         if(message.storeID == this.korisnik.id){
             await this.$store.dispatch("getPendingOrdersStore").then(()=>{

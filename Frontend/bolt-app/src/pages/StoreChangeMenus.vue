@@ -59,7 +59,7 @@
                                 name="ingredients"/>
                         </div>
 
-                        <button @click="dodajNovoJelo" type="submit" class="btn btn-primary marstil">Dodaj novo jelo</button>
+                        <button @click="dodajNovoJelo" type="submit" class="btn btn-dark marstil">Dodaj novo jelo</button>
                     </form>
                 </div>
             </div>
@@ -85,7 +85,7 @@
                                     placeholder="Upišite ime nove kategorije"
                                     name="imeKat"/>
                             </div>
-                        <button @click="dodajNovuKategoriju" type="submit" class="btn btn-primary marstil">Dodaj kategoriju</button>
+                        <button @click="dodajNovuKategoriju" type="submit" class="btn btn-dark marstil">Dodaj kategoriju</button>
                     </form>
                 </div> 
             </div>

@@ -19,7 +19,7 @@
                                     <input type="text" class="form-control" v-model="novoVreme.preptime" name="novoVreme" placeholder="Novo vreme porudzbine..." autofocus="">           
                                 </div>
                             </div>
-                            <button class="btn btn-lg btn-primary dugme" @click="promeniVreme">Promeni</button>
+                            <button class="btn btn-lg btn-dark dugme" @click="promeniVreme">Promeni</button>
                         </form>
                     </div>
                 </div>

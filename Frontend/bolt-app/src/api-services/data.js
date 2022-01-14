@@ -41,8 +41,6 @@ export default new Vuex.Store({
             return state.pickedStore
         },
         getAllMealsFromStore(state){
-            console.log("ovo je iz gettera")
-            console.log(state.mealsFromStore)
             return state.mealsFromStore
         },
         getStore(state){
@@ -109,7 +107,7 @@ export default new Vuex.Store({
             })
         },
         async registerCustomer({commit}, registerInfo){
-            console.log(registerInfo)
+
             return await Api().post('/api/register/customer', registerInfo).then((res)=>{
                 // const trenutniKorisnik = res.data
                 // commit('setKorisnik', trenutniKorisnik)
@@ -243,7 +241,7 @@ export default new Vuex.Store({
         async getOrderHistory({commit}){
             return await Api().get('/api/customer/previousOrders/'+Vue.$cookies.get("id")).then(res=>{
                 const narudzbine = res.data
-                console.log(res)
+
                 commit('setOrderHistory', narudzbine)
             })
         },
@@ -269,7 +267,7 @@ export default new Vuex.Store({
         async getAllCategories({commit}){
             return await Api().get('/api/category/all').then(res=>{
                 const kat = res.data
-                console.log(res.data)
+
                 commit('setCategories', kat)
             })  
         },
@@ -286,19 +284,18 @@ export default new Vuex.Store({
             })  
         }, 
         async getStoresByCategory({commit}, category){
-            console.log(category)
+
             return await Api().post('/api/store/category/get', category).then(res=>{
-                console.log(res)
+
                 const stores = res.data
                 commit('setStoresByCategory', stores)
             })  
         }, 
         async getCustomerById({commit}){
-            //console.log(this.trenKorisnik.uuid)
+
             const customerId= Vue.$cookies.get("id")
             return await Api().get('/api/customer/get/'+ customerId).then(res=>{
                 const customer = res.data
-                console.log(customer)
                 commit('setCustomer', customer)
             })
         },
@@ -306,12 +303,10 @@ export default new Vuex.Store({
             const customerId= Vue.$cookies.get("id")
             return await Api().get('/api/deliverer/get/'+ customerId).then(res=>{
                 const deliverer = res.data
-                console.log(deliverer)
                 commit('setDeliverer', deliverer)
             })
         },
         async changeCustomerLocation({commit},location){
-            console.log(location)
             return await Api().put('/api/customer/changeLocation/'+this.state.osobaID, location).then(()=>{
                 commit('setToken', Vue.$cookies.get("token") )
             }).catch(err=>{
@@ -319,8 +314,6 @@ export default new Vuex.Store({
             })
         },
         async orderMeal({commit},order){
-            console.log("narudzbina")
-            console.log(order)
             return await Api().post('/api/order/', order).then(res=>{
                 if(res.status == 200){
                     Vue.toasted.show("Vasa porudzbina je poslata!", { 
@@ -357,7 +350,6 @@ export default new Vuex.Store({
             })
         },
         async changeVehicle({dispatch}, vozilo){
-            console.log(vozilo)
             return await Api().put('/api/deliverer/vehicle/change/'+ Vue.$cookies.get("id"), vozilo).then(()=>{
                 dispatch('getDelivererById', Vue.$cookies.get("id"))
             }).catch(err=>{
@@ -376,14 +368,12 @@ export default new Vuex.Store({
         async getPendingOrdersStore({commit}){
             return await Api().get('/api/order/pending/'+Vue.$cookies.get("id")).then(res=>{
                 const pendingOrders = res.data
-                console.log("izvrseno")
                 commit('setPendingOrdersStore', pendingOrders)
             })  
         },
         async getAcceptedOrdersStore({commit}){
             return await Api().get('/api/order/acceptedStore/'+Vue.$cookies.get("id")).then(res=>{
                 const accOrders = res.data
-                 console.log(accOrders)
                 commit('setAcceptedOrdersStore', accOrders)
             })  
         },
@@ -396,6 +386,13 @@ export default new Vuex.Store({
         async acceptOrderStore({dispatch}, orderInfo){
             return await Api().post('/api/order/acceptStore', orderInfo).then(()=>{
                 dispatch('getAcceptedOrdersStore', Vue.$cookies.get("id"))
+                dispatch('getPendingOrdersStore', Vue.$cookies.get("id"))
+            })  
+        },
+        async readyOrderStore({dispatch}, orderInfo){
+            return await Api().post('/api/order/ready', orderInfo).then(()=>{
+                dispatch('getAcceptedOrdersStore', Vue.$cookies.get("id"))
+                dispatch('getReadyOrdersStore', Vue.$cookies.get("id"))
             })  
         },
         async declineOrderStore({dispatch}, orderInfo){
@@ -451,8 +448,6 @@ export default new Vuex.Store({
             state.pickedStore=id
         },
         setAllMealsFromStore(state, meals){
-            console.log("ovo je iz mutacija")
-            console.log(meals)
             state.mealsFromStore=meals
         },
         setStore(state, store){
