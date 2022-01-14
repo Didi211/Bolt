@@ -55,19 +55,19 @@ export default {
       ws.onmessage = async (event) => {
         let message = JSON.parse(event.data)
         console.log(message)
-        // if(message.refreshFlag){
-        //   await this.$store.dispatch('getUnselectedOrdersDeliverer')
-        // }
-        // else if(message.status == 'Ready'){
-        //   if(message.delivererID==this.korisnik.id){
-        //     // await this.$store.dispatch("primiObavestenjeDeliverer", message)
+        if(message.messageType == "Refresh"){
+          await this.$store.dispatch('getUnselectedOrdersDeliverer')
+        }
+        else if(message.messageType == 'OrderReady'){
+          if(message.delivererID==this.korisnik.id){
+            await this.$store.dispatch("primiObavestenjeDeliverer", message)
 
-        //   }
-        // }
-        // else{
-        //   }
+          }
+        }
+        else if(message.messageType == 'newOrder'){
+          await this.$store.dispatch('getUnselectedOrdersDeliverer')
+        }
         
-        await this.$store.dispatch('getUnselectedOrdersDeliverer')
       }
 
     }
