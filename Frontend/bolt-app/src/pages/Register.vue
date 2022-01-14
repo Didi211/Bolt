@@ -29,7 +29,7 @@
                                 <input v-model="formC.username" type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="">
                                 <input v-model="formC.location" type="text" class="form-control" name="address" placeholder="Adresa" required="" autofocus="">
                                 <input v-model="formC.password" type="password" class="form-control" name="password" placeholder="Šifra" required="" /> 
-                                <button @click.prevent="registerCustomer" class="btn btn-lg btn-primary dugme ">Registruj se</button>
+                                <button @click.prevent="registerCustomer" class="btn btn-lg btn-dark dugme ">Registruj se</button>
                         </form>
                     </div>
                     <div v-if="restaurantSel">
@@ -39,7 +39,7 @@
                                 <input v-model="formR.username" type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="">
                                 <input v-model="formR.location" type="text" class="form-control" name="address" placeholder="Adresa" required="" autofocus="">
                                 <input v-model="formR.password" type="password" class="form-control" name="password" placeholder="Šifra" required="" /> 
-                                <button @click.prevent="registerRestaurant" class="btn btn-lg btn-primary dugme ">Registruj se</button>
+                                <button @click.prevent="registerRestaurant" class="btn btn-lg btn-dark dugme ">Registruj se</button>
                         </form>
                     </div>
                     <div v-if="delivererSel">
@@ -61,7 +61,7 @@
                                         <label class="btn btn-secondary dugmezaprevoz" for="bike">Bicikla</label>
                                     </div>
                                 </div>
-                                <button @click.prevent="registerDeliverer" class="btn btn-lg btn-primary dugme ">Registruj se</button>
+                                <button @click.prevent="registerDeliverer" class="btn btn-lg btn-dark dugme ">Registruj se</button>
                         </form>
                     </div>
                     <div class="row imanalog">

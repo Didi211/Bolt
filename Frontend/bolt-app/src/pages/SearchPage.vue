@@ -11,12 +11,12 @@
         </div>
         <div class="row">
             <div v-if="!pretraga">
-                <button type="submit" class="btn btn-primary marstil" @click="pretrazi">
+                <button type="submit" class="btn btn-dark marstil" @click="pretrazi">
                         <span>Pretraži</span>
                       </button>
             </div>
             <div v-else>
-                <button type="submit" class="btn btn-primary marstil" @click="otkazi">
+                <button type="submit" class="btn btn-dark marstil" @click="otkazi">
                         <span>Otkaži pretragu</span>
                 </button>
             </div>

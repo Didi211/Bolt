@@ -25,7 +25,7 @@
                     </div>
                     <div class="card-body">
                         <div class="text-center">
-                            <button @click="dodajKategoriju" type="submit" class="btn btn-primary marstil">Dodaj kategoriju jelu</button>
+                            <button @click="dodajKategoriju" type="submit" class="btn btn-dark marstil">Dodaj kategoriju jelu</button>
                         </div>
                     </div>
                 </div>

@@ -16,19 +16,23 @@
                     <div v-if="order.status === 'Pending'" class="row card-body">
                         <div class="col-xl-12">
                             <div class="text-center m-3">
-                                <button @click="prihvatiPorudzbinu" type="submit" class="btn btn-primary marstil">Prihvati porudzbinu</button>
+                                <button @click="prihvatiPorudzbinu" type="submit" class="btn btn-dark marstil">Prihvati porudzbinu</button>
                             </div>
                             <div class="text-center m-3">
-                                <button @click="odbijPorudzbinu" type="submit" class="btn btn-primary marstil">Odbij porudzbinu</button>
+                                <button @click="odbijPorudzbinu" type="submit" class="btn btn-dark marstil">Odbij porudzbinu</button>
                             </div>
                         </div>
                     </div>
                     <div v-else-if="order.status === 'Accepted'" class="row card-body">
-                        
+                        <div class="col-xl-12">
+                            <div class="text-center m-3">
+                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil">Zavrsi obradu porudzbine</button>
+                            </div>
+                        </div>
                     </div>
-                    <div v-else-if="order.status === 'Ready'" class="row card-body">
+                    <!-- <div v-else-if="order.status === 'Ready'" class="row card-body">
                         
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -71,6 +75,14 @@ export default defineComponent({
             }
 
             await this.$store.dispatch('declineOrderStore', orderInfo).then(()=>{
+            })
+        },
+        async zavrsiObraduPorudzbine(){
+            let orderInfo = {
+                orderID:this.order.orderID
+            }
+             await this.$store.dispatch('readyOrderStore', orderInfo).then(()=>{
+                console.log("sve izvrseno")
             })
         }
     },
