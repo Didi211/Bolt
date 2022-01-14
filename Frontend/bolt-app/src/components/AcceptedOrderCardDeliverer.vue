@@ -10,12 +10,12 @@
     <h5><b>Adresa musterije:</b> {{ order.onAddress }} </h5>
     <h5><b>Note:</b> {{order.note}}</h5>
     <h5><b>Status:</b> {{order.status}}</h5>
-    <div v-if="obDeliverer.status=='Ready'">
+    <div v-if="order.status=='Ready'">
       <button type="button" class="btn  btn-dark dugme" @click="pickedUp">Pokupljeno</button>
     </div>
-    <div v-else>
+    <!-- <div v-else>
       <button type="button" class="btn  btn-dark dugme" @click="finished"> Dostavljeno</button>
-    </div>
+    </div> -->
     
   </div>
 </template>
@@ -43,6 +43,7 @@ export default {
   },
   methods:{
     pickedUp(){
+      
       this.orderid.orderID=this.$props.order.orderID
       this.$store.dispatch('pickedUpOrderDeliverer', this.orderid)
 

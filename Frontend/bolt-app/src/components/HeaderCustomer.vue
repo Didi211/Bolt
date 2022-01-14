@@ -21,7 +21,7 @@
                     <button type="button" class="btn btn-primary btn-sm dugme" @click="hide">x</button>
                     </div>
                 </div>
-                <div v-show="statusObavestenja.status=='Picked up'" id="p" class="hide">
+                <div v-show="statusObavestenja.status=='Picked up'" id="p" class="hide align-items-center">
                     <div class=" mr-2 alert alert-primary" >
                         Vasu porudzbinu je pokupio dostavljac!
                     <button type="button" class="btn btn-primary btn-sm dugme" @click="hide">x</button>
@@ -116,5 +116,14 @@ a.disabled {
 }
 .hide{
     display: block;
+}
+.dugme{
+    background-color: transparent;
+    border: none;
+    color: blue;
+    font-size: 1.5rem;
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 </style>

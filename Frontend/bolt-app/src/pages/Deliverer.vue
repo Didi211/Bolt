@@ -35,8 +35,13 @@
                                         :order="order"/>
                 </div>
                 <div class="col-md-2">
-                <h5 class="red">Notifikacije</h5>
-
+                    <h5 class="red">Notifikacije</h5>
+                    <div v-if="notifikacija != ''" class="hide" id="hide">
+                        <div class=" mr-2 alert alert-primary">
+                        Porudzbina sa id: {{notifikacija}} je spremna da se pokupi!
+                            <button type="button" class="btn btn-primary btn-sm dugme" @click="hide">x</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,7 +89,10 @@ export default defineComponent({
         },
         deliverer(){
             return this.$store.getters['getDeliverer']
-        }
+        },
+        notifikacija(){
+            return this.$store.getters['getObPickUp']
+        },
     },
     methods:{
         promeniVozilo(){
@@ -99,6 +107,9 @@ export default defineComponent({
             this.$store.dispatch('changeVehicle', vozilo).then(()=>{
                 
             })
+        },
+        hide(){
+            document.getElementById("hide").style.display="none"
         }
     },
     async created(){
@@ -134,5 +145,8 @@ export default defineComponent({
 .orders{
     display:flex;
     justify-content: center;
+}
+.hide{
+    display: block;
 }
 </style>

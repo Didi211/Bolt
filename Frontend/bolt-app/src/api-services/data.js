@@ -31,7 +31,8 @@ export default new Vuex.Store({
         readyOrdersStore:[],
         obCustomer: "",
         obDeliverer: null,
-        changeDisabledOrderID:""
+        changeDisabledOrderID:"",
+        obPickUp:""
     },
     getters:{
         getOrderHistory(state){
@@ -94,6 +95,9 @@ export default new Vuex.Store({
         getChangeDisabledOrderID(state){
             console.log("usao u getter")
             return state.changeDisabledOrderID
+        },
+        getObPickUp(state){
+            return state.obPickUp
         }
     },
     actions:{
@@ -461,6 +465,9 @@ export default new Vuex.Store({
         changeDisabledOrderID({commit},orderID){
             console.log("usao u dispatch")
             commit('setChangeDisabledOrderID', orderID)
+        },
+        obPickUpOrderID({commit}, orderID){
+            commit('setObPickUp', orderID)
         }
     },
     mutations:{
@@ -539,6 +546,9 @@ export default new Vuex.Store({
         setChangeDisabledOrderID(state, orderID){
             console.log("usao u setter")
             state.changeDisabledOrderID = orderID
+        },
+        setObPickUp(state, ob){
+            state.obPickUp=ob
         }
     }
 })

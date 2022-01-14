@@ -59,8 +59,11 @@ export default {
           await this.$store.dispatch('getUnselectedOrdersDeliverer')
         }
         else if(message.messageType == 'OrderReady'){
+          console.log(message)
           if(message.delivererID==this.korisnik.id){
             await this.$store.dispatch("primiObavestenjeDeliverer", message)
+            await this.$store.dispatch('obPickUpOrderID', message.orderID)
+            await this.$store.dispatch('getAcceptedOrdersByDeliverer')
 
           }
         }
