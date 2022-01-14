@@ -21,6 +21,7 @@ const GetCustomerID = async (orderID) => {
         let customerID = RecordsToJSON(customer.records)[0].uuid;   
         return customerID;
     } catch (e) {
+
         throw e;
     }
 }
@@ -32,7 +33,6 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
         for await (let element of req.body.meals) {
             price += await GetMealPrice(element)
         }
-        console.log(StatusFlags.pending);
         let order = await neo4j.model("Order").create({
             price: price,
             onAddress: req.body.onAddress,
@@ -66,7 +66,6 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
             storeID: req.body.storeID,
             meals: allMeals
         }
-        console.log("Poruka:",poruka);
         await redis_client.publish("app:store",JSON.stringify(poruka));
         //ili ovako, da u redisu pamtimo samo  orderedok se ne izvrse ali ne cele objekte, vec njihov id i status 
         await redis_client.sAdd('orders:pending',`'${orderJson.orderID}'`);
@@ -114,8 +113,6 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
             order: NodeToJson(order),
             storeID: NodeToJson(store) 
         }
-        console.log('porukaCostumer:',porukaCustomer);
-        console.log('porukaDeliverer:',porukaDeliverer);
         await redis_client.publish('app:deliverer',JSON.stringify(porukaDeliverer));
         await redis_client.publish('app:customer',JSON.stringify(porukaCustomer)); 
 
@@ -152,6 +149,7 @@ const DeclineOrderRestaraunt = async (req,res) =>{ // push ka klijentu ,status u
     }
     catch(e) { 
         res.status(500).send(e);
+        console.log(e);
     }
 }
 const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavljacima ide forced refresh, ukoliko je prihvacena vec vrati resepnce da jeste,status u redisu se menja
@@ -304,17 +302,16 @@ const GetPendingStore = async (req,res) => {
     try{
         let orderIDs =await redis_client.sMembers("orders:pending")
         if(orderIDs.length == 0){
-            console.log("u ifu");
             res.status(200).send(orderIDs)}
         else{        
-        let order  = await neo4j.cypher(`match (o:Order)-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store { uuid: "${req.params.storeID}"})  where o.orderID in [${orderIDs}]  return DISTINCT o`)
-        let orders = RecordsToJSON(order.records)
-        for await (let el of orders){
-                let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
-                let meals = RecordsToJSON(result.records)            
-                el.meals = meals        
-        }        
-        res.send(orders).status(200)
+            let order  = await neo4j.cypher(`match (o:Order)-[r:CONTAINS]->(m:Meal)<-[rel:OFFERS]-(s:Store { uuid: "${req.params.storeID}"})  where o.orderID in [${orderIDs}]  return DISTINCT o`)
+            let orders = RecordsToJSON(order.records)
+            for await (let el of orders){
+                    let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
+                    let meals = RecordsToJSON(result.records)            
+                    el.meals = meals        
+            }        
+            res.send(orders).status(200)
     }
     }catch(e){
         console.log(e);
@@ -323,31 +320,29 @@ const GetPendingStore = async (req,res) => {
 }
 const GetAcceptedStore = async (req,res) => {
     try{
-        console.log("u apiuju");
         let ordersAcceptedIDs =  await redis_client.sMembers("orders:accepted").catch();
-        console.log(ordersAcceptedIDs)
         let ordersHasDelivererIDs = await redis_client.sMembers("orders:hasdeliverer").catch();
         
         
         let ordersIDs = ordersAcceptedIDs.concat(ordersHasDelivererIDs);   
-        console.log(typeof ordersIDs);
         
         if(ordersIDs.length == 0){
-        console.log("u ifu");
             res.status(200).send(ordersIDs)}
         else{        
-        let orderResult  = await neo4j.cypher(
-            `match (o:Order) <-[:PREPARES]- (s:Store {uuid: "${req.params.storeID}"}) where o.orderID in [${ordersIDs}] return DISTINCT o `);
-        let orders = RecordsToJSON(orderResult.records)
-        for await (let el of orders){
-                let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
-                let meals = RecordsToJSON(result.records)            
-                el.meals = meals
-                el.status = "Accepted"        
-        }       
-        res.send(orders).status(200)}
+            let orderResult  = await neo4j.cypher(
+                `match (o:Order) <-[:PREPARES]- (s:Store {uuid: "${req.params.storeID}"}) where o.orderID in [${ordersIDs}] return DISTINCT o `);
+            let orders = RecordsToJSON(orderResult.records)
+            for await (let el of orders){
+                    let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
+                    let meals = RecordsToJSON(result.records)            
+                    el.meals = meals
+                    el.status = "Accepted"        
+            }       
+            res.send(orders).status(200)
+        }
     }catch(e){
         res.status(500).send(e)
+        console.log(e);
     }
     
 
@@ -370,6 +365,8 @@ const GetReadyStore = async (req,res) => {
 
     }catch(e){
         res.status(500).send(e)
+        console.log(e);
+
     }
 }
 const GetPendingDeliverer =async (req,res) => {
@@ -388,9 +385,11 @@ try {
     
     }
     res.send(o).status(200)}
-} catch (e) {
-    res.status(500).send(e)
-}    
+    } catch (e) {
+        res.status(500).send(e)
+        console.log(e);
+
+    }    
 }
 const GetAcceptedDeliverer =async (req,res) => {    
     try {
@@ -410,6 +409,8 @@ const GetAcceptedDeliverer =async (req,res) => {
     }
     } catch (e) {
         res.status(500).send(e)
+        console.log(e);
+
     }   
 }
 
