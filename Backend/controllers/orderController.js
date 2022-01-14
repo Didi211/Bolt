@@ -304,6 +304,7 @@ const GetPendingStore = async (req,res) => {
 const GetAcceptedStore = async (req,res) => {
     try{
         let ordersAcceptedIDs =  await redis_client.sMembers("orders:accepted");
+        console.log(ordersAcceptedIDs)
         let ordersHasDelivererIDs = await redis_client.sMembers("orders:hasdeliverer");
         let ordersIDs = ordersAcceptedIDs.concat(ordersHasDelivererIDs);
         

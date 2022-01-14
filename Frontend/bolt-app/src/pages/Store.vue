@@ -108,6 +108,7 @@ export default defineComponent({
         this.isDataLoaded = false
         Promise.all([await this.$store.dispatch('getStoreById', Vue.$cookies.get("id")), await this.$store.dispatch('getPendingOrdersStore') ,
         await this.$store.dispatch('getAcceptedOrdersStore'),await this.$store.dispatch('getReadyOrdersStore')]).then(()=>{
+            console.log("zavrseno")
             this.isDataLoaded = true;
         })
     }
