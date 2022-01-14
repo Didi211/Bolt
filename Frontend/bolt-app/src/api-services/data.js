@@ -366,6 +366,7 @@ export default new Vuex.Store({
         },
         async getUnselectedOrdersDeliverer({commit}){
             return await Api().get('/api/order/pendingDeliverer/').then(res=>{
+                console.log(res.data)
                 commit('setUnselectedOrdersDeliverer',res.data)
             }).catch(err=>{
                 console.log(err)

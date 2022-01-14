@@ -52,7 +52,13 @@ export default {
     else if(this.korisnik.tip == 'Deliverer'){
       //otvori web socket za njegov port
       const ws = new WebSocket("ws://localhost:3001/");
-      await this.$store.dispatch("postaviWebSocket", ws)
+      ws.onmessage = async (event) => {
+        let message = JSON.parse(event.data)
+        console.log(message)
+        // await this.$store.dispatch("primiObavestenjeDeliverer", message)
+        await this.$store.dispatch('getUnselectedOrdersDeliverer')
+        
+      }
 
     }
     else if(this.korisnik.tip == 'Store'){
