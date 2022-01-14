@@ -364,6 +364,15 @@ export default new Vuex.Store({
                 console.log(err)
             })
         },
+        async getUnselectedOrdersDeliverer({commit}){
+            return await Api().get('/api/order/pendingDeliverer/').then(res=>{
+                console.log(res.data)
+                commit('setUnselectedOrdersDeliverer',res.data)
+            }).catch(err=>{
+                console.log(err)
+            })
+
+        },
         async getPendingOrdersStore({commit}){
             return await Api().get('/api/order/pending/'+Vue.$cookies.get("id")).then(res=>{
                 const pendingOrders = res.data
@@ -416,7 +425,7 @@ export default new Vuex.Store({
         },
         primiObavestenjeMusteriji({commit}, message){
 
-            commit("postaviObavestenjeMusteriji", message.status)
+            commit("postaviObavestenjeMusteriji", message)
         }
     },
     mutations:{

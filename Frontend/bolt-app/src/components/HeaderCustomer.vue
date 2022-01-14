@@ -3,12 +3,12 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container px-4 px-lg-5">
                 <a class="navbar-brand disabled" href="#!" disabled="disabled">Dobrodosli, {{username}}!</a>
-                <div v-show="statusObavestenja=='Accepted'" >
+                <div v-show="statusObavestenja.status=='Accepted'" >
                     <div class=" mr-2 alert alert-primary">
                         Vasa porudzbina je prihvacena!
                     </div>
                 </div>
-                <div v-show="statusObavestenja=='Declined'" >
+                <div v-show="statusObavestenja.status=='Declined'" >
                     <div class=" mr-2 alert alert-primary">
                         Vasa porudzbina je odbijena!
                     </div>
