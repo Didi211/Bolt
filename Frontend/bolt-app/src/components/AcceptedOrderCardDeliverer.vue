@@ -1,6 +1,6 @@
 <template>
   <div class=" Usluga">
-    <h4><b>Narudzbina</b></h4>
+    <h4><b>Narudzbina: {{order.orderID}}</b></h4>
     <div v-for="r in order.restaraunt" :key="r.uuid">
     <h5><b>Restoran:</b> {{ r.name }}</h5>
     <h5><b>Adresa restorana:</b> {{ r.location }} </h5>
@@ -10,7 +10,13 @@
     <h5><b>Adresa musterije:</b> {{ order.onAddress }} </h5>
     <h5><b>Note:</b> {{order.note}}</h5>
     <h5><b>Status:</b> {{order.status}}</h5>
-    <button type="button" class="btn  btn-dark dugme"> Dostavljeno</button>
+    <div v-if="obDeliverer.status=='Ready'">
+      <button type="button" class="btn  btn-dark dugme" @click="pickedUp">Pokupljeno</button>
+    </div>
+    <div v-else>
+      <button type="button" class="btn  btn-dark dugme" @click="finished"> Dostavljeno</button>
+    </div>
+    
   </div>
 </template>
 
@@ -25,12 +31,22 @@ export default {
   },
   data(){
     return{
+      orderid:{
+        orderID: ""
+      }
+    }
+  },
+  computed:{
+    obDeliverer(){
+      return this.$store.getters['getObDeliverer']
     }
   },
   methods:{
-    // acceptOrder(){
-    //   this.$store.dispatch('aktivirajUsluguAdmin', this.usluga.id);
-    // }
+    pickedUp(){
+      this.orderid.orderID=this.$props.order.orderID
+      this.$store.dispatch('pickedUpOrderDeliverer', this.orderid)
+
+    }
   }
 };
 </script>

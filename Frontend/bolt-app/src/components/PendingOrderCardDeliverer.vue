@@ -1,6 +1,6 @@
 <template>
   <div class=" Usluga">
-    <h4><b>Narudzbina</b></h4>
+    <h4><b>Narudzbina: {{order.orderID}}</b></h4>
     <div v-for="r in order.restaraunt" :key="r.uuid">
     <h5><b>Restoran:</b> {{ r.name }}</h5>
     <h5><b>Adresa restorana:</b> {{ r.location }} </h5>
