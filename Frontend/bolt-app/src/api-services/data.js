@@ -382,6 +382,7 @@ export default new Vuex.Store({
         async getAcceptedOrdersStore({commit}){
             return await Api().get('/api/order/acceptedStore/'+Vue.$cookies.get("id")).then(res=>{
                 const accOrders = res.data
+                 console.log(accOrders)
                 commit('setAcceptedOrdersStore', accOrders)
             })  
         },

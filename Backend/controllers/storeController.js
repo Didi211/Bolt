@@ -121,7 +121,7 @@ const GetStore = async (req,res) => {
     try { 
         let store = await neo4j.model('Store').find(uuid);
         let storeDTO = convertToDTO(store);
-        redis_client.publish('app:customer','poruka neka');
+        
         res.status(200).send(storeDTO)
     }
     catch(e) { 
