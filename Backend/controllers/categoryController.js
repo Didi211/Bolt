@@ -8,12 +8,19 @@ const category = require('../models/categoryModel');
 const CreateCategory = async (req,res) => { 
     let categoryBody = req.body   
     try { 
+        let newRedisData = []
+        redisData = await redis_client.get('categories')
+        if(redisData != null)
+            newRedisData = JSON.parse(redisData)
+            
         let category = await neo4j.model("Category").mergeOn({
             name: categoryBody.name
         })
         let categoryDTO = { 
             name: category._properties.get('name')
         }
+        newRedisData.push(categoryDTO)
+        redis_client.set('categories',JSON.stringify(newRedisData))
         res.status(200).send(categoryDTO)
     }
     catch(e) { 

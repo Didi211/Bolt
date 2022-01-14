@@ -302,7 +302,17 @@ const GetPendingStore = async (req,res) => {
 }
 const GetAcceptedStore = async (req,res) => {
     try{
-        let order  = await neo4j.cypher(`match (s:Store{uuid : "${req.params.storeID}"})-[rel:PREPARES]->(o:Order) WHERE  o.status = "${statusFlags.accepted}" OR o.status = "${statusFlags.hasDeliverer}" return o`)
+        console.log("jel si tu");
+        let narudzbine = JSON.parse( await redis_client.get("app:accepted"))
+        // narudzbine.push(JSON.parse( await redis_client.get("app:deliverer")))
+        let obj = await redis_client.lRange("order",0,-1)
+        console.log(obj)
+        // let restaranove = narudzbine.filter(e => {
+            // e == req.params.storeID
+        // })
+        // console.log(restaranove);
+
+        let order  = await neo4j.cypher(`match (o:Order) where o.orderID in [${obj}] return o`)
         let orders = RecordsToJSON(order.records)
         for await (let el of orders){
                 let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
