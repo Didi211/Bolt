@@ -62,12 +62,13 @@ const CreateOrder = async (req,res) => { //push ka restoranu, kreira se u redis 
             });
             
         }
-        let poruka = { 
+        let porukaStore = { 
+            messageType: "NewOrder",
             order : orderJson,
             storeID: req.body.storeID,
             meals: allMeals
         }
-        await redis_client.publish("app:store",JSON.stringify(poruka));
+        await redis_client.publish("app:store",JSON.stringify(porukaStore));
         //ili ovako, da u redisu pamtimo samo  orderedok se ne izvrse ali ne cele objekte, vec njihov id i status 
         await redis_client.sAdd('orders:pending',`'${orderJson.orderID}'`);
         // redis_client.hSet('ordersPending',`${orderJson.orderID}`,JSON.stringify(poruka));
@@ -111,6 +112,7 @@ const AcceptOrderRestaraunt = async (req,res) =>{  // push ka klijentu i ka dost
             status: StatusFlags.accepted
         }
         let porukaDeliverer = { 
+            messageType: "newOrder",
             order: NodeToJson(order),
             storeID: NodeToJson(store) 
         }
@@ -139,13 +141,13 @@ const DeclineOrderRestaraunt = async (req,res) =>{ // push ka klijentu ,status u
         }
         
         // await redis_client.hDel('orders',`${req.body.orderID}`); 
-        let poruka = { 
+        let porukaCustomer= { 
             orderID : req.body.orderID,
             customerID: await GetCustomerID(req.body.orderID),
             status: StatusFlags.declined
         }
         await redis_client.sRem('orders:pending',`'${req.body.orderID}'`);
-        await redis_client.publish('app:customer',JSON.stringify(poruka)); //ili da saljemo samo accepted 
+        await redis_client.publish('app:customer',JSON.stringify(porukaCustomer)); //ili da saljemo samo accepted 
         res.status(200).send();
     }
     catch(e) { 
@@ -199,9 +201,10 @@ const AcceptOrderDeliverer = async (req,res) =>{ //push ka klijentu , ka dostavl
         }
         //notify delivery guys for refresh
         let porukaDeliverer = { 
-            refreshFlag: true
+            messageType: "Refresh"
         }
         let porukaStore = { 
+            messageType: "HasDeliverer",
             status: statusFlags.hasDeliverer,
             orderID: req.body.orderID,
             storeID: storeJson.uuid
@@ -236,6 +239,7 @@ const OrderReady = async (req,res) =>{     //push ka dostavljacima, status u red
             delivererJson = element;
         });
         let porukaDeliverer = { 
+            messageType: "OrderReady",
             orderID: req.body.orderID,
             delivererID: delivererJson.uuid,
             status: statusFlags.ready
@@ -254,14 +258,31 @@ const OrderPickedUp = async(req,res) =>{ //push ka klijentu, statu u redisu se m
         await redis_client.sAdd('orders:delivering',`'${req.body.orderID}'`);
         await redis_client.expire('orders:delivering',24*60*60);
 
-        
+        queryResult = await neo4j.cypher(
+            `match (s:Store) -[:PREPARES]-> (o:Order {orderID: "${req.body.orderID}"})  return s`);
+        if (queryResult.records.length < 1) { 
+            res.status(400).send("Couldn't find store.");
+            return;
+        }
+        let store = RecordsToJSON(queryResult.records);
+        let storeJson;
+        store.forEach(element => {
+            storeJson = element;
+        });
+
         let porukaCustomer = { 
             orderID: req.body.orderID,
             customerID: await GetCustomerID(req.body.orderID),
             status: statusFlags.pickedUp
         }
+        let porukaStore = { 
+            messageType: "PickedUp",
+            orderID: req.body.orderID,
+            storeID: storeJson.uuid
+        }
        
-        await redis_client.publish('app:customer',porukaCustomer)
+        await redis_client.publish('app:customer',JSON.stringify(porukaCustomer));
+        await redis_client.publish('app:store',JSON.stringify(porukaStore));
         res.status(200).send();
         
     } catch (e) {
@@ -287,12 +308,12 @@ const OrderFinished = async (req,res) => { //push ka klijentu, status u neo4j se
         }
 
        
-        let customerMsg = {
+        let porukaCustomer = {
             customerID:  await GetCustomerID(req.body.orderID),
             status: statusFlags.finished
         }
         await redis_client.sRem('orders:delivering',`'${req.body.orderID}'`);
-        await redis_client.publish('app:customer',JSON.stringify(customerMsg))
+        await redis_client.publish('app:customer',JSON.stringify(porukaCustomer));
     }
     catch (e) {
         console.log(e);
