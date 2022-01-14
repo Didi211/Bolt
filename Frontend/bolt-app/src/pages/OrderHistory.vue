@@ -16,7 +16,7 @@
             </div>
             
         </div>
-        <div class="row">
+        <div class="row futer">
             <Footer />
         </div>
     </div>

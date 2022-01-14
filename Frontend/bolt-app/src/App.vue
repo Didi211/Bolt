@@ -38,7 +38,13 @@ export default {
     if(this.korisnik.tip == 'Customer'){
       //otvori web socket za njegov port
       const ws = new WebSocket("ws://localhost:3000/");
-      await this.$store.dispatch("postaviWebSocket", ws)
+      ws.onmessage = (event) => {
+        let message = event.data
+        console.log(message.customerID)
+        // await this.$store.dispatch("postaviWebSocket", ws)
+      }
+
+      
     }
     else if(this.korisnik.tip == 'Deliverer'){
       //otvori web socket za njegov port
@@ -64,6 +70,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+
 }
 </style>
