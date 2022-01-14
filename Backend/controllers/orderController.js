@@ -387,7 +387,7 @@ const GetReadyStore = async (req,res) => {
             res.status(200).send(ordersIDs)}
         else{       
         let order  = await neo4j.cypher(
-            `match (o:Order) where o.orderID in [${ordersIDs}] return DISTINCT o`)
+            `match (o:Order) <-[:PREPARES]- (s:Store {uuid: "${req.params.storeID}"}) where o.orderID in [${ordersIDs}] return DISTINCT o`)
         let orders = RecordsToJSON(order.records)
         for await (let el of orders){
                 let result = await neo4j.cypher(`match (o:Order { orderID : "${el.orderID}"})-[rel:CONTAINS]->(m:Meal) return m`)
