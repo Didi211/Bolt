@@ -71,4 +71,12 @@ const GetAllCategories = async (req,res) =>  {
         res.status(500).send(e.message || e.toString())
     }
 }
+const DeleteCategory = (req,res) => {
+    neo4j.cypher(`match (m:Meal)-[rel:BELONGS_TO]->(c:Category {name : "${req.params.categoryName}"}) delete rel,c`).then(result => {
+        //console.log(result);
+        let meals = RecordsToJSON(result.records)
+    
+        res.send(meals).status(200)
+    }).catch(err => console.log(err))
+}
 module.exports = {CreateCategory, DeleteCategory, GetAllCategories};
