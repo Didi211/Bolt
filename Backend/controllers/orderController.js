@@ -301,8 +301,6 @@ const OrderFinished = async (req,res) => { //push ka klijentu, status u neo4j se
             res.status(400).send("Couldn't find the order.");
             return;
         }
-        
-
        
         let porukaCustomer = {
             customerID:  await GetCustomerID(req.body.orderID),

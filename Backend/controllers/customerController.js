@@ -3,6 +3,7 @@ const neo4j = require('../config/neo4j_config');
 const customer = require('../models/customerModel');
 const token = require('../config/token')
 const bcrypt = require('bcrypt');
+const statusFlags = require('../statusFlags');
 
 const saltRounds = 10;
 
@@ -101,7 +102,7 @@ const RecommendedMeals = async (req,res) => {
         //nadji  jela tom customeru sa njihovim kateogorijama 
         let queryResult = await neo4j.cypher(
             `match (c:Customer {uuid: "${customerID}"}) 
-                -[:ORDERED]-> (o:Order)
+                -[:ORDERED]-> (o:Order {status: "${statusFlags.finished}"})
                 -[:CONTAINS]-> (m:Meal)
                 -[:BELONGS_TO]->(cat:Category)
 
@@ -109,6 +110,7 @@ const RecommendedMeals = async (req,res) => {
         );
         if (queryResult.records.length === 0) { 
             res.status(200).send([]);
+            return;
         }
 
         //pretovori u JSOn
@@ -129,15 +131,15 @@ const RecommendedMeals = async (req,res) => {
             extractedCategories.add(`'${element.category.name}'`);
             extractedMealsIDs.push(`'${element.meal.mealID}'`);
         });
-        
+        console.log(extractedCategories);
         //pribavljanje
         queryResult = await neo4j.cypher(
             `match (s:Store) -[:OFFERS]-> (m:Meal) -[:BELONGS_TO]-> (cat:Category)
-                where cat.name in [${extractedCategories}] and 
+                where cat.name in [${Array.from(extractedCategories)}] and 
                 not m.mealID in [${extractedMealsIDs}]
                 return m,s order by rand() limit 5`
         );
-        if (queryResult.records.length === 0) { 
+        if (queryResult.records.length === 0) { extractedCategories
             res.status(400).send("Couldn't load similar meals.");
         }
 
@@ -146,9 +148,9 @@ const RecommendedMeals = async (req,res) => {
         queryResult.records.forEach(record => { 
             let meal_store = new Object();
             meal_store.meal = record._fields[0].properties;
-            meal_store.storeID = record._fields[1].properties.storeID;
+            meal_store.store = record._fields[1].properties;
 
-            meals_storesDB.push(meal_category);
+            meals_storesDB.push(meal_store);
         });
         
         res.status(200).send(meals_storesDB);

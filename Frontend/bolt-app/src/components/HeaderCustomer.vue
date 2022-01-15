@@ -40,6 +40,7 @@
                         <router-link :to="{name: 'Homepage'}"><li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Pocetna</a></li></router-link>
                         <router-link :to="{name: 'SearchPage'}"><li class="nav-item"><a class="nav-link" href="#!">Pretraga</a></li></router-link>
                         <router-link :to="{name: 'OrderHistory'}"><li class="nav-item"><a class="nav-link" href="#!">Istorija narucivanja</a></li></router-link>
+                        <router-link :to="{name: 'RecommendationPage'}"><li class="nav-item"><a class="nav-link" href="#!">Preporuke</a></li></router-link>
                         <router-link :to="{name: 'Homepage'}"><li class="nav-item"><a class="nav-link" href="#!" @click="logoutKorisnik">Odjavi se</a></li></router-link>
                         <!-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
