@@ -13,32 +13,38 @@
                 </div>
             </header>
         <!-- Section-->
-        <div class="row">
-            <div class="col-xl-12 justify-content-center margine">
-                <h3>Krenite da naručujete hranu iz <b>najboljih restorana</b>!</h3>
-                <div class="row justify-content-center">
-                        <div class="col-xl-1">
-                        <router-link :to="{name:'Login'}" class="crnistil">Prijavite se!</router-link>
+            <div class="row">
+                <div class="col-xl-12 justify-content-center margine">
+                    <h3>Krenite da naručujete hranu iz <b>najboljih restorana</b>!</h3>
+                    <div class="row justify-content-center">
+                            <div class="col-xl-1">
+                            <router-link :to="{name:'Login'}" class="crnistil">Prijavite se!</router-link>
 
-                        </div>
-                        <div class="col-xl-1">
-                        <router-link :to="{name:'Register'}" class="crnistil">Registrujte se!</router-link>
+                            </div>
+                            <div class="col-xl-1">
+                            <router-link :to="{name:'Register'}" class="crnistil">Registrujte se!</router-link>
 
-                        </div>
+                            </div>
+                    </div>
+
                 </div>
+            </div>
+            <div v-if="isDataLoaded">
+                <section class="">
+                    <div class="container px-4 px-lg-5 mt-5">
+                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">
+                            
+                            <StoreCard v-for="store in top5" 
+                                        :key="store.id" 
+                                        :store="store"/>
+                        </div>
+                    </div>
+                </section>
 
             </div>
-        </div>
-            <section class="">
-                <div class="container px-4 px-lg-5 mt-5">
-                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">
-                        
-                        <StoreCard v-for="store in top5" 
-                                    :key="store.id" 
-                                    :store="store"/>
-                    </div>
-                </div>
-            </section>
+            <div v-else>
+                <AppSpinner/>
+            </div>
         </div>
         <div class="row">
             <Footer />
@@ -52,13 +58,15 @@ import { defineComponent } from '@vue/composition-api'
 import  Header  from '@/components/Header.vue'
 import  Footer  from '@/components/Footer.vue'
 import StoreCard from '@/components/StoreCardUnregComponent.vue'
+import AppSpinner from '@/components/AppSpinner.vue'
 
 export default defineComponent({
     name: "Homepage",
     components: {
         Header,
         Footer,
-        StoreCard
+        StoreCard,
+        AppSpinner
     },
     data(){
         return{

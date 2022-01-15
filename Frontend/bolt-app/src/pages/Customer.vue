@@ -3,7 +3,7 @@
         <div class="row">
             <HeaderCustomer />
         </div>
-        <div class="row">
+        <div v-if="isDataLoaded" class="row">
             <header class="bg-dark py-5">
                 <div class="container px-4 px-lg-5 my-5">
                     <div class="text-center text-white">
@@ -23,6 +23,9 @@
                 </div>
             </section>
         </div>
+        <div v-else>
+            <AppSpinner />
+        </div>
         <div class="row">
             <Footer />
         </div>
@@ -35,13 +38,21 @@ import { defineComponent } from '@vue/composition-api'
 import  HeaderCustomer  from '@/components/HeaderCustomer.vue'
 import  Footer  from '@/components/Footer.vue'
 import StoreCard from '@/components/StoreCardComponent.vue'
+import AppSpinner from '@/components/AppSpinner.vue'
+
 
 export default defineComponent({
-    name: "Homepage",
+    name: "Customer",
     components: {
         HeaderCustomer,
         Footer,
-        StoreCard
+        StoreCard,
+        AppSpinner
+    },
+    data(){
+        return{
+            isDataLoaded:true
+        }
     },
     computed:{
         allStores(){

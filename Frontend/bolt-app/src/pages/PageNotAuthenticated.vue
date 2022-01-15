@@ -24,22 +24,6 @@ export default {
   name: "PageNotAuthenticated",
   components: {
     Header
-  },
-  methods:{
-      vratiRutu(){
-          if(this.tipKorisnika == "A"){
-              return 'AdminHomePage'
-          }
-          else if(this.tipKorisnika == "R"){
-              return 'RadnikHomePage'
-          }
-          else if(this.tipKorisnika == "M"){
-              return 'MusterijaHomePage'
-          }
-          else{
-              return 'PosetilacHomePage'
-          }
-      }
   }
 
 };
