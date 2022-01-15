@@ -13,63 +13,38 @@
                 </div>
             </header>
         <!-- Section-->
-        <div class="row">
-            <div class="col-xl-12 justify-content-center margine">
-                <h3>Krenite da narucujete hranu iz <b>najboljih restorana</b>!</h3>
-                <div class="row justify-content-center">
-                        <div class="col-xl-1">
-                        <router-link :to="{name:'Login'}" class="crnistil">Prijavite se!</router-link>
+            <div class="row">
+                <div class="col-xl-12 justify-content-center margine">
+                    <h3>Krenite da naručujete hranu iz <b>najboljih restorana</b>!</h3>
+                    <div class="row justify-content-center">
+                            <div class="col-xl-1">
+                            <router-link :to="{name:'Login'}" class="crnistil">Prijavite se!</router-link>
 
-                        </div>
-                        <div class="col-xl-1">
-                        <router-link :to="{name:'Register'}" class="crnistil">Registrujte se!</router-link>
+                            </div>
+                            <div class="col-xl-1">
+                            <router-link :to="{name:'Register'}" class="crnistil">Registrujte se!</router-link>
 
-                        </div>
+                            </div>
+                    </div>
+
                 </div>
+            </div>
+            <div v-if="isDataLoaded">
+                <section class="">
+                    <div class="container px-4 px-lg-5 mt-5">
+                        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">
+                            
+                            <StoreCard v-for="store in top5" 
+                                        :key="store.id" 
+                                        :store="store"/>
+                        </div>
+                    </div>
+                </section>
 
             </div>
-        </div>
-            <section class="">
-                <div class="container px-4 px-lg-5 mt-5">
-                    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-3 justify-content-center">
-                        
-                        <StoreCard v-for="store in top5" 
-                                    :key="store.id" 
-                                    :store="store"/>
-                       
-                        <!-- <div class="col mb-5 ">
-                            <div class="card h-100"> -->
-                                <!-- Sale badge-->
-                                <!-- <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div> -->
-                                <!-- Product image-->
-                                <!-- <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." /> -->
-                                <!-- Product details-->
-                                <!-- <div class="card-body p-4">
-                                    <div class="text-center"> -->
-                                        <!-- Product name-->
-                                        <!-- <h5 class="fw-bolder">Special Item</h5> -->
-                                        <!-- Product reviews-->
-                                        <!-- <div class="d-flex justify-content-center small text-warning mb-2">
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                            <div class="bi-star-fill"></div>
-                                        </div> -->
-                                        <!-- Product price-->
-                                        <!-- <span class="text-muted text-decoration-line-through">$20.00</span>
-                                        $18.00
-                                    </div>
-                                </div> -->
-                                <!-- Product actions-->
-                                <!-- <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">Add to cart</a></div>
-                                </div>
-                            </div>
-                        </div>-->
-                    </div>
-                </div>
-            </section>
+            <div v-else>
+                <AppSpinner/>
+            </div>
         </div>
         <div class="row">
             <Footer />
@@ -82,15 +57,16 @@
 import { defineComponent } from '@vue/composition-api'
 import  Header  from '@/components/Header.vue'
 import  Footer  from '@/components/Footer.vue'
-//import Vue from 'vue'
 import StoreCard from '@/components/StoreCardUnregComponent.vue'
+import AppSpinner from '@/components/AppSpinner.vue'
 
 export default defineComponent({
     name: "Homepage",
     components: {
         Header,
         Footer,
-        StoreCard
+        StoreCard,
+        AppSpinner
     },
     data(){
         return{

@@ -24,13 +24,6 @@
             </header>
         </div>
         <div class="row">
-            <!-- <div class="col-md-3"> 
-                <p class="lead fw-normal text-black-50 mb-0">Odeljak</p>
-                <p>Pice</p>
-                <p>Paste</p>
-                <p>Pancerote</p>
-                <p>Salate</p>
-            </div> -->
             <div class="col-md-9 lista"> 
                 <div v-for="ob in obj" :key="ob.meals.mealID">
                     <h3>{{ob.section}}</h3>
@@ -54,7 +47,6 @@
 
                 </div>
             </div>
-            <!-- <h1>STORE NAME</h1> -->
         </div>
     </div>
     <div v-else>
@@ -64,11 +56,7 @@
             <Footer />
     </div>
 </div>
-<!-- heder sa korpom -->
-<!-- Naziv restorana -->
-<!-- lokacija -->
-<!-- vreme spremanja -->
-    <!-- <h1>STORE MENU</h1> -->
+
 
 </template>
 <script>
@@ -118,14 +106,7 @@ export default defineComponent({
         },
         customer(){
             return this.$store.getters['getCustomer']
-        },
-        // userObj: function(){
-        //      return  this.$store.getters['getTrenutniKorisnik']
-        //     //  return this.user
-        // }
-        // async meals(){
-        //     return await this.$store.dispatch('getMealsFromStore')
-        // }
+        }
     },
     methods:{
         onChildClickYes(value){
@@ -195,26 +176,12 @@ export default defineComponent({
         await this.$store.dispatch('getMealsFromStore', storeID)]).then(()=>{
             this.isDataLoaded = true;
         })
-        // , await this.$store.dispatch('getCustomerById')
-        // , await this.$store.dispatch('getCustomerByUsername', this.user.username)]
-        // await this.$store.dispatch('getStoreById',storeID).then(()=>{
-        //     this.isDataLoaded = true;
-        // })
-        // await this.$store.dispatch('getMealsFromStore', storeID)
-        // .then(res=>{
-        //     this.$store.dispatch('postaviPickedStore', res.data.uuid)
-        // })
     }
 })
 </script>
 
 <style scoped>
-/* .bg-dark{
-    padding: 0;
-    padding-bottom: 0%;
-    padding-top: 0%;
-    height: 50%;
-} */
+
 .naziv{
     
     width: 100%;

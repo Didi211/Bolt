@@ -32,7 +32,7 @@
                     </div>
                     <div class="card-body">
                         <div class="text-center">
-                            <button @click="izbrisiJelo" type="submit" class="btn btn-dark marstil">Izbrisi jelo iz menija</button>
+                            <button @click="izbrisiJelo" type="submit" class="btn btn-dark marstil">Izbriši jelo iz menija</button>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,6 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-// import Vue from 'vue'
 import AppSpinner from '@/components/AppSpinner.vue'
 
 export default defineComponent({
@@ -91,7 +90,6 @@ export default defineComponent({
                             position: "top-center", 
                             duration : 2000
                     })
-                    // window.location.reload()
                 })
                 this.novaKategorija.categoryName=""
             }

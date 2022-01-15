@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <h2>Preporuka jela na osnovu vasih porudzbina</h2>
+                    <h2>Preporuka jela na osnovu vaših porudzbina</h2>
                     <div  class="row row-cols-xl-4 justify-content-center">
                         <MealCard v-for="m in recMeals" 
                                     :key="m.meal.mealID" 

@@ -8,14 +8,12 @@
                         <div class="col-md-12">
                             <p>Adresa:</p>
                             <input class="m-3" type="text" v-model="narudzbina.order.onAddress" id="location">
-                            <!-- <button @click="change" class="btn btn-dark" >Izmeni</button> -->
                         </div>
                     </div>
                     <div class="row">
                     <input type="textarea" v-model="narudzbina.order.note" id="note" class="m-3 note">
                     </div>                   
-                    <button type="button" class="btn btn-dark" @click="orderMeals">Naruci ponovo</button>
-                    <!-- @click="order" -->
+                    <button type="button" class="btn btn-dark" @click="orderMeals">Naruči ponovo</button>
                 </div>
             </div>
         </div>
@@ -32,7 +30,7 @@ export default defineComponent({
     props: {
         narudzbina:{
             required: true,
-            type: Object, //da se promeni u Object posle
+            type: Object,
         }
   },
   data(){
@@ -55,14 +53,6 @@ export default defineComponent({
         },
   },
   methods:{
-      naruciPonovo(){
-          console.log('mozda da se napravi redirekcija ka storemenu za izabrani restoran za koji je bila porudzbina')
-      },
-    // change(){
-    //     this.loc.location=document.getElementById("location").value
-    //     console.log(this.loc.location)
-    //     this.$store.dispatch('changeCustomerLocation', this.loc)
-    // },
     orderMeals(){
         this.orderMeal.onAddress=this.$props.narudzbina.order.onAddress
         this.orderMeal.note=this.$props.narudzbina.order.note

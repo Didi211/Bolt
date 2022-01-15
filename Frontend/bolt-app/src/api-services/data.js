@@ -135,14 +135,6 @@ export default new Vuex.Store({
         async registerCustomer({commit}, registerInfo){
 
             return await Api().post('/api/register/customer', registerInfo).then((res)=>{
-                // const trenutniKorisnik = res.data
-                // commit('setKorisnik', trenutniKorisnik)
-                // Vue.$cookies.set("id",this.state.trenutniKorisnik.user.uuid,"1h");
-                // Vue.$cookies.set("token",this.state.trenutniKorisnik.webtoken,"1h");
-                // Vue.$cookies.set("tip",this.state.trenutniKorisnik.user.role,"1h");
-                // commit('setToken', Vue.$cookies.get("token"))
-                // commit('setTip', Vue.$cookies.get("tip"))
-                // commit('setOsobaID', Vue.$cookies.get("id"))
                 const trenKorisnik = res.data.user
                 const trenToken = res.data.webtoken
                 commit('setKorisnik', trenKorisnik)
@@ -166,14 +158,6 @@ export default new Vuex.Store({
         },
         async registerStore({commit}, registerInfo){
             return await Api().post('/api/register/store', registerInfo).then((res)=>{
-                // const trenutniKorisnik = res.data
-                // commit('setKorisnik', trenutniKorisnik)
-                // Vue.$cookies.set("id",this.state.trenutniKorisnik.user.uuid,"1h");
-                // Vue.$cookies.set("token",this.state.trenutniKorisnik.webtoken,"1h");
-                // Vue.$cookies.set("tip",this.state.trenutniKorisnik.user.role,"1h");
-                // commit('setToken', Vue.$cookies.get("token"))
-                // commit('setTip', Vue.$cookies.get("tip"))
-                // commit('setOsobaID', Vue.$cookies.get("id"))
                 const trenKorisnik = res.data.user
                 const trenToken = res.data.webtoken
                 commit('setKorisnik', trenKorisnik)
@@ -182,7 +166,6 @@ export default new Vuex.Store({
                 Vue.$cookies.set("token",this.state.token,"1h");
                 Vue.$cookies.set("tip",this.state.trenutniKorisnik.role,"1h");
                 Vue.$cookies.set("username",this.state.trenutniKorisnik.username,"1h");
-                // commit('setToken', Vue.$cookies.get("token"))
                 commit('setTip', Vue.$cookies.get("tip"))
                 commit('setOsobaID', Vue.$cookies.get("id"))
                 router.push("/Store")
@@ -197,14 +180,6 @@ export default new Vuex.Store({
         },
         async loginKorisnik({commit},loginInfo){
             await Api().post('/api/login', loginInfo).then(res=>{
-                // const trenutniKorisnik = res.data
-                // commit('setKorisnik', trenutniKorisnik)
-                // Vue.$cookies.set("id",this.state.trenutniKorisnik.user.uuid,"1h");
-                // Vue.$cookies.set("token",this.state.trenutniKorisnik.webtoken,"1h");
-                // Vue.$cookies.set("tip",this.state.trenutniKorisnik.user.role,"1h");
-                // commit('setToken', Vue.$cookies.get("token"))
-                // commit('setTip', Vue.$cookies.get("tip"))
-                // commit('setOsobaID', Vue.$cookies.get("id"))
                 const trenKorisnik = res.data.user
                 const trenToken = res.data.webtoken
                 commit('setKorisnik', trenKorisnik)
@@ -213,10 +188,8 @@ export default new Vuex.Store({
                 Vue.$cookies.set("token",this.state.token,"1h");
                 Vue.$cookies.set("tip",this.state.trenutniKorisnik.role,"1h");
                 Vue.$cookies.set("username",this.state.trenutniKorisnik.username,"1h");
-                // commit('setToken', Vue.$cookies.get("token"))
                 commit('setTip', Vue.$cookies.get("tip"))
                 commit('setOsobaID', Vue.$cookies.get("id"))
-                // commit('setOsobaID',this.state.trenutniKorisnik.userID)
                 if(this.state.trenutniKorisnik.role == "Customer")
                 {
                     router.push("/Customer")
@@ -259,9 +232,6 @@ export default new Vuex.Store({
                 Vue.$cookies.remove("token");
                 Vue.$cookies.remove("tip");
                 Vue.$cookies.remove("username")
-                // commit('setToken', null);
-                // commit('setTip', null)
-            //commit('LOGOUT_KORISNIK')
         },
         async getUserByID({commit}, id){
             return await Api().get('/api/user/'+id).then(res=>{
@@ -464,7 +434,6 @@ export default new Vuex.Store({
         async addNewCategory({dispatch}, cat){
             return await Api().post('/api/category/add', cat).then(()=>{
                 dispatch('getAllCategories')
-                // dispatch('getMealsFromStore', Vue.$cookies.get("id"))
             })    
         },
         async deleteMeal({dispatch}, mealID){

@@ -8,7 +8,6 @@
                 <h4 v-if="deliverer.vehicle=='Bike'">Vaše trenutno prevozno sredstvo je: <b>Bicikla</b> </h4>
                 <h4 v-if="deliverer.vehicle=='Car'">Vaše trenutno prevozno sredstvo je: <b>Automobil</b> </h4>
                 <h4 v-if="deliverer.vehicle=='Scooter'">Vaše trenutno prevozno sredstvo je: <b>Skuter</b> </h4>
-                <!-- {{deliverer.vehicle}} -->
             <div class="col-xl-4">
                     <h5 class="form-signin text-center">Izaberite novo prevozno sredstvo:</h5>
                 </div>
@@ -65,8 +64,6 @@ import PendingOrderCard from '@/components/PendingOrderCardDeliverer.vue'
 import AcceptedOrderCard from '@/components/AcceptedOrderCardDeliverer.vue'
 import AppSpinner from '@/components/AppSpinner.vue'
 
-//import StoreCard from '@/components/StoreCardComponent.vue'
-
 export default defineComponent({
     name: "Homepage",
     components: {
@@ -75,7 +72,6 @@ export default defineComponent({
         PendingOrderCard,
         AcceptedOrderCard,
         AppSpinner
-        //StoreInfo
     },
     data(){
         return{
@@ -103,8 +99,7 @@ export default defineComponent({
             var vozilo={
                 vehicle:  voz
             }
-            // var vozilo= JSON.stringify(voz)
-            // console.log(vozilo)
+            
 
             this.$store.dispatch('changeVehicle', vozilo).then(()=>{
                 

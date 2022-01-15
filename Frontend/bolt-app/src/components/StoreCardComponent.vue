@@ -16,10 +16,6 @@
                         <!-- Vreme isporuke-->
                     </div>
                 </div>
-                <!-- Product actions
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                </div> -->
             </div>
         </router-link>
     </div>
@@ -39,7 +35,6 @@ export default defineComponent({
     },
     methods:{
      open(){
-            // this.$router.push({ path: 'StoreMenu' })
             this.$store.dispatch('postaviPickedStore', this.store.uuid)
        }
     },

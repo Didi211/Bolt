@@ -34,23 +34,13 @@
                     <button type="button" class="btn btn-primary btn-sm dugme" @click="hide">x</button>
                     </div>
                 </div>
-                <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button> -->
                 <div >
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <router-link :to="{name: 'Homepage'}"><li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Pocetna</a></li></router-link>
+                        <router-link :to="{name: 'Homepage'}"><li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Početna</a></li></router-link>
                         <router-link :to="{name: 'SearchPage'}"><li class="nav-item"><a class="nav-link" href="#!">Pretraga</a></li></router-link>
-                        <router-link :to="{name: 'OrderHistory'}"><li class="nav-item"><a class="nav-link" href="#!">Istorija narucivanja</a></li></router-link>
+                        <router-link :to="{name: 'OrderHistory'}"><li class="nav-item"><a class="nav-link" href="#!">Istorija naručivanja</a></li></router-link>
                         <router-link :to="{name: 'RecommendationPage'}"><li class="nav-item"><a class="nav-link" href="#!">Preporuke</a></li></router-link>
                         <router-link :to="{name: 'Homepage'}"><li class="nav-item"><a class="nav-link" href="#!" @click="logoutKorisnik">Odjavi se</a></li></router-link>
-                        <!-- <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#!">Login</a></li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li><a class="dropdown-item" href="#!">Register</a></li>
-                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-                            </ul>
-                        </li> -->
                     </ul>
                     
                 </div>

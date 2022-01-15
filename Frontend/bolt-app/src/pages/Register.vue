@@ -10,20 +10,20 @@
             <div class="row dugmiciRow">
                 <div class="col-xl-6">
                     <input type="radio" class="btn-check" name="options" id="customer" autocomplete="off" checked @click="toggleTip('C')">
-                    <label class="btn btn-secondary lepodugme" for="customer">Musterija</label>
+                    <label class="btn btn-secondary lepodugme" for="customer">Mušterija</label>
 
                     <input type="radio" class="btn-check" name="options" id="restaurant" autocomplete="off" @click="toggleTip('R')">
                     <label class="btn btn-secondary lepodugme" for="restaurant">Restoran</label>
 
                     <input type="radio" class="btn-check " name="options" id="deliverer" autocomplete="off" @click="toggleTip('D')">
-                    <label class="btn btn-secondary lepodugme" for="deliverer">Dostavljac</label>
+                    <label class="btn btn-secondary lepodugme" for="deliverer">Dostavljač</label>
                 </div>
             </div>
             <div class="wrapper RegistracijaRow">
                 <div class="col-lg-8">
                     <div v-if="customerSel">
                         <form class="form-signin" @submit.prevent>
-                            <h2 class="form-signin-heading text-center ml-2 mr-2">Registracija musterije</h2>
+                            <h2 class="form-signin-heading text-center ml-2 mr-2">Registracija mušterije</h2>
                                 <input v-model="formC.name" type="text" class="form-control" name="name" placeholder="Ime" required="" autofocus="">
                                 <input v-model="formC.surname" type="text" class="form-control" name="surname" placeholder="Prezime" required="" autofocus="">
                                 <input v-model="formC.username" type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="">
@@ -44,7 +44,7 @@
                     </div>
                     <div v-if="delivererSel">
                         <form class="form-signin" @submit.prevent>
-                            <h2 class="form-signin-heading text-center ml-2 mr-2">Registracija dostavljaca</h2>
+                            <h2 class="form-signin-heading text-center ml-2 mr-2">Registracija dostavljača</h2>
                                 <input v-model="formD.name" type="text" class="form-control" name="name" placeholder="Ime" required="" autofocus="">
                                 <input v-model="formD.surname" type="text" class="form-control" name="surname" placeholder="Prezime" required="" autofocus="">
                                 <input v-model="formD.username" type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="">

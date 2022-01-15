@@ -33,20 +33,17 @@
                     <div v-else-if="order.status === 'Accepted'" class="row card-body">
                         <div class="col-xl-12">
                             <div class="text-center m-3">
-                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil" :disabled="true">Zavrsi obradu porudzbine</button>
+                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil" :disabled="true">Završi obradu porudzbine</button>
                             </div>
                         </div>
                     </div>
                     <div v-else-if="order.status === 'Has a deliverer'" class="row card-body">
                         <div class="col-xl-12">
                             <div class="text-center m-3">
-                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil" :disabled="false">Zavrsi obradu porudzbine</button>
+                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil" :disabled="false">Završi obradu porudzbine</button>
                             </div>
                         </div>
                     </div>
-                    <!-- <div v-else-if="order.status === 'Ready'" class="row card-body">
-                        
-                    </div> -->
                 </div>
             </div>
         </div>

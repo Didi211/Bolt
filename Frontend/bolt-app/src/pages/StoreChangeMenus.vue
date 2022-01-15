@@ -39,7 +39,7 @@
                                 name="odeljak"/>
                         </div>
                         <div class="form-group">
-                            <label class="labele" for="servingSize">Gramaza:</label>
+                            <label class="labele" for="servingSize">Gramaža:</label>
                             <input
                                 v-model="novoJelo.servingSize"
                                 type="text"
@@ -66,7 +66,7 @@
             <div class="row mt-3 justify-content-center">
                 <div class="col-xl-8">
                     <div class="row justify-content-center">
-                       <h4 class="mb-3">Postojece kategorije hrane:</h4>
+                       <h4 class="mb-3">Postojeće kategorije hrane:</h4>
                         <div class="col-xl-2 mr-2 alert alert-primary"  v-for="k in kategorije" :key="k.id">
                             {{k.name}}
                         </div>
@@ -119,7 +119,6 @@ import  Footer  from '@/components/Footer.vue'
 import AppSpinner from '@/components/AppSpinner.vue'
 import Vue from 'vue'
 import Meal from '@/components/MealStoreComponent.vue'
-//import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
     name: "StoreChangeMenus",
@@ -158,7 +157,6 @@ export default defineComponent({
             }
             else{
                 await this.$store.dispatch('makeNewMeal', this.novoJelo).then(async ()=>{
-                    // window.location.reload()
                     await this.$store.dispatch('getMealsFromStore', Vue.$cookies.get("id"))
                     this.$toasted.show("Dodato novo jelo!", { 
                                         theme: "bubble", 
@@ -179,7 +177,6 @@ export default defineComponent({
             else{
                 await this.$store.dispatch('addNewCategory', this.novaKat).then( ()=>{
                     window.location.reload()
-                    // await this.$store.dispatch('getMealsFromStore', Vue.$cookies.get("id"))
                 })
             }
         }
