@@ -1,5 +1,7 @@
 
+const { JsonWebTokenError } = require('jsonwebtoken');
 const neo4j = require('../config/neo4j_config');
+const redis_client = require('../config/redis_config');
 const meal = require('../models/mealModel');
 
 
@@ -131,6 +133,11 @@ const GetCategory = (req,res) =>{
 }
 const Top5Meals = async (req,res) => { 
     try {
+        let mealsRedis = await redis_client.get('top5meals');
+        if (mealsRedis != null) { 
+            res.status(200).send(JSON.parse(mealsRedis));
+            return;
+        }
         let queryResult = await neo4j.cypher(
             `match (s:Store) -[:OFFERS]-> (m:Meal) <-[r:CONTAINS]- (o:Order) 
                 return m,s,count(r) as popularity 
@@ -150,6 +157,7 @@ const Top5Meals = async (req,res) => {
 
             meals_storesDB.push(meal_store);
         });
+        await redis_client.setEx('top5meals',600,JSON.stringify(meals_storesDB));
         res.status(200).send(meals_storesDB);
     } catch (e) {
         console.log(e);
