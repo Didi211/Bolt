@@ -3,7 +3,7 @@ const { JsonWebTokenError } = require('jsonwebtoken');
 const neo4j = require('../config/neo4j_config');
 const redis_client = require('../config/redis_config');
 const meal = require('../models/mealModel');
-
+const statusFlags = require('../statusFlags');
 
 const RecordsToJSON = (records) =>{
     let item= []    
@@ -139,7 +139,7 @@ const Top5Meals = async (req,res) => {
             return;
         }
         let queryResult = await neo4j.cypher(
-            `match (s:Store) -[:OFFERS]-> (m:Meal) <-[r:CONTAINS]- (o:Order) 
+            `match (s:Store) -[:OFFERS]-> (m:Meal) <-[r:CONTAINS]- (o:Order {status: "${statusFlags.finished}"}) 
                 return m,s,count(r) as popularity 
                 order by popularity desc
                 limit 5`);

@@ -3,6 +3,7 @@ const neo4j = require('../config/neo4j_config');
 const customer = require('../models/customerModel');
 const token = require('../config/token')
 const bcrypt = require('bcrypt');
+const statusFlags = require('../statusFlags');
 
 const saltRounds = 10;
 
@@ -101,7 +102,7 @@ const RecommendedMeals = async (req,res) => {
         //nadji  jela tom customeru sa njihovim kateogorijama 
         let queryResult = await neo4j.cypher(
             `match (c:Customer {uuid: "${customerID}"}) 
-                -[:ORDERED]-> (o:Order)
+                -[:ORDERED]-> (o:Order {status: "${statusFlags.finished}"})
                 -[:CONTAINS]-> (m:Meal)
                 -[:BELONGS_TO]->(cat:Category)
 
