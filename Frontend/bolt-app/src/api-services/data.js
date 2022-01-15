@@ -115,6 +115,7 @@ export default new Vuex.Store({
                 commit('setTip', Vue.$cookies.get("tip"))
                 commit('setOsobaID', Vue.$cookies.get("id"))
                 router.push("/Deliverer")
+                window.location.reload()
             }).catch(()=>{
                 Vue.toasted.show("Već postoji korisnik sa tim username-om!", { 
                     theme: "bubble", 
@@ -146,6 +147,7 @@ export default new Vuex.Store({
                 commit('setTip', Vue.$cookies.get("tip"))
                 commit('setOsobaID', Vue.$cookies.get("id"))
                 router.push("/Customer")
+                window.location.reload()
             }).catch(()=>{
                 Vue.toasted.show("Već postoji korisnik sa tim username-om!", { 
                     theme: "bubble", 
@@ -176,6 +178,7 @@ export default new Vuex.Store({
                 commit('setTip', Vue.$cookies.get("tip"))
                 commit('setOsobaID', Vue.$cookies.get("id"))
                 router.push("/Store")
+                window.location.reload()
             }).catch(()=>{
                 Vue.toasted.show("Greska!", { 
                     theme: "bubble", 

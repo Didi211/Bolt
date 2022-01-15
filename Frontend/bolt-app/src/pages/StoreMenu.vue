@@ -44,7 +44,7 @@
             <div class="col-md-3"> 
                 <h3>Korpa</h3>
                 <div class="basket"> 
-                    <li v-for="j in jela" :key="j.mealID"> {{j.name}} {{j.price}}din</li>
+                    <li v-for="j in jela" :key="j.id"> {{j.name}} {{j.price}}din</li>
                     <p>Adresa:</p>
                     <input type="text" v-model="customer.location" id="location">
                     <button @click="change" class="btn btn-dark">Izmeni</button>
