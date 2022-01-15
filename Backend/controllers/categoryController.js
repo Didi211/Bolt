@@ -71,4 +71,5 @@ const GetAllCategories = async (req,res) =>  {
         res.status(500).send(e.message || e.toString())
     }
 }
+
 module.exports = {CreateCategory, DeleteCategory, GetAllCategories};

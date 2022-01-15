@@ -106,6 +106,16 @@ const AddToCategory = async (req,res) => {
             })
             .catch(err => {res.status(400).send(result)})
 }
+const DeleteMeal = (req,res) => {
+  
+    neo4j.cypher(`match (m:Meal {mealID : "${req.params.id}"})-[rel:BELONGS_TO]->(c:Category}) delete rel`).then(result => {
+        
+        neo4j.cypher(`match (m:Meal {mealID : "${req.params.id}"})<-[rel:CONTAINS]-(o:Order) delete rel,m`).then(result => {
+            res.send().status(200)
+        }).catch(err => console.log(err))
+    }).catch(err => console.log(err))
+}
+
 const GetCategory = (req,res) =>{
     neo4j.cypher(`match (m:Meal {mealID : "${req.params.id}"})-[rel:BELONGS_TO]->(c:Category) return c`).then(result => {
         //console.log(result);
@@ -116,4 +126,4 @@ const GetCategory = (req,res) =>{
 }
 
 
-module.exports = {CreateMeal,GetMealsByRestaurant,GetMealById,GetMealPrice,AddToCategory,GetCategory};
+module.exports = {CreateMeal,DeleteMeal,GetMealsByRestaurant,GetMealById,GetMealPrice,AddToCategory,GetCategory};

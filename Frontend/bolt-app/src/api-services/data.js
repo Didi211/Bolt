@@ -470,9 +470,10 @@ export default new Vuex.Store({
         primiObavestenjeDeliverer({commit}, message){
             commit("primiObavestenjeDeliverer", message)
         },
-        changeDisabledOrderID({commit},orderID){
+        changeDisabledOrderID({commit, dispatch},orderID){
             console.log("usao u dispatch")
             commit('setChangeDisabledOrderID', orderID)
+            dispatch('getAcceptedOrdersStore')
         },
         obPickUpOrderID({commit}, orderID){
             commit('setObPickUp', orderID)

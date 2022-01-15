@@ -5,16 +5,18 @@
         </div>
         <div v-if="isDataLoaded">
             <div class="row mt-3 vozilo">
-                <h4>Vaše trenutno prevozno sredstvo je: <b>{{deliverer.vehicle}}</b> </h4>
+                <h4 v-if="deliverer.vehicle=='Bike'">Vaše trenutno prevozno sredstvo je: <b>Bicikla</b> </h4>
+                <h4 v-if="deliverer.vehicle=='Car'">Vaše trenutno prevozno sredstvo je: <b>Automobil</b> </h4>
+                <h4 v-if="deliverer.vehicle=='Scooter'">Vaše trenutno prevozno sredstvo je: <b>Skuter</b> </h4>
                 <!-- {{deliverer.vehicle}} -->
             <div class="col-xl-4">
                     <h5 class="form-signin text-center">Izaberite novo prevozno sredstvo:</h5>
                 </div>
                 <div class="col-xl-4">
                     <select class="vehicle" name="vehicle" id="vehicle">
-                        <option value="Bike">Bike</option>
-                        <option value="Car">Car</option>
-                        <option value="Scooter">Scooter</option>
+                        <option value="Bike">Bicikla</option>
+                        <option value="Car">Automobil</option>
+                        <option value="Scooter">Skuter</option>
                     </select>   
                     <button class="btn btn-dark dugme" @click="promeniVozilo" >Promeni</button>     
                 </div>
