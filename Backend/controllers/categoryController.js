@@ -10,7 +10,7 @@ const CreateCategory = async (req,res) => {
     try { 
         let newRedisData = []
         redisData = await redis_client.get('categories')
-        if(redisData != null)
+        if(redisData)
             newRedisData = JSON.parse(redisData)
             
         let category = await neo4j.model("Category").mergeOn({
