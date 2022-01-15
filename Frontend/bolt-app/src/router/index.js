@@ -12,6 +12,7 @@ import StoreMenu from '@/pages/StoreMenu'
 import PageNotAuthenticated from '@/pages/PageNotAuthenticated'
 import OrderHistory from '@/pages/OrderHistory'
 import StoreChangeMenus from '@/pages/StoreChangeMenus'
+import RecommendationPage from '@/pages/RecommendationPage'
 
 Vue.use(Router)
 
@@ -82,6 +83,20 @@ const router = new Router({
             path:'/SearchPage',
             name: 'SearchPage',
             component: SearchPage,
+            beforeEnter(to, from, next){
+                let tip = Vue.$cookies.get("tip")
+                if(tip == 'Customer'){
+                    next();
+                }
+                else{
+                    next({name: 'PageNotAuthenticated'})
+                }
+            }
+        },
+        {
+            path:'/RecommendationPage',
+            name: 'RecommendationPage',
+            component: RecommendationPage,
             beforeEnter(to, from, next){
                 let tip = Vue.$cookies.get("tip")
                 if(tip == 'Customer'){
