@@ -65,9 +65,11 @@ const GetPreviousOrders = async (req,res) => {
     let orders = RecordsToJSON(result.records)
     let ordersWithMeals = []
     for await (let order of orders) { 
+        let sres = await neo4j.cypher(`match (o:Order {orderID : "${order.orderID}"})<-[rel:PREPARES]-(s:Store) return s`)
+        let store = RecordsToJSON(sres.records)
         let result = await neo4j.cypher(`match (m:Meal)<-[:CONTAINS]-(o:Order { orderID: '${order.orderID}'}) return m`)
         let meals = RecordsToJSON(result.records)
-        ordersWithMeals.push({order: order, meals: meals})
+        ordersWithMeals.push({order: order, meals: meals,store: store})
         // console.log("Meal:",meals);
 
     }
