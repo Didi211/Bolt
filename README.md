@@ -10,6 +10,7 @@ c-mwCvesZ2pvYcHxtkGjSko-tnc0dqofp1kPmFbCjEc
 Pokretanje redisa LOKALNO preko ubuntu aplikacije windows-ovog podsistema.
 
 INSTALLATIONS:
+
 0. npm install vue/@cli u folderu Frontend/bolt-app ukoliko Vue paket nije instaliran na racunaru
 1. npm install u folderu Backend i u folderu Frontend/bolt-app
 2. npm start za pokretanje backend-a aplikacije
