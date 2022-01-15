@@ -32,7 +32,9 @@ export default new Vuex.Store({
         obCustomer: "",
         obDeliverer: "",
         changeDisabledOrderID:"",
-        obPickUp:""
+        obPickUp:"",
+        recMeals:[],
+        top5Meals:[]
     },
     getters:{
         getOrderHistory(state){
@@ -98,6 +100,12 @@ export default new Vuex.Store({
         },
         getObPickUp(state){
             return state.obPickUp
+        },
+        getRecMeals(state){
+            return state.recMeals
+        },
+        getTop5Meals(state){
+            return state.top5Meals
         }
     },
     actions:{
@@ -464,6 +472,18 @@ export default new Vuex.Store({
                 dispatch('getMealsFromStore', Vue.$cookies.get("id"))
             })    
         },
+        async getRecMeals({commit}){
+            return await Api().get('/api/customer/recommendedMeals/'+Vue.$cookies.get("id")).then((res)=>{
+                const topMeals = res.data
+                commit('setRecMeals', topMeals)
+            })    
+        },
+        async getTop5Meals({commit}){
+            return await Api().get('/api/meal/top5').then((res)=>{
+                const topMeals = res.data
+                commit('setTop5Meals', topMeals)
+            })    
+        },
         postaviToken({commit}, tok){
             commit('setToken', tok)
         },
@@ -576,6 +596,12 @@ export default new Vuex.Store({
         },
         setObPickUp(state, ob){
             state.obPickUp=ob
+        },
+        setRecMeals(state, meals){
+            state.recMeals = meals
+        },
+        setTop5Meals(state, meals){
+            state.top5Meals = meals
         }
     }
 })
