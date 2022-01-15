@@ -58,8 +58,6 @@ export default {
       this.orderid.orderID=this.$props.order.orderID
       this.$store.dispatch('orderFinishedDeliverer', this.orderid).then(()=>{
         console.log("orderFinished then deo")
-        
-        
       })
     }
   }
