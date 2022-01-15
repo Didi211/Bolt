@@ -21,7 +21,7 @@ const CreateCategory = async (req,res) => {
             name: category._properties.get('name')
         }
         newRedisData.push(categoryDTO)
-        redis_client.set('categories',JSON.stringify(newRedisData))
+        redis_client.setEx('categories',600,JSON.stringify(newRedisData))
         res.status(200).send(categoryDTO)
     }
     catch(e) { 
