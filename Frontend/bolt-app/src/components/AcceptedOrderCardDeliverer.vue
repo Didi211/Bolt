@@ -10,10 +10,10 @@
     <h5><b>Adresa musterije:</b> {{ order.onAddress }} </h5>
     <h5><b>Note:</b> {{order.note}}</h5>
     <h5><b>Status:</b> {{order.status}}</h5>
-    <div v-if="order.status=='Ready'">
+    <div v-if="order.status=='Ready' && isDelivered">
       <button type="button" class="btn  btn-dark dugme" @click="pickedUp">Pokupljeno</button>
     </div>
-    <div v-if="isPickedUp">
+    <div v-if="isPickedUp || order.status =='Picked up'">
       <button type="button" class="btn  btn-dark dugme" @click="finished"> Dostavljeno</button>
     </div>
     <!-- <div v-else>
@@ -36,7 +36,8 @@ export default {
       orderid:{
         orderID: ""
       },
-      isPickedUp:false
+      isPickedUp:false,
+      isDelivered: true
     }
   },
   computed:{
@@ -47,6 +48,7 @@ export default {
   methods:{
     pickedUp(){
       this.isPickedUp=true
+      this.isDelivered=false
       this.orderid.orderID=this.$props.order.orderID
       this.$store.dispatch('pickedUpOrderDeliverer', this.orderid)
 
@@ -54,8 +56,11 @@ export default {
     finished(){
       this.isPickedUp=false
       this.orderid.orderID=this.$props.order.orderID
-      this.$store.dispatch('orderFinishedDeliverer', this.orderid)
-      this.$store.dispatch('getAcceptedOrdersByDeliverer')
+      this.$store.dispatch('orderFinishedDeliverer', this.orderid).then(()=>{
+        console.log("orderFinished then deo")
+        
+        
+      })
     }
   }
 };

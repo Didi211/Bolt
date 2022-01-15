@@ -405,9 +405,15 @@ export default new Vuex.Store({
                 commit('setNista')
             })
         },
-        async orderFinishedDeliverer({commit}, order){
+        async orderFinishedDeliverer({commit, dispatch}, order){
+            console.log('uso u data.js')
+            console.log(order)
             return await Api().post('/api/order/finished', order).then(()=>{
+                console.log('zavrsen api orderFinished')
+                dispatch('getAcceptedOrdersByDeliverer')
                 commit('setNista')
+            }).catch(err=>{
+                console.log(err)
             })
         },
         async getPendingOrdersStore({commit}){
