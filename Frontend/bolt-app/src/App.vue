@@ -35,7 +35,7 @@ export default {
       await this.$store.dispatch("postaviOsobaID", this.korisnik.id)
       await this.$store.dispatch("getUserByID", this.korisnik.id)
     }
-
+    //mozda ovi if-ovi za ws treba da se ubace u ovaj gore if
     if(this.korisnik.tip == 'Customer'){
       //otvori web socket za njegov port
       const ws = new WebSocket("ws://localhost:3000/");

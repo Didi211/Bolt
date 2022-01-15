@@ -13,8 +13,10 @@
     <div v-if="order.status=='Ready'">
       <button type="button" class="btn  btn-dark dugme" @click="pickedUp">Pokupljeno</button>
     </div>
-    <!-- <div v-else>
+    <div v-if="isPickedUp">
       <button type="button" class="btn  btn-dark dugme" @click="finished"> Dostavljeno</button>
+    </div>
+    <!-- <div v-else>
     </div> -->
     
   </div>
@@ -33,7 +35,8 @@ export default {
     return{
       orderid:{
         orderID: ""
-      }
+      },
+      isPickedUp:false
     }
   },
   computed:{
@@ -43,10 +46,16 @@ export default {
   },
   methods:{
     pickedUp(){
-      
+      this.isPickedUp=true
       this.orderid.orderID=this.$props.order.orderID
       this.$store.dispatch('pickedUpOrderDeliverer', this.orderid)
 
+    },
+    finished(){
+      this.isPickedUp=false
+      this.orderid.orderID=this.$props.order.orderID
+      this.$store.dispatch('orderFinishedDeliverer', this.orderid)
+      this.$store.dispatch('getAcceptedOrdersByDeliverer')
     }
   }
 };

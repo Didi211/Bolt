@@ -30,7 +30,7 @@ export default new Vuex.Store({
         acceptedOrdersStore:[],
         readyOrdersStore:[],
         obCustomer: "",
-        obDeliverer: null,
+        obDeliverer: "",
         changeDisabledOrderID:"",
         obPickUp:""
     },
@@ -396,6 +396,11 @@ export default new Vuex.Store({
         },
         async pickedUpOrderDeliverer({commit}, order){
             return await Api().post('api/order/pickedUp',order).then(()=>{
+                commit('setNista')
+            })
+        },
+        async orderFinishedDeliverer({commit}, order){
+            return await Api().post('/api/order/finished', order).then(()=>{
                 commit('setNista')
             })
         },

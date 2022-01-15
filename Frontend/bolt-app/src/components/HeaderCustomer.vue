@@ -99,6 +99,7 @@ export default defineComponent({
             if(this.statusObavestenja.status=="Finished"){
                 document.getElementById("f").style.display = "none";
             }
+            //mozda ovde treba da se obrise state obCustomer
 
 
         }
