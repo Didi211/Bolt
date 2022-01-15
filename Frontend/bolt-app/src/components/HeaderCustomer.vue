@@ -1,7 +1,8 @@
 <template>
     <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container px-4 px-lg-5">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light heder1">
+                <img class="img-responsive" src="../assets/logo-removebg-preview.png" alt="">
+            <div class="container px-4 px-lg-5 heder">
                 <a class="navbar-brand disabled" href="#!" disabled="disabled">Dobrodosli, {{username}}!</a>
                 <div v-show="statusObavestenja.status=='Accepted'" id="a" class="hide">
                     <div class=" mr-2 alert alert-primary">
@@ -126,5 +127,13 @@ a.disabled {
     margin: 0;
     padding: 0;
     text-align: center;
+}
+.heder{
+    margin: 0;
+    padding: 0;
+}
+.heder1{
+    display: flex;
+    justify-content: center;
 }
 </style>
