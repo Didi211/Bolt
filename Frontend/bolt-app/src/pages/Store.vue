@@ -5,7 +5,7 @@
         </div>
         <div v-if="isDataLoaded">
             <div class="row mt-3">
-                <h4>Vase trenutno prosecno vreme dostave je: {{store.preptime}} minuta</h4>
+                <h4>Vase trenutno prosečno vreme dostave je: {{store.preptime}} minuta</h4>
             </div>
             <div class="row">
                 <div class="wrapper PrijavaRow">
@@ -13,7 +13,7 @@
                         <form class="form-signin" @submit.prevent>
                             <div class="row margine">
                                 <div class="col-xl-6">
-                                    <h5 class="form-signin text-center">Postavi prosecno vreme obrade porudzbine:</h5>
+                                    <h5 class="form-signin text-center">Postavi prosečno vreme obrade porudzbine:</h5>
                                 </div>
                                 <div class="col-xl-3">
                                     <input type="text" class="form-control" v-model="novoVreme.preptime" name="novoVreme" placeholder="Novo vreme porudzbine..." autofocus="">           
@@ -34,7 +34,7 @@
             </div>
             <div class="row justify-content-center mt-3">
                 <div class="col-xl-8">
-                    <h3>Prihvacene porudzbine:</h3>
+                    <h3>Prihvaćene porudzbine:</h3>
                     <Order v-for="order in acceptedOrders" 
                                     :key="order.id" 
                                     :order="order"/>
@@ -66,7 +66,6 @@ import  HeaderStore  from '@/components/HeaderStore.vue'
 import  Footer  from '@/components/Footer.vue'
 import AppSpinner from '@/components/AppSpinner.vue'
 import Order from '@/components/OrderStore.vue'
-//import StoreCard from '@/components/StoreCardComponent.vue'
 
 export default defineComponent({
     name: "Homepage",

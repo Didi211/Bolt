@@ -24,7 +24,6 @@
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-// import Vue from 'vue'
 
 export default defineComponent({
    name: "RecMealCard",
@@ -36,7 +35,6 @@ export default defineComponent({
     },
     methods:{
      open(){
-            // this.$router.push({ path: 'StoreMenu' })
             this.$store.dispatch('postaviPickedStore', this.rec.store.uuid)
        }
     },

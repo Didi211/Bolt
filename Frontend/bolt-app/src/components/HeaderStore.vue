@@ -3,23 +3,13 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light heder1">
                 <img class="img-responsive" src="../assets/logo-removebg-preview.png" alt="">
             <div class="container px-4 px-lg-5 heder">
-                <a class="navbar-brand disabled" href="#!" disabled="disabled">Dobrodosli, {{username}}!</a>
-                <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button> -->
+                <a class="navbar-brand disabled" href="#!" disabled="disabled">Dobrodošli, {{username}}!</a>
                 <div >
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                        <router-link :to="{name: 'Homepage'}"><li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Pocetna</a></li></router-link>
+                        <router-link :to="{name: 'Homepage'}"><li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Početna</a></li></router-link>
                         <router-link :to="{name: 'StoreChangeMenus'}"><li class="nav-item"><a class="nav-link active" aria-current="page" href="#!">Jelovnik restorana</a></li></router-link>
                         <router-link :to="{name: 'Homepage'}"><li class="nav-item"><a class="nav-link" href="#!" @click="logoutKorisnik">Odjavi se</a></li></router-link>
                     </ul>
-                     <!-- <form class="d-flex">
-                        <button class="btn btn-outline-dark" type="submit">
-                            <router-link :to="{name: 'Basket'}">
-                            <i class="bi-cart-fill me-1"></i>
-                            Korpa
-                            <span class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-                        </router-link>
-                        </button>
-                    </form> -->
                 </div>
             </div>
         </nav>

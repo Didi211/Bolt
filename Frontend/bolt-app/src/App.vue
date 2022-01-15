@@ -94,7 +94,6 @@ export default {
           }
         }
       }
-      // await this.$store.dispatch("postaviWebSocket", ws)
     }
   }
 }

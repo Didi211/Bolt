@@ -10,9 +10,6 @@
           <div class="col-xl-12 margine">
             <router-link :to="{ name: 'Homepage'}"><button type="submit" class="btn btn-primary marstil">&nbsp;&nbsp;Vrati se na početnu stranicu</button></router-link>
           </div>
-          <!-- <div class="col-xl-12 margine">
-            <router-link :to="{ name: 'Login'}"><button type="submit" class="btn btn-primary marstil">Prijavi se</button></router-link>
-          </div> -->
         </div>
       </div>
     </div>
@@ -27,11 +24,6 @@ export default {
   name: "PageNotAuthenticated",
   components: {
     Header
-  },
-  computed:{
-      // ...mapGetters({
-      //   'tipKorisnika': 'getTipKorisnika'
-      // })
   },
   methods:{
       vratiRutu(){

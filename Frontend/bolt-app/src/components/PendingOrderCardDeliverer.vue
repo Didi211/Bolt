@@ -11,7 +11,6 @@
     <h5><b>Note:</b> {{order.note}}</h5>
     <h5><b>Status:</b> {{order.status}}</h5>
     <button type="button" class="btn btn-dark dugme" @click="acceptOrder"> Prihvati </button>
-    <!-- @click="acceptOrder" -->
   </div>
 </template>
 
@@ -47,18 +46,9 @@ export default {
 <style scoped>
 .Usluga {
   background-color: rgba(255, 255, 255, 0.7);
-  /* background-color: rgba(242, 175, 88,0.5); */
   border-radius: 25px;
-  /* border: 4px solid rgb(242, 175, 88); */
   border: 2px solid gray;
   padding: 0%;
-
-  /* margin-top: 20px;
-  margin-bottom: 20px;
-  margin-left: 47px; /*ovo bi trebalo na lepsi nacin da se resi*/
-
-  /* padding-bottom: 15px;
-  padding-top: 15px; */
   justify-self: center;
 }
 .dugme{

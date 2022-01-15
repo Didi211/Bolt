@@ -3,7 +3,6 @@
             <div class="card h-100" @click="open" v-bind:id="store.uuid">
                 <!-- Store name-->
                 <h2><span class="badge badge-danger">{{store.name}}</span></h2> 
-                <!-- <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." /> -->
                 <!-- Store details-->
                 <div class="card-body pb-3 pr-4 pl-4">
                     <div class="text-center">
@@ -16,17 +15,12 @@
                         <p></p>
                     </div>
                 </div>
-                <!-- Product actions
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                    <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="#">View options</a></div>
-                </div> -->
             </div>
     </div>
 </template>
 
 <script>
 import { defineComponent } from '@vue/composition-api'
-// import Vue from 'vue'
 
 export default defineComponent({
    name: "StoreInfoComponent",
@@ -38,7 +32,6 @@ export default defineComponent({
     },
     methods:{
      open(){
-            // this.$router.push({ path: 'StoreMenu' })
             this.$store.dispatch('postaviPickedStore', this.store.uuid)
        }
     },
