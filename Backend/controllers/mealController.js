@@ -129,6 +129,41 @@ const GetCategory = (req,res) =>{
         res.send(meals).status(200)
     }).catch(err => console.log(err))
 }
+const Top5Meals = async (req,res) => { 
+    try {
+        let queryResult = await neo4j.cypher(
+            `match (s:Store) -[:OFFERS]-> (m:Meal) <-[r:CONTAINS]- (o:Order) 
+                return m,s,count(r) as popularity 
+                order by popularity desc
+                limit 5`);
+        if (queryResult.records.length === 0) { 
+            res.status(400).send("Couldn't find any meals.");
+            return;
+        }
 
+        let meals_storesDB = [];
+        queryResult.records.forEach(record => { 
+            let meal_store = new Object();
+            meal_store.meal = record._fields[0].properties;
+            meal_store.storeID = record._fields[1].properties.uuid;
+            meal_store.popularity = record._fields[2].low
 
-module.exports = {CreateMeal,DeleteMeal,GetMealsByRestaurant,GetMealById,GetMealPrice,AddToCategory,GetCategory};
+            meals_storesDB.push(meal_store);
+        });
+        res.status(200).send(meals_storesDB);
+    } catch (e) {
+        console.log(e);
+        res.status(500).send(e);
+    }
+}
+
+module.exports = {
+    CreateMeal,
+    DeleteMeal,
+    GetMealsByRestaurant,
+    GetMealById,
+    GetMealPrice,
+    AddToCategory,
+    GetCategory,
+    Top5Meals
+};

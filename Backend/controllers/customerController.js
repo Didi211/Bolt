@@ -98,7 +98,7 @@ const RecommendedMeals = async (req,res) => {
         //req.params.id - customerID 
         let customerID = req.params.id;
 
-        //nadji omiljena jela tom customeru sa njihovim kateogorijama 
+        //nadji  jela tom customeru sa njihovim kateogorijama 
         let queryResult = await neo4j.cypher(
             `match (c:Customer {uuid: "${customerID}"}) 
                 -[:ORDERED]-> (o:Order)
@@ -145,8 +145,8 @@ const RecommendedMeals = async (req,res) => {
         let meals_storesDB = [];
         queryResult.records.forEach(record => { 
             let meal_store = new Object();
-            meal_category.meal = record._fields[0].properties;
-            meal_category.storeID = record._fields[1].properties.storeID;
+            meal_store.meal = record._fields[0].properties;
+            meal_store.storeID = record._fields[1].properties.storeID;
 
             meals_storesDB.push(meal_category);
         });
