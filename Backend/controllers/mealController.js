@@ -145,7 +145,7 @@ const Top5Meals = async (req,res) => {
         queryResult.records.forEach(record => { 
             let meal_store = new Object();
             meal_store.meal = record._fields[0].properties;
-            meal_store.storeID = record._fields[1].properties.uuid;
+            meal_store.store = record._fields[1].properties;
             meal_store.popularity = record._fields[2].low
 
             meals_storesDB.push(meal_store);
