@@ -1,7 +1,8 @@
 <template>
     <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container px-4 px-lg-5">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light heder1">
+                <img class="img-responsive" src="../assets/logo-removebg-preview.png" alt="">
+            <div class="container px-4 px-lg-5 heder">
                 <a class="navbar-brand disabled" href="#!" disabled="disabled">Dobrodosli, {{username}}!</a>
                 <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button> -->
                 <div >
@@ -53,5 +54,13 @@ export default defineComponent({
 a.disabled {
   pointer-events: none;
   cursor: default;
+}
+.heder{
+    margin: 0;
+    padding: 0;
+}
+.heder1{
+    display: flex;
+    justify-content: center;
 }
 </style>

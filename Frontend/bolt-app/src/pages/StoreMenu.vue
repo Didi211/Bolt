@@ -144,7 +144,13 @@ export default defineComponent({
         change(){
             this.loc.location=document.getElementById("location").value
             console.log(this.loc)
-            this.$store.dispatch('changeCustomerLocation', this.loc)
+            this.$store.dispatch('changeCustomerLocation', this.loc).then(()=>{
+                this.$toasted.show("Promenjena je vasa adresa", { 
+                        theme: "bubble", 
+                        position: "top-center", 
+                        duration : 5000
+                   })
+            })
         },
         order(){
             this.orderMeal.onAddress=document.getElementById("location").value
