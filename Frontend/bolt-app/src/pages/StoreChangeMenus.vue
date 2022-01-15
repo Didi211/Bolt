@@ -157,8 +157,9 @@ export default defineComponent({
                                 })
             }
             else{
-                await this.$store.dispatch('makeNewMeal', this.novoJelo).then(()=>{
-                    window.location.reload()
+                await this.$store.dispatch('makeNewMeal', this.novoJelo).then(async ()=>{
+                    // window.location.reload()
+                    await this.$store.dispatch('getMealsFromStore', Vue.$cookies.get("id"))
                     this.$toasted.show("Dodato novo jelo!", { 
                                         theme: "bubble", 
                                         position: "top-center", 
@@ -176,7 +177,10 @@ export default defineComponent({
                                 })
             }
             else{
-                await this.$store.dispatch('addNewCategory', this.novaKat)
+                await this.$store.dispatch('addNewCategory', this.novaKat).then( ()=>{
+                    window.location.reload()
+                    // await this.$store.dispatch('getMealsFromStore', Vue.$cookies.get("id"))
+                })
             }
         }
     },

@@ -447,6 +447,12 @@ export default new Vuex.Store({
         async addNewCategory({dispatch}, cat){
             return await Api().post('/api/category/add', cat).then(()=>{
                 dispatch('getAllCategories')
+                // dispatch('getMealsFromStore', Vue.$cookies.get("id"))
+            })    
+        },
+        async deleteMeal({dispatch}, mealID){
+            return await Api().delete('/api/meal/delete/'+mealID).then(()=>{
+                dispatch('getMealsFromStore', Vue.$cookies.get("id"))
             })    
         },
         postaviToken({commit}, tok){

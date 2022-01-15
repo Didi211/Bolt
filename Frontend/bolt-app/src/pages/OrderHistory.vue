@@ -7,7 +7,7 @@
             <div v-if="narudzbine.length==0">
                 <h4>Do sada niste narucili nijednom!</h4>
             </div>
-            <div v-else>
+            <div v-else class="row justify-content-center">
                 <OrderHistoryComponent
                     v-for="narudzbina in narudzbine"
                     :key="narudzbina.order.orderID"
