@@ -100,7 +100,7 @@ export default defineComponent({
                 document.getElementById("f").style.display = "none";
             }
             //mozda ovde treba da se obrise state obCustomer
-
+            this.$store.dispatch('resetObCustomer')
 
         }
     },

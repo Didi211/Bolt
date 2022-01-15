@@ -209,14 +209,17 @@ export default new Vuex.Store({
                 if(this.state.trenutniKorisnik.role == "Customer")
                 {
                     router.push("/Customer")
+                    window.location.reload()
                 }
                 else if(this.state.trenutniKorisnik.role == "Store")
                 {
                     router.push("/Store")
+                    window.location.reload()
                 }
                 else if(this.state.trenutniKorisnik.role == "Deliverer")
                 {
                     router.push("/Deliverer")
+                    window.location.reload()
                 }
             }).catch((err)=>{
                 if(err.response.status==403){
@@ -473,6 +476,9 @@ export default new Vuex.Store({
         },
         obPickUpOrderID({commit}, orderID){
             commit('setObPickUp', orderID)
+        },
+        resetObCustomer({commit}){
+            commit('postaviObavestenjeMusteriji', "")
         }
     },
     mutations:{
