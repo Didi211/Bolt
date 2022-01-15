@@ -16,8 +16,9 @@
             <div class="row">
                 <div class="card-body p-4">
                     <div class="text-center">
-                        <button @click="pushDataYes">+</button>
-                         <button @click="pushDataNo">-</button>
+                        <button class="btn btn-dark m-1" @click="pushDataYes">+</button>
+                         <button class="btn btn-dark m-1"  @click="pushDataNo">-</button>
+                       
                     </div>
                 </div>
             </div>

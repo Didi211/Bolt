@@ -52,7 +52,7 @@
     <div v-else>
         <AppSpinner/>
     </div>
-    <div class="row">
+    <div class="row futer">
             <Footer />
     </div>
 </div>
@@ -211,6 +211,9 @@ p{
 }
 .order{
     width: 100%;
+}
+.futer{
+    margin-top: 10%;
 }
 
 </style>
