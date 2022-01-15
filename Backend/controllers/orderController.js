@@ -448,8 +448,9 @@ const GetAcceptedDeliverer =async (req,res) => {
     try {
         let ordersHasDeliverer = await _getOrdersForDeliverer("orders:hasdeliverer",statusFlags.hasDeliverer,req.params.delivererID);
         let ordersReady = await _getOrdersForDeliverer("orders:ready",statusFlags.ready,req.params.delivererID);
+        let ordersDelivering = await _getOrdersForDeliverer("orders:delivering",statusFlags.pickedUp,delivererID);
         let orders = ordersHasDeliverer.concat(ordersReady);
-
+        orders = orders.concat(ordersDelivering);
         res.send(orders).status(200)
     
     } catch (e) {
