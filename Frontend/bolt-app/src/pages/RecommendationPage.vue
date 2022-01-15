@@ -66,8 +66,11 @@ export default defineComponent({
     },
     async created(){
         this.isDataLoaded=false
-        Promise.all([await this.$store.dispatch('getRecMeals'), await this.$store.dispatch('getTop5Meals')]).then(()=>{
-            this.isDataLoaded=true
+        await this.$store.dispatch('getTop5Meals').then(async ()=>{
+            console.log("izvrsen api za top5 meals")
+            await this.$store.dispatch('getRecMeals').then(()=>{
+                this.isDataLoaded=true
+            })
         })
     }
 })

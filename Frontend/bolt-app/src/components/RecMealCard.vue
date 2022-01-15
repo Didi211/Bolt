@@ -7,11 +7,11 @@
                 <!-- Meal details-->
                 <div class="card-body pb-3 pr-4 pl-4">
                     <div class="text-center">
-                        <p>{{rec.meal.name}}</p>
-                        <p>{{rec.meal.price}}</p>
+                        <h3>{{rec.meal.name}}</h3>
+                        <h5>cena: {{rec.meal.price}}</h5>
                         <!-- Store location-->
                        <p>Adresa:</p>
-                        <h5 class=" mt-1 fw-bolder">{{rec.location}}</h5>
+                        <h4 class="fw-bolder"><span class=" mt-2 badge badge-secondary">{{rec.store.location}}</span></h4>
                         <p>Vreme pripreme:</p>
                         <h4><span class=" mt-2 badge badge-secondary">{{rec.store.preptime}}min</span></h4>
                         <!-- Vreme isporuke-->
@@ -37,11 +37,11 @@ export default defineComponent({
     methods:{
      open(){
             // this.$router.push({ path: 'StoreMenu' })
-            this.$store.dispatch('postaviPickedStore', this.store.uuid)
+            this.$store.dispatch('postaviPickedStore', this.rec.store.uuid)
        }
     },
     async created(){
-        
+        console.log(this.rec)
     },
 })
 </script>
