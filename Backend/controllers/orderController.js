@@ -301,12 +301,7 @@ const OrderFinished = async (req,res) => { //push ka klijentu, status u neo4j se
             res.status(400).send("Couldn't find the order.");
             return;
         }
-        queryResult = await neo4j.cypher(
-            `match (c:Customer)-[r:ORDERED]->(o:Order {orderID: "${req.body.orderID}"}) return c`);
-        if (queryResult.length < 1) { 
-            res.status(400).send("Couldn't find the customer.");
-            return;
-        }
+        
 
        
         let porukaCustomer = {
