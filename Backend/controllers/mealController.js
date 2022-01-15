@@ -144,6 +144,7 @@ const Top5Meals = async (req,res) => {
                 order by popularity desc
                 limit 5`);
         if (queryResult.records.length === 0) { 
+            
             res.status(400).send("Couldn't find any meals.");
             return;
         }

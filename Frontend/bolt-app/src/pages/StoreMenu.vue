@@ -39,9 +39,9 @@
                 <div class="basket"> 
                     <li v-for="j in jela" :key="j.id"> {{j.name}} {{j.price}}din</li>
                     <p>Adresa:</p>
-                    <input type="text" v-model="customer.location" id="location">
-                    <button @click="change" class="btn btn-dark">Izmeni</button>
-                    <input type="textarea" placeholder="note" id="note" class="note">
+                    <input type="text" v-model="customer.location" id="location" class="m-1">
+                    <button @click="change" class="btn btn-dark m-1">Izmeni</button>
+                    <input type="textarea" placeholder="note" id="note" v-model="notes" class="note m-1">
                     <button @click="order"  class="btn btn-dark order">Naruči</button>
 
 
@@ -84,6 +84,7 @@ export default defineComponent({
             jela:[],
             jelaId:[],
             user: null,
+            notes: "",
             loc: {
                 location: ""
             },
@@ -134,17 +135,35 @@ export default defineComponent({
             })
         },
         order(){
-            this.orderMeal.onAddress=document.getElementById("location").value
-            this.orderMeal.note=document.getElementById("note").value
-            this.orderMeal.meals=this.jelaId
-            this.orderMeal.uuid=this.customer.uuid
-            this.orderMeal.storeID= this.$route.params.id
-            console.log("ovo je iz order u store menu")
-            console.log(this.orderMeal)
-            this.jela=[]
-            this.jelaId=[]
-            document.getElementById("note").value=""
-            this.$store.dispatch('orderMeal', this.orderMeal)
+            console.log(this.jelaId)
+            console.log(this.customer.location)
+            if(this.jelaId.length == 0 ){
+                this.$toasted.show("Niste izabrali nijedno jelo!", { 
+                    theme: "bubble", 
+                    position: "top-center", 
+                    duration : 5000
+                })
+            }
+            else if (this.customer.location == ""){
+                this.$toasted.show("Morate da unesete Vasu lokaciju!", { 
+                    theme: "bubble", 
+                    position: "top-center", 
+                    duration : 5000
+                })
+            }
+            else{
+                this.orderMeal.onAddress=document.getElementById("location").value
+                this.orderMeal.note=document.getElementById("note").value
+                this.orderMeal.meals=this.jelaId
+                this.orderMeal.uuid=this.customer.uuid
+                this.orderMeal.storeID= this.$route.params.id
+                console.log("ovo je iz order u store menu")
+                console.log(this.orderMeal)
+                this.jela=[]
+                this.jelaId=[]
+                document.getElementById("note").value=""
+                this.$store.dispatch('orderMeal', this.orderMeal)
+            }
         }
     },
     async created(){
