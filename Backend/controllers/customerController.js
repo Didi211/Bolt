@@ -105,7 +105,7 @@ const RecommendedMeals = async (req,res) => {
                 -[:CONTAINS]-> (m:Meal)
                 -[:BELONGS_TO]->(cat:Category)
 
-                return m,cat`
+                return m,cat order by rand() limit 5`
         );
         if (queryResult.records.length === 0) { 
             res.status(200).send([]);
