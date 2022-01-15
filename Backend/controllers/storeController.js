@@ -4,7 +4,7 @@ const token = require('../config/token')
 const bcrypt = require('bcrypt');
 const redis_client = require('../config/ws.config');
 const saltRounds = 10;
-
+const {sortStoresBy} = require('../helpers');
 
 function convertToDTO(store) { 
    
@@ -20,7 +20,7 @@ function convertToDTO(store) {
    
 }
 const GetTop5 = async (req,res) => { 
-        try {                
+    try {                
         redisData = await redis_client.get('top5')
         if(redisData != null)
             res.status(200).send(JSON.parse(redisData))
@@ -40,31 +40,18 @@ const GetTop5 = async (req,res) => {
                 }
                 return arr 
             }
+
             let result = await neo4j.model('Store').all()
             let allStores = result._values
         
             let stores =  await makeArray(allStores)
-            stores = stores.sort((a,b) => { 
-               //#region OpisFje
-                // a,b
-                // > 0 sort b before a 
-                // < 0 sort a before b
-                // === 0 keep original order of a and b
-                //    function compare(a, b) {
-                //     if (a is less than b by some ordering criterion) {
-                //       return -1;
-                //     }
-                //     if (a is greater than b by the ordering criterion) {
-                //       return 1;
-                //     }
-                //     // a must be equal to b
-                //     return 0;
-                //   }
-               //#endregion
-                if (a.value > b.value) return  1
-                if (a.value < b.value) return -1
-                return 0
-            })
+            stores = sortStoresBy(stores,"value");
+            // stores = stores.sort((a,b) => { 
+              
+            //     if (a.value > b.value) return  1
+            //     if (a.value < b.value) return -1
+            //     return 0
+            // })
             stores.reverse()
             if (stores.length > 5) 
                 stores = stores.slice(0,5)
@@ -76,6 +63,7 @@ const GetTop5 = async (req,res) => {
                         top5.push(convertToDTO(restaurant))
                 }
             }
+            top5 = sortStoresBy(top5,"preptime");
             redis_client.setEx('top5', 600,JSON.stringify(top5))
             res.status(200).send(top5)                
         }    
@@ -83,6 +71,7 @@ const GetTop5 = async (req,res) => {
     
     catch(e) {         
         res.status(500).send(e.message || e.toString())
+        console.log(e);
     }
 }
 
@@ -154,8 +143,15 @@ const GetAllStores = async (req,res) => {
             let stores = await neo4j.model('Store').all()
             let storesDTO = []
             stores.forEach(element => {
-            storesDTO.push(convertToDTO(element))            
-        });
+                storesDTO.push(convertToDTO(element))            
+            });
+            storesDTO = sortStoresBy(storesDTO,"preptime");
+            // storesDTO.sort((a,b) => { 
+           
+            //     if (a.preptime > b.preptime) return  1
+            //     if (a.preptime< b.preptime) return -1
+            //     return 0
+            // })
             redis_client.setEx('stores', 600,JSON.stringify(storesDTO))
             res.status(200).send(storesDTO)
         }    
@@ -181,6 +177,12 @@ const GetStoresByCategory = async (req,res) => {
                 username: node.properties.username
             })
         })
+        foundStores = sortStoresBy(foundStores,"preptime");
+        // foundStores.sort((a,b) => { 
+        //     if (a.preptime > b.preptime) return  1
+        //     if (a.preptime< b.preptime) return -1
+        //     return 0
+        //  })  
         res.status(200).send(foundStores)
     }
     catch(e) {
@@ -188,9 +190,7 @@ const GetStoresByCategory = async (req,res) => {
     }
 }
 
-const getPendingOrders = async (req,res) => { 
-    
-}
+
 
 module.exports = {
     CreateStore,

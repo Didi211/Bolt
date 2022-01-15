@@ -3,7 +3,7 @@ const { stringify } = require('nodemon/lib/utils');
 const neo4j = require('../config/neo4j_config');
 const redis_client = require('../config/redis_config');
 const category = require('../models/categoryModel');
-
+const {sortStoresBy} = require('../helpers'); 
 
 const CreateCategory = async (req,res) => { 
     let categoryBody = req.body   
@@ -65,12 +65,13 @@ const GetAllCategories = async (req,res) =>  {
                 
             })
            
-            categoriesDTO.sort((a,b) => { 
+            categoriesDTO = sortStoresBy(categoriesDTO,"name");
+            // categoriesDTO.sort((a,b) => { 
            
-                 if (a.name > b.name) return  1
-                 if (a.name< b.name) return -1
-                 return 0
-             })
+            //      if (a.name > b.name) return  1
+            //      if (a.value < b.name) return -1
+            //      return 0
+            //  })
 
             redis_client.setEx('categories', 600,JSON.stringify(categoriesDTO))
             res.status(200).send(categoriesDTO)
