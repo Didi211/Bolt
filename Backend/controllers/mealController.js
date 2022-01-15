@@ -110,12 +110,17 @@ const DeleteMeal = (req,res) => {
   
     neo4j.cypher(`match (m:Meal {mealID : "${req.params.id}"})-[rel:BELONGS_TO]->(c:Category}) delete rel`).then(result => {
         
-        neo4j.cypher(`match (m:Meal {mealID : "${req.params.id}"})<-[rel:CONTAINS]-(o:Order) delete rel,m`).then(result => {
-            res.send().status(200)
-        }).catch(err => console.log(err))
+        neo4j.cypher(`match (m:Meal {mealID : "${req.params.id}"})<-[rel:CONTAINS]-(o:Order) delete rel`).then(result => {
+
+            neo4j.cypher(`match (m:Meal {mealID : "${req.params.id}"})<-[rel:OFFERS]-(o:Store) delete rel,m`).then(result => {
+                res.send().status(200)
+            }).catch(err => console.log(err))
+
+
+        
+    }).catch(err => console.log(err))
     }).catch(err => console.log(err))
 }
-
 const GetCategory = (req,res) =>{
     neo4j.cypher(`match (m:Meal {mealID : "${req.params.id}"})-[rel:BELONGS_TO]->(c:Category) return c`).then(result => {
         //console.log(result);
