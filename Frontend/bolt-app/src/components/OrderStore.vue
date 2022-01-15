@@ -33,7 +33,7 @@
                     <div v-else-if="order.status === 'Accepted'" class="row card-body">
                         <div class="col-xl-12">
                             <div class="text-center m-3">
-                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil" :disabled="disabledDugme">Zavrsi obradu porudzbine</button>
+                                <button @click="zavrsiObraduPorudzbine" type="submit" class="btn btn-dark marstil" :disabled="true">Zavrsi obradu porudzbine</button>
                             </div>
                         </div>
                     </div>
