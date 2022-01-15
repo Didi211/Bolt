@@ -133,7 +133,7 @@ const RecommendedMeals = async (req,res) => {
             `match (s:Store) -[:OFFERS]-> (m:Meal) -[:BELONGS_TO]-> (cat:Category)
                 where cat.name in [${extractedCategories}] and 
                 not m.mealID in [${extractedMealsIDs}]
-                return m,s order by rand()`
+                return m,s order by rand() limit 5`
         );
         if (queryResult.records.length === 0) { 
             res.status(400).send("Couldn't load similar meals.");
