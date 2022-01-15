@@ -93,6 +93,7 @@ export default defineComponent({
                     })
                     // window.location.reload()
                 })
+                this.novaKategorija.categoryName=""
             }
             else{
                 this.$toasted.show("Prvo izaberite kategoriju!", { 
