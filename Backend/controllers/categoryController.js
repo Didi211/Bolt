@@ -64,6 +64,13 @@ const GetAllCategories = async (req,res) =>  {
                 categoriesDTO.push(elementDTO)
                 
             })
+           
+            categoriesDTO.sort((a,b) => { 
+           
+                 if (a.name > b.name) return  1
+                 if (a.name< b.name) return -1
+                 return 0
+             })
 
             redis_client.setEx('categories', 600,JSON.stringify(categoriesDTO))
             res.status(200).send(categoriesDTO)
