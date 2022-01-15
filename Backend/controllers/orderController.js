@@ -310,6 +310,7 @@ const OrderFinished = async (req,res) => { //push ka klijentu, status u neo4j se
         }
         await redis_client.sRem('orders:delivering',`'${req.body.orderID}'`);
         await redis_client.publish('app:customer',JSON.stringify(porukaCustomer));
+        res.status(200).send();
     }
     catch (e) {
         console.log(e);
